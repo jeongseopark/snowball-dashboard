@@ -9,11 +9,12 @@
 <meta property="og:title" content="SNOWBALL BOT ❄️">
 <meta property="og:description" content="나만의 무한매수법 VIP 자동매매 관제탑">
 <meta property="og:image" content="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1200&auto=format&fit=crop">
-<meta property="og:url" content="https://jeongseopark.github.io/snowball-dashboard/">
 
 <title>SNOWBALL BOT</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
 :root {
   --bg:       #080C14; --bg2:      #0D1520; --bg3:      #111B2E;
@@ -171,7 +172,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
           <div class="kpi-card" style="--accent:var(--gold)"><div class="kpi-label">🏆 달성 사이클</div><div class="kpi-value lg" id="ui-kpiCompleted">0</div><div class="kpi-unit">회 완료</div></div>
           <div class="kpi-card" style="--accent:var(--cyan)"><div class="kpi-label">📈 현재 주기</div><div class="kpi-value lg" id="ui-kpiCycle">#1</div><div class="kpi-unit">진행 중</div></div>
           <div class="kpi-card" style="--accent:var(--purple)"><div class="kpi-label">🎯 진행 회차</div><div class="kpi-value" id="ui-kpiInstall">0</div><div class="kpi-unit">목표 회차</div></div>
-          <div class="kpi-card" style="--accent:var(--green)"><div class="kpi-label">💵 1일 예산</div><div class="kpi-value" id="ui-kpiBudget">$0</div><div class="kpi-unit">현재 적용 중</div></div>
+          <div class="kpi-card" style="--accent:var(--green)"><div class="kpi-label">💵 1일 예산</div><div class="kpi-value" id="ui-kpiBudget">$0.00</div><div class="kpi-unit">현재 적용 중</div></div>
         </div>
       </div>
 
@@ -226,7 +227,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
           <div class="sum-item"><div class="sum-val" style="color:var(--green);" id="ui-tradeSells">0건</div><div class="sum-key">익절 매도</div></div>
           <div class="sum-item"><div class="sum-val" style="color:var(--gold);" id="ui-tradeBuys">0건</div><div class="sum-key">분할 매수</div></div>
         </div>
-        <div class="section-title">최근 매매 영수증 (최대 30건)</div>
+        
+        <div class="section-title" style="margin-top:14px;">일별 투입금액 추이 (최근 30일)</div>
+        <div class="kpi-card" style="border-radius:16px; padding:12px; height:180px;">
+          <canvas id="trendChart"></canvas>
+        </div>
+
+        <div class="section-title" style="margin-top:20px;">최근 매매 영수증 (최대 30건)</div>
         <div class="trade-list" id="ui-tradeList"></div>
       </div>
     </div>
@@ -330,7 +337,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 // ⭐ 사장님의 구글 앱스 스크립트 API URL
 const API_URL = "https://script.google.com/macros/s/AKfycbxI6cIbRpL5-r8xnGLvtbTkCNxAolrFr7maCV6hr0D8tdUCK5wpyaSU6fa6m1wDZqSTvw/exec";
 
-// ── 실시간 듀얼 시계 업데이트 로직 ──
+let trendChartInstance = null; // 차트 중복 생성 방지용
+
 function updateClocks() {
   const now = new Date();
   const opts = { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
@@ -338,7 +346,7 @@ function updateClocks() {
   document.getElementById('clock-kr').innerText = now.toLocaleTimeString('ko-KR', { timeZone: 'Asia/Seoul', ...opts });
 }
 setInterval(updateClocks, 1000);
-updateClocks(); // 페이지 로드 즉시 한 번 실행
+updateClocks(); 
 
 async function initData() {
   try {
@@ -350,7 +358,7 @@ async function initData() {
       alert("데이터 로딩 실패: " + data.error);
     }
   } catch(e) {
-    alert("🔍 에러 원인: " + e.message)
+    alert("🔍 에러 원인: " + e.message);
   } finally {
     document.getElementById('loader').style.opacity = '0';
     setTimeout(() => document.getElementById('loader').style.display = 'none', 500);
@@ -362,6 +370,7 @@ function renderDashboard(data) {
   const trend = data.trend || [];
   const trades = data.trades || [];
   const cycles = data.cycles || [];
+  const trendHistory = data.trend_history || []; // 새로 받아온 차트용 기록
 
   const totalProfit = parseFloat(status[4] || 0);
   const completedCycles = status[2] || 0;
@@ -377,15 +386,26 @@ function renderDashboard(data) {
   const totalInvested = parseFloat(trend[8] || 0);
   const maxInstall = trades.length > 0 ? (trades[0][3] || 40) : 40;
 
-  // 대시보드 탭
+  // ── 1. 대시보드 탭 ──
   document.getElementById('ui-totalPnl').textContent = `+$${totalProfit.toFixed(2)}`;
   document.getElementById('ui-kpiCompleted').textContent = completedCycles;
   document.getElementById('ui-kpiCycle').textContent = `#${cycleNum}`;
   document.getElementById('ui-kpiInstall').innerHTML = `${currInstall}<span style="font-size:14px;color:var(--text3)"> / ${maxInstall}</span>`;
-  document.getElementById('ui-kpiBudget').textContent = `$${dailyBudget.toFixed(0)}`;
+  
+  // ⭐ 소수점 2자리 고정
+  document.getElementById('ui-kpiBudget').textContent = `$${dailyBudget.toFixed(2)}`;
 
   document.getElementById('ui-posTicker').textContent = ticker;
-  document.getElementById('ui-posCycleStr').textContent = `사이클 #${cycleNum}`;
+  
+  // ⭐ 현재 사이클 시작일자 찾기
+  let startDateStr = '알 수 없음';
+  const cycleTrends = trendHistory.filter(t => String(t[2]) === String(cycleNum));
+  if (cycleTrends.length > 0) {
+    let dt = new Date(cycleTrends[0][0]); 
+    startDateStr = `${dt.getFullYear()}.${String(dt.getMonth()+1).padStart(2,'0')}.${String(dt.getDate()).padStart(2,'0')}`;
+  }
+  document.getElementById('ui-posCycleStr').textContent = `사이클 #${cycleNum} (시작: ${startDateStr})`;
+
   document.getElementById('ui-posAvgPrice').textContent = `$${avgPrice.toFixed(2)}`;
   document.getElementById('ui-posClosePrice').textContent = `$${closePrice.toFixed(2)}`;
   
@@ -416,7 +436,7 @@ function renderDashboard(data) {
   }).join('');
   document.getElementById('ui-snowballDots').innerHTML = dotHtml;
 
-  // 거래 내역 탭
+  // ── 2. 거래 내역 탭 (차트 포함) ──
   let buyCnt = 0; let sellCnt = 0;
   document.getElementById('ui-tradeList').innerHTML = trades.map(t => {
     const isBuy = String(t[5]).includes('매수');
@@ -442,7 +462,46 @@ function renderDashboard(data) {
   document.getElementById('ui-tradeBuys').textContent = `${buyCnt}건`;
   document.getElementById('ui-tradeSells').textContent = `${sellCnt}건`;
 
-  // 사이클 탭
+  // ⭐ 일별 투입금액 추이 차트 렌더링 (Chart.js)
+  if(trendHistory.length > 0) {
+    const ctx = document.getElementById('trendChart').getContext('2d');
+    const chartLabels = trendHistory.map(t => {
+      let d = new Date(t[0]);
+      return `${d.getMonth()+1}/${d.getDate()}`;
+    });
+    const chartData = trendHistory.map(t => parseFloat(t[8] || 0)); // 누적 투입금($)
+
+    if(trendChartInstance) trendChartInstance.destroy(); // 기존 차트 지우기
+    trendChartInstance = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: chartLabels,
+        datasets: [{
+          label: '누적 투입금 ($)',
+          data: chartData,
+          borderColor: '#00E5FF',
+          backgroundColor: 'rgba(0, 229, 255, 0.15)',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.4,
+          pointRadius: 2,
+          pointBackgroundColor: '#080C14',
+          pointBorderColor: '#00E5FF'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: '#8FA8CC', font: {family: 'Space Mono', size: 9} } },
+          y: { grid: { color: '#1E2F4A', borderDash: [3, 3] }, ticks: { color: '#8FA8CC', font: {family: 'Space Mono', size: 9} }, beginAtZero: true }
+        }
+      }
+    });
+  }
+
+  // ── 3. 사이클 탭 ──
   document.getElementById('ui-cycleTotalProfit').textContent = `+$${totalProfit.toFixed(2)}`;
   document.getElementById('ui-cycleTotalCnt').textContent = `${completedCycles}주기`;
   
@@ -479,10 +538,10 @@ function renderDashboard(data) {
       </div>`;
   }
 
-  // 정보 탭
+  // ── 4. 정보 탭 ──
   document.getElementById('ui-infoTicker').textContent = ticker;
   document.getElementById('ui-infoBudget').textContent = `$${dailyBudget.toFixed(2)}`;
-  
+
   const now = new Date();
   const pad = n => String(n).padStart(2,'0');
   document.getElementById('ui-updateTime').textContent = `동기화 완료: ${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
