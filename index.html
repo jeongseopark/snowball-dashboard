@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta property="og:title" content="SNOWBALL BOT ❄️">
-<meta property="og:description" content="나만의 무한매수법 VIP 자동매매 관제탑">
-<meta property="og:image" content="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1200&auto=format&fit=crop">
-<meta property="og:url" content="https://jeongseopark.github.io/snowball-dashboard/">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<meta property="og:title" content="SNOWBALL BOT ❄️">
+<meta property="og:description" content="나만의 무한매수법 VIP 자동매매 관제탑">
+<meta property="og:image" content="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1200&auto=format&fit=crop">
+<meta property="og:url" content="https://jeongseopark.github.io/snowball-dashboard/">
+
 <title>SNOWBALL BOT</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -39,10 +41,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .bot-avatar{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--cyan),var(--purple));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
 .bot-name{font-family:var(--head);font-weight:800;font-size:17px;letter-spacing:0.5px;}
 .bot-sub{font-size:11px;color:var(--text3);font-family:var(--mono);}
-.live-badge{display:flex;align-items:center;gap:5px;background:rgba(0,230,118,0.1);border:1px solid rgba(0,230,118,0.3);padding:4px 10px;border-radius:20px;}
-.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse-dot 1.5s ease-in-out infinite;}
-@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.7);}}
-.live-text{font-size:11px;color:var(--green);font-family:var(--mono);font-weight:700;letter-spacing:1px;}
+
+/* ⭐ 실시간 듀얼 시계 UI */
+.dual-clock {display:flex; flex-direction:column; align-items:flex-end; gap:3px;}
+.clock-row {display:flex; align-items:center; gap:5px; font-family:var(--mono); font-size:10px; background:var(--surface); padding:2px 6px; border-radius:6px; border:1px solid var(--border);}
+.clock-flag {font-size:12px; line-height:1;}
+.clock-time {color:var(--text2); font-weight:700; letter-spacing:0.5px;}
 
 .section{padding:16px 16px 0;}
 .section-title{font-family:var(--head);font-size:11px;font-weight:700;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
@@ -79,8 +83,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .gauge-track{height:8px;border-radius:4px;background:var(--border2);overflow:hidden;}
 .gauge-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--cyan2),var(--cyan));transition:width 1s cubic-bezier(0.4,0,0.2,1);position:relative;}
 .gauge-fill::after{content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);width:14px;height:14px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);margin-right:-7px;}
-.gauge-labels{display:flex;justify-content:space-between;margin-top:8px;}
-.gauge-label{font-size:10px;color:var(--text3);font-family:var(--mono);}
 .target-info{display:flex;justify-content:space-between;align-items:center;margin-top:10px;}
 
 .trade-list{display:flex;flex-direction:column;gap:8px;}
@@ -152,7 +154,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       <div class="bot-avatar">🤖</div>
       <div><div class="bot-name">SNOWBALL BOT</div><div class="bot-sub">VIP AUTO TRADING</div></div>
     </div>
-    <div class="live-badge"><div class="live-dot"></div><div class="live-text">LIVE</div></div>
+    <div class="dual-clock">
+      <div class="clock-row"><span class="clock-flag">🇺🇸</span><span class="clock-time" id="clock-ny">--:--:--</span></div>
+      <div class="clock-row"><span class="clock-flag">🇰🇷</span><span class="clock-time" id="clock-kr">--:--:--</span></div>
+    </div>
   </div>
 
   <div class="scroll-area" id="scrollArea">
@@ -322,8 +327,18 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 </div>
 
 <script>
-// ⭐ 사장님의 구글 앱스 스크립트 API URL (절대 지우지 마세요!)
+// ⭐ 사장님의 구글 앱스 스크립트 API URL
 const API_URL = "https://script.google.com/macros/s/AKfycbxI6cIbRpL5-r8xnGLvtbTkCNxAolrFr7maCV6hr0D8tdUCK5wpyaSU6fa6m1wDZqSTvw/exec";
+
+// ── 실시간 듀얼 시계 업데이트 로직 ──
+function updateClocks() {
+  const now = new Date();
+  const opts = { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
+  document.getElementById('clock-ny').innerText = now.toLocaleTimeString('en-US', { timeZone: 'America/New_York', ...opts });
+  document.getElementById('clock-kr').innerText = now.toLocaleTimeString('ko-KR', { timeZone: 'Asia/Seoul', ...opts });
+}
+setInterval(updateClocks, 1000);
+updateClocks(); // 페이지 로드 즉시 한 번 실행
 
 async function initData() {
   try {
@@ -346,9 +361,8 @@ function renderDashboard(data) {
   const status = data.status || [];
   const trend = data.trend || [];
   const trades = data.trades || [];
-  const cycles = data.cycles || []; // 새로 추가된 사이클 데이터
+  const cycles = data.cycles || [];
 
-  // 1️⃣ 기본 데이터 매핑
   const totalProfit = parseFloat(status[4] || 0);
   const completedCycles = status[2] || 0;
   const dailyBudget = parseFloat(status[3] || 0);
@@ -363,7 +377,7 @@ function renderDashboard(data) {
   const totalInvested = parseFloat(trend[8] || 0);
   const maxInstall = trades.length > 0 ? (trades[0][3] || 40) : 40;
 
-  // 2️⃣ 대시보드 탭 세팅
+  // 대시보드 탭
   document.getElementById('ui-totalPnl').textContent = `+$${totalProfit.toFixed(2)}`;
   document.getElementById('ui-kpiCompleted').textContent = completedCycles;
   document.getElementById('ui-kpiCycle').textContent = `#${cycleNum}`;
@@ -393,7 +407,6 @@ function renderDashboard(data) {
   document.getElementById('ui-targetDist').textContent = `$${Math.abs(distVal).toFixed(2)} (${distRate.toFixed(2)}%)`;
   document.getElementById('ui-targetPrice').textContent = `$${targetPrice.toFixed(2)}`;
 
-  // 스노우볼 도트 (최대 목표회차 기준)
   const dotHtml = Array.from({length: maxInstall}, (_, i) => {
     const step = i + 1;
     let cName = 'empty';
@@ -403,7 +416,7 @@ function renderDashboard(data) {
   }).join('');
   document.getElementById('ui-snowballDots').innerHTML = dotHtml;
 
-  // 3️⃣ 거래 내역 탭 세팅
+  // 거래 내역 탭
   let buyCnt = 0; let sellCnt = 0;
   document.getElementById('ui-tradeList').innerHTML = trades.map(t => {
     const isBuy = String(t[5]).includes('매수');
@@ -413,7 +426,6 @@ function renderDashboard(data) {
     const pnlStr = realized > 0 ? `+$${realized.toFixed(2)}` : `$${parseFloat(t[8] || 0).toFixed(2)}`;
     const pnlClass = realized > 0 ? 'pos' : (isBuy ? 'neu' : 'neg');
     
-    // 날짜 포맷 (YYYY-MM-DD HH:MM -> MM-DD HH:MM)
     let dateStr = t[0];
     if(dateStr.length > 10) dateStr = dateStr.substring(5, 16);
 
@@ -430,7 +442,7 @@ function renderDashboard(data) {
   document.getElementById('ui-tradeBuys').textContent = `${buyCnt}건`;
   document.getElementById('ui-tradeSells').textContent = `${sellCnt}건`;
 
-  // 4️⃣ 사이클 탭 세팅
+  // 사이클 탭
   document.getElementById('ui-cycleTotalProfit').textContent = `+$${totalProfit.toFixed(2)}`;
   document.getElementById('ui-cycleTotalCnt').textContent = `${completedCycles}주기`;
   
@@ -441,7 +453,6 @@ function renderDashboard(data) {
   document.getElementById('ui-cycAvgPrice').textContent = `$${avgPrice.toFixed(2)}`;
   document.getElementById('ui-cycTarget').textContent = `$${targetPrice.toFixed(2)}`;
 
-  // 시트에 '사이클별_요약' 데이터가 있을 경우 렌더링
   if(cycles.length > 0) {
     document.getElementById('ui-cycleScroll').innerHTML = cycles.map(c => `
       <div class="cycle-card">
@@ -460,7 +471,6 @@ function renderDashboard(data) {
       </div>
     `).join('');
   } else {
-    // 요약 데이터가 없을 때 표시
     document.getElementById('ui-emptyCycle').style.display = 'block';
     document.getElementById('ui-barChart').innerHTML = `
       <div class="bar-wrap">
@@ -469,12 +479,10 @@ function renderDashboard(data) {
       </div>`;
   }
 
-  // 5️⃣ 정보 탭 세팅
+  // 정보 탭
   document.getElementById('ui-infoTicker').textContent = ticker;
   document.getElementById('ui-infoBudget').textContent = `$${dailyBudget.toFixed(2)}`;
 
-  // 업데이트 시간
-  const now = new Date();
   const pad = n => String(n).padStart(2,'0');
   document.getElementById('ui-updateTime').textContent = `동기화 완료: ${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
 }
@@ -487,7 +495,6 @@ function switchTab(tab, btn) {
   document.getElementById('scrollArea').scrollTop = 0;
 }
 
-// 시작
 initData();
 </script>
 </body>
