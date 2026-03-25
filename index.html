@@ -350,7 +350,7 @@ async function initData() {
       alert("데이터 로딩 실패: " + data.error);
     }
   } catch(e) {
-    alert("API 통신 에러가 발생했습니다.");
+    alert("🔍 에러 원인: " + e.message)
   } finally {
     document.getElementById('loader').style.opacity = '0';
     setTimeout(() => document.getElementById('loader').style.display = 'none', 500);
