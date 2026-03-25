@@ -482,7 +482,8 @@ function renderDashboard(data) {
   // 정보 탭
   document.getElementById('ui-infoTicker').textContent = ticker;
   document.getElementById('ui-infoBudget').textContent = `$${dailyBudget.toFixed(2)}`;
-
+  
+  const now = new Date();
   const pad = n => String(n).padStart(2,'0');
   document.getElementById('ui-updateTime').textContent = `동기화 완료: ${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
 }
