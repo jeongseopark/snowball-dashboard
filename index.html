@@ -72,7 +72,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .pos-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);}
 .pos-row:last-child{border-bottom:none;}
 .pos-key{font-size:12px;color:var(--text3);font-family:var(--body);}
-.pos-val{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--text);}
+.pos-val{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--text);text-align:right;}
 .pos-val.cyan{color:var(--cyan);}
 .pos-val.gold{color:var(--gold);}
 .pos-val.green{color:var(--green);}
@@ -103,7 +103,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .trade-type-label.sell{color:var(--green);}
 .trade-meta{font-size:10px;color:var(--text3);font-family:var(--mono);}
 
-/* ⭐ 스노우볼 프로그레스 업그레이드 */
+/* 대시보드 스노우볼 프로그레스 */
 .snowball-header { display: flex; justify-content: space-between; font-size: 11px; color: var(--text2); margin-bottom: 12px; font-family: var(--mono); font-weight: 700;}
 .snowball-progress{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;padding:0 0 8px;}
 .snow-dot{width:18px;height:18px;border-radius:50%;margin:3px;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:8px;font-family:var(--mono);color:var(--text3);transition:all 0.3s;}
@@ -117,7 +117,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .legend-color.curr { background: var(--gold); }
 .legend-color.rem { background: transparent; border: 1.5px solid var(--border2); }
 
-/* 사이클 탭 전용 */
+/* 사이클 탭 미니 프로그레스 바 */
+.mini-progress { height: 6px; background: var(--border2); border-radius: 3px; overflow: hidden; margin-top: 8px; }
+.mini-progress-fill { height: 100%; background: linear-gradient(90deg, var(--cyan2), var(--cyan)); border-radius: 3px; transition: width 0.5s; }
+
 .summary-row{display:flex;justify-content:space-around;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r2);padding:14px;margin-bottom:10px;}
 .sum-item{text-align:center;}
 .sum-val{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--cyan);}
@@ -132,16 +135,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .bar-chart{display:flex;align-items:flex-end;gap:5px;height:60px;margin-top:10px;}
 .bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;}
 .bar{width:100%;border-radius:3px 3px 0 0;background:linear-gradient(180deg,var(--cyan),var(--cyan2));position:relative;transition:height 0.8s;min-height:4px;}
-
-/* ⭐ 사이클 현황 요약 박스 */
-.cycle-brief-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--r); padding: 16px; font-family: var(--body); }
-.brief-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid var(--border2); padding-bottom: 10px; }
-.brief-title { font-family: var(--mono); font-size: 14px; font-weight: 700; color: var(--text); }
-.brief-badge { background: rgba(0, 229, 255, 0.1); color: var(--cyan); font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
-.brief-row { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; }
-.brief-row:last-child { margin-bottom: 0; }
-.brief-key { color: var(--text3); }
-.brief-val { font-family: var(--mono); color: var(--text); }
 
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(8,12,20,0.92);backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;padding:8px 0 env(safe-area-inset-bottom,8px);z-index:200;}
 .nav-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 20px;border:none;background:none;cursor:pointer;transition:transform 0.15s;}
@@ -267,25 +260,47 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     <div class="tab-content" id="tab-cycles">
       <div class="section" style="padding-top:16px;">
         
-        <div class="section-title">현재 사이클 요약 브리핑</div>
-        <div class="cycle-brief-card">
-          <div class="brief-header">
-            <span class="brief-title" id="ui-briefTitle">📊 사이클 #1 진행 중</span>
-            <span class="brief-badge" id="ui-briefBadge">미익절</span>
-          </div>
-          <div class="brief-row"><span class="brief-key">시작 일자:</span><span class="brief-val" id="ui-briefStart">----/--/-- (US/ET)</span></div>
-          <div class="brief-row"><span class="brief-key">마지막 기록:</span><span class="brief-val" id="ui-briefLast">US --/-- (0회차)</span></div>
-          <div class="brief-row"><span class="brief-key">진행 현황:</span><span class="brief-val" style="color:var(--cyan);" id="ui-briefInstall">0/20 회차</span></div>
-          <div class="brief-row"><span class="brief-key">실현 수익:</span><span class="brief-val" style="color:var(--green);" id="ui-briefProfit">$0.00</span></div>
-        </div>
-        <div style="margin-bottom:20px;"></div>
-
         <div class="summary-row">
           <div class="sum-item"><div class="sum-val" style="color:var(--green);" id="ui-cycleTotalProfit">$0.00</div><div class="sum-key">총 실현수익</div></div>
           <div class="sum-item"><div class="sum-val" style="color:var(--cyan);" id="ui-cycleTotalCnt">0주기</div><div class="sum-key">완료 사이클</div></div>
         </div>
 
-        <div class="section-title">수익 추이 차트</div>
+        <div class="section-title" style="margin-top:14px;">현재 진행 사이클 현황</div>
+        <div class="position-card">
+          <div class="position-header">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="ticker-chip" id="ui-cycTicker">TICKER</div>
+              <div style="font-size:12px;color:var(--text3);font-family:var(--mono);" id="ui-cycCurrent">사이클 #1 진행중</div>
+            </div>
+            <span class="tag gold" id="ui-cycInstallTag">0 / 0회차</span>
+          </div>
+          <div style="padding:14px 16px 10px; border-bottom:1px solid var(--border);">
+             <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text3); font-family:var(--mono);">
+               <span>매수 진행률</span><span id="ui-cycProgressPct" style="color:var(--cyan); font-weight:700;">0%</span>
+             </div>
+             <div class="mini-progress"><div class="mini-progress-fill" id="ui-cycProgressBar" style="width:0%"></div></div>
+          </div>
+          <div class="position-rows">
+            <div class="pos-row">
+              <span class="pos-key">총 투입금액 <span style="font-size:10px; color:var(--text3);">/ 보유수량</span></span>
+              <span class="pos-val cyan" id="ui-cycInvested">$0.00 / 0주</span>
+            </div>
+            <div class="pos-row">
+              <span class="pos-key">현재 평단가 <span style="font-size:10px; color:var(--text3);">/ 현재가</span></span>
+              <span class="pos-val" id="ui-cycAvgPrice">$0.00 <span style="font-size:10px; color:var(--text2);">($0.00)</span></span>
+            </div>
+            <div class="pos-row">
+              <span class="pos-key">현재 평가 손익</span>
+              <span class="pos-val" id="ui-cycPnl">$0.00 (0.00%)</span>
+            </div>
+            <div class="pos-row">
+              <span class="pos-key">익절 목표가 <span style="font-size:10px; color:var(--text3);">/ +10%</span></span>
+              <span class="pos-val gold" id="ui-cycTarget">$0.00</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-title" style="margin-top:20px;">수익 추이 차트</div>
         <div class="kpi-card" style="border-radius:16px; padding:18px;">
           <div style="font-size:11px;color:var(--text3);margin-bottom:8px;font-family:var(--mono);">사이클별 실현수익 ($)</div>
           <div class="bar-chart" id="ui-barChart"></div>
@@ -322,6 +337,29 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
             <div class="pos-row"><span class="pos-key">한국투자증권 API</span><span class="tag cyan">● Verified</span></div>
           </div>
         </div>
+
+        <div class="section-title" style="margin-top:14px;">스프레드시트 탭 구성 가이드</div>
+        <div class="position-card">
+          <div class="position-rows">
+            <div class="pos-row">
+              <div><div class="pos-key">봇_매매기록</div><div style="font-size:10px;color:var(--text3);margin-top:2px;">봇이 실시간 기록하는 Raw 영수증</div></div>
+              <span class="tag red">봇 전용</span>
+            </div>
+            <div class="pos-row">
+              <div><div class="pos-key">일별_추이</div><div style="font-size:10px;color:var(--text3);margin-top:2px;">현재 포지션 및 평단가 기록</div></div>
+              <span class="tag cyan">자동</span>
+            </div>
+            <div class="pos-row">
+              <div><div class="pos-key">현재_상태</div><div style="font-size:10px;color:var(--text3);margin-top:2px;">스코어카드 집계용 1줄 전광판</div></div>
+              <span class="tag cyan">자동</span>
+            </div>
+            <div class="pos-row" style="border:none;">
+              <div><div class="pos-key">사이클별_요약</div><div style="font-size:10px;color:var(--text3);margin-top:2px;">완료된 사이클 성과 통계</div></div>
+              <span class="tag gold">수동/수식</span>
+            </div>
+          </div>
+        </div>
+
       </div>
       <div style="height:20px;"></div>
     </div>
@@ -337,7 +375,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 </div>
 
 <script>
-// ⭐ 구글 앱스 스크립트 API URL (기존과 동일)
+// ⭐ 구글 앱스 스크립트 API URL 
 const API_URL = "https://script.google.com/macros/s/AKfycbxI6cIbRpL5-r8xnGLvtbTkCNxAolrFr7maCV6hr0D8tdUCK5wpyaSU6fa6m1wDZqSTvw/exec";
 
 let trendChartInstance = null;
@@ -398,7 +436,6 @@ function renderDashboard(data) {
 
   document.getElementById('ui-posTicker').textContent = ticker;
   
-  // 날짜 포맷 함수
   const formatDate = (dateString) => {
     let dt = new Date(dateString);
     return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
@@ -409,12 +446,9 @@ function renderDashboard(data) {
   };
 
   let startDateStr = '알 수 없음';
-  let lastDateStr = '알 수 없음';
   const cycleTrends = trendHistory.filter(t => String(t[2]) === String(cycleNum));
-  
   if (cycleTrends.length > 0) {
     startDateStr = formatDate(cycleTrends[0][0]);
-    lastDateStr = formatShortDate(cycleTrends[cycleTrends.length-1][0]); // 가장 최근 추이 기록
   }
   document.getElementById('ui-posCycleStr').textContent = `사이클 #${cycleNum} (시작: ${startDateStr})`;
 
@@ -439,7 +473,6 @@ function renderDashboard(data) {
   document.getElementById('ui-targetDist').textContent = `$${Math.abs(distVal).toFixed(2)} (${distRate.toFixed(2)}%)`;
   document.getElementById('ui-targetPrice').textContent = `$${targetPrice.toFixed(2)}`;
 
-  // ⭐ 스노우볼 프로그레스 바 상단 텍스트 및 로직 업데이트
   const installPercent = maxInstall > 0 ? Math.round((currInstall / maxInstall) * 100) : 0;
   document.getElementById('ui-snowTitle').textContent = `사이클 #${cycleNum}`;
   document.getElementById('ui-snowPercent').textContent = `${currInstall}/${maxInstall} 회차 ${installPercent}% 완료`;
@@ -453,7 +486,7 @@ function renderDashboard(data) {
   }).join('');
   document.getElementById('ui-snowballDots').innerHTML = dotHtml;
 
-  // ── 2. 거래 내역 탭 (⭐ 이중축 차트 포함) ──
+  // ── 2. 거래 내역 탭 (이중축 차트) ──
   let buyCnt = 0; let sellCnt = 0;
   document.getElementById('ui-tradeList').innerHTML = trades.map(t => {
     const isBuy = String(t[5]).includes('매수');
@@ -478,12 +511,11 @@ function renderDashboard(data) {
   document.getElementById('ui-tradeBuys').textContent = `${buyCnt}건`;
   document.getElementById('ui-tradeSells').textContent = `${sellCnt}건`;
 
-  // ⭐ 이중축 복합 차트 렌더링 (Chart.js)
   if(trendHistory.length > 0) {
     const ctx = document.getElementById('trendChart').getContext('2d');
     const chartLabels = trendHistory.map(t => formatShortDate(t[0]));
-    const chartAmtData = trendHistory.map(t => parseFloat(t[8] || 0)); // 누적 투입금($)
-    const chartQtyData = trendHistory.map(t => parseInt(t[7] || 0));   // 누적 수량(주)
+    const chartAmtData = trendHistory.map(t => parseFloat(t[8] || 0)); 
+    const chartQtyData = trendHistory.map(t => parseInt(t[7] || 0));   
 
     if(trendChartInstance) trendChartInstance.destroy();
     trendChartInstance = new Chart(ctx, {
@@ -500,7 +532,7 @@ function renderDashboard(data) {
             fill: true,
             tension: 0.3,
             pointRadius: 2,
-            yAxisID: 'y' // 왼쪽 축
+            yAxisID: 'y'
           },
           {
             type: 'bar',
@@ -510,7 +542,7 @@ function renderDashboard(data) {
             borderColor: '#FFD740',
             borderWidth: 1,
             borderRadius: 4,
-            yAxisID: 'y1' // 오른쪽 축
+            yAxisID: 'y1'
           }
         ]
       },
@@ -527,7 +559,7 @@ function renderDashboard(data) {
           },
           y1: { 
             type: 'linear', display: true, position: 'right',
-            grid: { drawOnChartArea: false }, // 격자 겹침 방지
+            grid: { drawOnChartArea: false }, 
             ticks: { color: '#FFD740', font: {family: 'Space Mono', size: 9} }
           }
         }
@@ -535,16 +567,27 @@ function renderDashboard(data) {
     });
   }
 
-  // ── 3. 사이클 탭 (⭐ 요약 브리핑 카드 업데이트) ──
+  // ── 3. 사이클 탭 (⭐ 풍부해진 진행 현황 카드) ──
   document.getElementById('ui-cycleTotalProfit').textContent = `+$${totalProfit.toFixed(2)}`;
   document.getElementById('ui-cycleTotalCnt').textContent = `${completedCycles}주기`;
   
-  // 브리핑 데이터 삽입
-  document.getElementById('ui-briefTitle').textContent = `📊 사이클 #${cycleNum} 진행 중`;
-  document.getElementById('ui-briefStart').textContent = `${startDateStr} (US/ET)`;
-  document.getElementById('ui-briefLast').textContent = `US ${lastDateStr} (${currInstall}회차)`;
-  document.getElementById('ui-briefInstall').textContent = `${currInstall}/${maxInstall} 회차`;
-  // (참고: 미기록 여부는 시트와 실제 KIS 데이터 간의 차이라 웹앱 단독 계산이 어려워 "마지막 기록"으로 통합 표현했습니다.)
+  // 새로 업그레이드된 사이클 진행 현황 바인딩
+  document.getElementById('ui-cycTicker').textContent = ticker;
+  document.getElementById('ui-cycCurrent').textContent = `사이클 #${cycleNum} 진행중`;
+  document.getElementById('ui-cycInstallTag').textContent = `${currInstall} / ${maxInstall}회차`;
+  
+  document.getElementById('ui-cycProgressPct').textContent = `${installPercent}%`;
+  document.getElementById('ui-cycProgressBar').style.width = `${installPercent}%`;
+  
+  document.getElementById('ui-cycInvested').innerHTML = `$${totalInvested.toFixed(2)} <span style="color:var(--text); font-size:12px;">/ ${totalQty}주</span>`;
+  document.getElementById('ui-cycAvgPrice').innerHTML = `$${avgPrice.toFixed(2)} <span style="font-size:10px; color:var(--text2);">($${closePrice.toFixed(2)})</span>`;
+  
+  const cycPnlEl = document.getElementById('ui-cycPnl');
+  cycPnlEl.textContent = pnlEl.textContent;
+  cycPnlEl.className = pnlEl.className;
+  
+  document.getElementById('ui-cycTarget').textContent = `$${targetPrice.toFixed(2)}`;
+
 
   if(cycles.length > 0) {
     document.getElementById('ui-cycleScroll').innerHTML = cycles.map(c => `
