@@ -35,6 +35,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .spinner{width:40px;height:40px;border:4px solid var(--border);border-top-color:var(--cyan);border-radius:50%;animation:spin 1s linear infinite;}
 @keyframes spin{100%{transform:rotate(360deg);}}
 
+/* 애니메이션 (네트워크 통신 느낌) */
+.pulse { animation: pulse 1.5s infinite; display: inline-block; margin-right: 3px; }
+@keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
+
 .scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;padding:0 0 80px;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;}
 .scroll-area::-webkit-scrollbar{display:none;}
 .top-bar{position:sticky;top:0;z-index:100;background:var(--bg);padding:env(safe-area-inset-top,12px) 20px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(20px);}
@@ -148,7 +152,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .tag.gold{background:rgba(255,215,64,0.1);color:var(--gold);border:1px solid rgba(255,215,64,0.25);}
 .tag.green{background:rgba(0,230,118,0.1);color:var(--green);border:1px solid rgba(0,230,118,0.25);}
 .tag.red{background:rgba(255,61,113,0.1);color:var(--red);border:1px solid rgba(255,61,113,0.25);}
+.tag.purple{background:rgba(124,77,255,0.1);color:var(--purple);border:1px solid rgba(124,77,255,0.25);}
 .update-time{text-align:center;font-size:10px;color:var(--text3);font-family:var(--mono);padding:20px 8px;}
+.sys-version{text-align:center; font-size:10px; color:var(--border2); font-family:var(--mono); margin-top:20px; letter-spacing:1px;}
 .tab-content{display:none;}
 .tab-content.active{display:block;}
 .empty-state{text-align:center;padding:30px;color:var(--text3);font-size:12px;font-family:var(--mono);border:1px dashed var(--border);border-radius:var(--r);margin:10px 16px;}
@@ -195,7 +201,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
               <div class="ticker-chip" id="ui-posTicker">TICKER</div>
               <div style="font-size:12px;color:var(--text2);font-family:var(--mono);" id="ui-posCycleStr">사이클 #1</div>
             </div>
-            <span class="tag cyan" id="ui-posBadge">매수 진행중</span>
+            <span class="tag cyan" id="ui-posBadge"><span class="pulse">●</span> 매수 진행중</span>
           </div>
           <div class="position-rows">
             <div class="pos-row"><span class="pos-key">현재 평단가</span><span class="pos-val cyan" id="ui-posAvgPrice">$0.00</span></div>
@@ -323,12 +329,22 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
         <div class="section-title">봇 설정 현황</div>
         <div class="position-card">
           <div class="position-rows">
-            <div class="pos-row"><span class="pos-key">봇 구동 상태</span><span class="tag green">● LIVE</span></div>
+            <div class="pos-row"><span class="pos-key">봇 구동 상태</span><span class="tag green"><span class="pulse">●</span> LIVE</span></div>
             <div class="pos-row"><span class="pos-key">운영 종목</span><span class="pos-val" style="font-size:14px; font-weight:800; color:var(--cyan)" id="ui-infoTicker">TICKER</span></div>
             <div class="pos-row"><span class="pos-key">1일 매수 예산</span><span class="pos-val gold" id="ui-infoBudget">$0.00</span></div>
             <div class="pos-row"><span class="pos-key">익절 목표 수익률</span><span class="pos-val">+10.00%</span></div>
             <div class="pos-row"><span class="pos-key">리버스 탈출 목표</span><span class="pos-val red" id="ui-infoExitRate">-20.00%</span></div>
             <div class="pos-row"><span class="pos-key">매수 방식</span><span class="pos-val" style="font-size:12px;">스플릿 (평단/LOC)</span></div>
+          </div>
+        </div>
+
+        <div class="section-title" style="margin-top:14px;">데이터 연동 아키텍처</div>
+        <div class="position-card">
+          <div class="position-rows">
+            <div class="pos-row"><span class="pos-key">Google Sheets API</span><span class="tag green"><span class="pulse">●</span> Connected</span></div>
+            <div class="pos-row"><span class="pos-key">Telegram Bot API</span><span class="tag green"><span class="pulse">●</span> Active</span></div>
+            <div class="pos-row"><span class="pos-key">한국투자증권 (KIS) API</span><span class="tag cyan"><span class="pulse">●</span> Verified</span></div>
+            <div class="pos-row"><span class="pos-key">Google Cloud Server</span><span class="tag purple"><span class="pulse">●</span> Running (KST)</span></div>
           </div>
         </div>
 
@@ -353,7 +369,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
             </div>
           </div>
         </div>
-
+        
+        <div class="sys-version">SYSTEM BUILD: v4.2 REVERSE EDITION</div>
       </div>
       <div style="height:20px;"></div>
     </div>
@@ -406,7 +423,6 @@ function renderDashboard(data) {
   const completedCycles = status[2] || 0;
   const dailyBudget = parseFloat(status[3] || 0);
   
-  // 🚨 6, 7번째 데이터로 리버스 모드 상태와 탈출 조건 읽어오기
   const isReverse = String(status[5]).toUpperCase() === 'TRUE';
   const exitRate = parseFloat(status[6] || -20.0);
   
@@ -453,7 +469,6 @@ function renderDashboard(data) {
   document.getElementById('ui-posQty').textContent = `${totalQty}주`;
   document.getElementById('ui-posInvested').textContent = `$${totalInvested.toFixed(2)}`;
 
-  // 🚨 리버스 모드 UI 분기 처리 🚨
   const badgeEl = document.getElementById('ui-posBadge');
   const targetDistEl = document.getElementById('ui-targetDist');
   const targetPriceEl = document.getElementById('ui-targetPrice');
@@ -461,7 +476,7 @@ function renderDashboard(data) {
   const gaugeRateEl = document.getElementById('ui-gaugeRate');
 
   if (isReverse) {
-      badgeEl.textContent = "🚨 리버스 모드";
+      badgeEl.innerHTML = `<span class="pulse">●</span> 🚨 리버스 모드`;
       badgeEl.className = "tag red";
       document.getElementById('ui-gaugeTitle').textContent = "탈출 목표까지";
       document.getElementById('ui-targetPriceTitle').textContent = "탈출 목표가";
@@ -478,9 +493,9 @@ function renderDashboard(data) {
       gaugeRateEl.textContent = `${pnlRate.toFixed(2)}% / ${exitRate}%`;
       gaugeRateEl.className = "tag red";
       gaugeBarEl.style.background = "linear-gradient(90deg, #FF3D71, #FF8A80)";
-      gaugeBarEl.style.width = "100%"; // 리버스는 항상 100% 꽉 찬 게이지로 경고 표시
+      gaugeBarEl.style.width = "100%"; 
   } else {
-      badgeEl.textContent = "매수 진행중";
+      badgeEl.innerHTML = `<span class="pulse">●</span> 매수 진행중`;
       badgeEl.className = "tag cyan";
       document.getElementById('ui-gaugeTitle').textContent = "목표 달성률";
       document.getElementById('ui-targetPriceTitle').textContent = "익절 목표가";
@@ -520,14 +535,12 @@ function renderDashboard(data) {
   }).join('');
   document.getElementById('ui-snowballDots').innerHTML = dotHtml;
 
-  // 거래 내역 탭
   let buyCnt = 0; let sellCnt = 0;
   document.getElementById('ui-tradeList').innerHTML = trades.map(t => {
     const isBuy = String(t[5]).includes('매수');
     if(isBuy) buyCnt++; else sellCnt++;
     const typeClass = isBuy ? 'buy' : 'sell';
     const realized = parseFloat(t[10] || 0);
-    // 리버스 모드 손실 대응: 손실이면 음수로 표시
     const pnlStr = realized !== 0 ? `${realized > 0 ? '+' : ''}$${realized.toFixed(2)}` : `$${parseFloat(t[8] || 0).toFixed(2)}`;
     const pnlClass = realized > 0 ? 'pos' : (realized < 0 ? 'neg' : (isBuy ? 'neu' : 'neg'));
     let dateStr = t[0].length > 10 ? t[0].substring(5, 16) : t[0];
@@ -573,7 +586,6 @@ function renderDashboard(data) {
     });
   }
 
-  // 사이클 탭 업데이트
   document.getElementById('ui-cycleTotalProfit').textContent = `+$${totalProfit.toFixed(2)}`;
   document.getElementById('ui-cycleTotalCnt').textContent = `${completedCycles}주기`;
   
@@ -635,10 +647,9 @@ function renderDashboard(data) {
       </div>`;
   }
 
-  // 4. 정보 탭
   document.getElementById('ui-infoTicker').textContent = ticker;
   document.getElementById('ui-infoBudget').textContent = `$${dailyBudget.toFixed(2)}`;
-  document.getElementById('ui-infoExitRate').textContent = `${exitRate.toFixed(2)}%`; // 🚨 리버스 탈출 목표 연동
+  document.getElementById('ui-infoExitRate').textContent = `${exitRate.toFixed(2)}%`; 
 
   const now = new Date();
   const pad = n => String(n).padStart(2,'0');
