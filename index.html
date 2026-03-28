@@ -140,22 +140,34 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;}
 .bar{width:100%;border-radius:3px 3px 0 0;background:linear-gradient(180deg,var(--cyan),var(--cyan2));position:relative;transition:height 0.8s;min-height:4px;}
 
-.flow-container { display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 8px; }
-.flow-box { background: var(--surface2); border: 2px solid var(--border); border-radius: 12px; padding: 14px; width: 85%; text-align: center; position: relative; transition: all 0.4s ease; }
+/* 🗺️ 플로우 탭 수퍼차지 CSS */
+.flow-container { display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 10px; }
+.flow-box { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 12px; padding: 14px 16px; width: 90%; position: relative; transition: all 0.4s ease; }
 .flow-box.active { border-color: var(--cyan); box-shadow: 0 0 15px rgba(0, 229, 255, 0.25); background: rgba(0, 229, 255, 0.05); transform: scale(1.02); }
 .flow-box.active.reverse { border-color: var(--red); box-shadow: 0 0 15px rgba(255, 61, 113, 0.3); background: rgba(255, 61, 113, 0.05); }
-.flow-icon { font-size: 20px; margin-bottom: 4px; }
-.flow-title { font-family: var(--body); font-weight: 700; font-size: 14px; color: var(--text); margin-bottom: 4px; }
-.flow-desc { font-family: var(--mono); font-size: 11px; color: var(--text3); line-height: 1.4; }
-.flow-active-desc { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--cyan); margin-top: 6px; display: none; }
+.flow-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.flow-icon { font-size: 22px; }
+.flow-title { font-family: var(--body); font-weight: 700; font-size: 14px; color: var(--text); }
+.flow-badge-group { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+.flow-badge { font-size: 9px; font-family: var(--mono); font-weight: 700; padding: 2px 6px; border-radius: 4px; }
+.flow-badge.cyan { background: rgba(0,229,255,0.15); color: var(--cyan); }
+.flow-badge.gold { background: rgba(255,215,64,0.15); color: var(--gold); }
+.flow-badge.red { background: rgba(255,61,113,0.15); color: var(--red); }
+.flow-list { margin: 0; padding-left: 18px; font-size: 11px; color: var(--text2); font-family: var(--body); line-height: 1.6; }
+.flow-list li { margin-bottom: 4px; }
+.flow-list li b { color: var(--text); }
+.flow-active-desc { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--cyan); margin-top: 10px; display: none; text-align: center; background: rgba(0,229,255,0.1); padding: 6px; border-radius: 6px;}
 .flow-box.active .flow-active-desc { display: block; }
-.flow-box.active.reverse .flow-active-desc { color: var(--red); }
-.flow-arrow { color: var(--border2); font-size: 18px; }
-.flow-branch { display: flex; width: 90%; gap: 10px; justify-content: center; }
+.flow-box.active.reverse .flow-active-desc { color: var(--red); background: rgba(255,61,113,0.1); }
+.flow-arrow { color: var(--border2); font-size: 18px; text-align: center; width: 100%; margin: -4px 0; }
+
+.flow-branch { display: flex; width: 95%; gap: 12px; justify-content: center; }
 .flow-branch-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .flow-branch-box { background: rgba(255,255,255,0.02); border: 1.5px dashed var(--border2); border-radius: 10px; padding: 12px; width: 100%; text-align: center; transition: all 0.3s; }
-.flow-branch-box.active { border-color: var(--cyan); border-style: solid; background: rgba(0, 229, 255, 0.05); box-shadow: 0 0 15px rgba(0, 229, 255, 0.2); }
-.flow-branch-box.active.reverse { border-color: var(--red); border-style: solid; background: rgba(255, 61, 113, 0.05); box-shadow: 0 0 15px rgba(255, 61, 113, 0.3); }
+.flow-branch-box.active { border-color: var(--cyan); border-style: solid; background: rgba(0, 229, 255, 0.05); box-shadow: 0 0 15px rgba(0, 229, 255, 0.2); transform: scale(1.03); }
+.flow-branch-box.active.reverse { border-color: var(--red); border-style: solid; background: rgba(255, 61, 113, 0.05); box-shadow: 0 0 15px rgba(255, 61, 113, 0.3); transform: scale(1.03); }
+.flow-branch-title { font-family: var(--body); font-weight: 700; font-size: 13px; color: var(--text); margin-bottom: 4px; margin-top:4px; }
+.flow-branch-cond { font-size: 10px; color: var(--text3); font-family: var(--mono); background: var(--bg); padding: 2px 6px; border-radius: 4px; display: inline-block; }
 
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(8,12,20,0.92);backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:8px 10px env(safe-area-inset-bottom,8px);z-index:200;}
 .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;border:none;background:none;cursor:pointer;transition:transform 0.15s;}
@@ -344,29 +356,48 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 
     <div class="tab-content" id="tab-flow">
       <div class="section" style="padding-top:16px;">
-        <div class="section-title">무한매수법 V4.0 진행 흐름도</div>
+        <div class="section-title">무한매수법 V4.0 하이브리드 흐름도</div>
         <div class="flow-container">
           
           <div class="flow-box" id="flow-ready">
-            <div class="flow-icon">💰</div>
-            <div class="flow-title">초기 설정 및 대기</div>
-            <div class="flow-desc">원금 설정 / 분할수 선택 완료</div>
+            <div class="flow-header">
+              <div class="flow-icon">💰</div>
+              <div class="flow-title">초기 설정 및 대기</div>
+            </div>
+            <ul class="flow-list">
+              <li><b>예산 분배:</b> 보유 원금 ÷ 분할수(20/40)</li>
+              <li><b>목표:</b> 매일 정해진 예산만큼 스노우볼 굴리기</li>
+            </ul>
             <div class="flow-active-desc">▶ 봇이 매수 타이밍을 대기 중입니다.</div>
           </div>
           <div class="flow-arrow">↓</div>
           
           <div class="flow-box" id="flow-first">
-            <div class="flow-icon">🚀</div>
-            <div class="flow-title">최초 1회차 매수</div>
-            <div class="flow-desc">T=0, 종가(LOC) 무조건 매수</div>
+            <div class="flow-header">
+              <div class="flow-icon">🚀</div>
+              <div class="flow-title">최초 1회차 매수</div>
+            </div>
+            <ul class="flow-list">
+              <li><b>T=0 상태:</b> 현재가 +10% 지정가 무조건 매수</li>
+            </ul>
             <div class="flow-active-desc">▶ 첫 매수가 진행/완료되었습니다.</div>
           </div>
           <div class="flow-arrow">↓</div>
           
           <div class="flow-box" id="flow-regular">
-            <div class="flow-icon">📈</div>
-            <div class="flow-title">일반 모드 진행 (V4.0 Hybrid)</div>
-            <div class="flow-desc">스플릿 매수 / 별지점 상한가 방어<br>부분 체결 시 T값 정밀 계산</div>
+            <div class="flow-header">
+              <div class="flow-icon">📈</div>
+              <div class="flow-title">일반 모드 진행 (Hybrid)</div>
+            </div>
+            <div class="flow-badge-group">
+               <span class="flow-badge cyan">스플릿 매수</span>
+               <span class="flow-badge gold">+10% 전량익절</span>
+            </div>
+            <ul class="flow-list text-left">
+              <li>👉 <b>매수:</b> 일일 예산을 평단/시장가로 분산 진입</li>
+              <li>🛡️ <b>방어:</b> 별지점(+5%) 상한가로 고점 추격 원천 차단</li>
+              <li>🧮 <b>T값:</b> 체결된 수량 비율만큼만 소수점 정밀 누적</li>
+            </ul>
             <div class="flow-active-desc" id="flow-regular-txt">▶ 현재 0회차 진행 중</div>
           </div>
           <div class="flow-arrow">↓</div>
@@ -374,27 +405,32 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
           <div class="flow-branch">
             <div class="flow-branch-col">
               <div class="flow-branch-box" id="flow-done">
-                <div style="font-size:16px; margin-bottom:4px;">🎉</div>
-                <div style="font-family:var(--body); font-weight:700; font-size:12px; color:var(--text); margin-bottom:2px;">전량 익절 달성</div>
-                <div style="font-size:10px; color:var(--text3); font-family:var(--mono);">보유수량 = 0</div>
+                <div style="font-size:18px; margin-bottom:4px;">🎉</div>
+                <div class="flow-branch-title">전량 익절 달성</div>
+                <div class="flow-branch-cond">보유수량 = 0</div>
               </div>
               <div class="flow-arrow">↓</div>
-              <div class="flow-box" style="width:100%; padding:10px;">
-                <div class="flow-title" style="font-size:12px; color:var(--green);">✅ 종료 및 재시작</div>
+              <div class="flow-box" style="width:100%; padding:10px; border-style:dashed;">
+                <div class="flow-title" style="font-size:12px; color:var(--green); text-align:center;">✅ 종료 및 다음 사이클 재시작</div>
               </div>
             </div>
             
             <div class="flow-branch-col">
               <div class="flow-branch-box" id="flow-exhausted">
-                <div style="font-size:16px; margin-bottom:4px;">🚨</div>
-                <div style="font-family:var(--body); font-weight:700; font-size:12px; color:var(--text); margin-bottom:2px;">목표 회차 소진</div>
-                <div style="font-size:10px; color:var(--text3); font-family:var(--mono);">T > 분할수</div>
+                <div style="font-size:18px; margin-bottom:4px;">🚨</div>
+                <div class="flow-branch-title">목표 회차 소진</div>
+                <div class="flow-branch-cond">T > 분할수</div>
               </div>
               <div class="flow-arrow">↓</div>
-              <div class="flow-box reverse" id="flow-reverse" style="width:100%; padding:10px;">
-                <div class="flow-title" style="font-size:12px; color:var(--red);">🏃 리버스 모드</div>
-                <div class="flow-desc" style="font-size:9px;">별지점 기준 손절+매수 반복</div>
-                <div class="flow-active-desc" style="font-size:10px;">▶ 영혼법 가동 중</div>
+              <div class="flow-box reverse" id="flow-reverse" style="width:100%; padding:12px 10px;">
+                <div class="flow-title" style="font-size:12px; color:var(--red); text-align:center; margin-bottom:8px;">🏃 리버스 모드 (영혼법)</div>
+                <ul class="flow-list" style="font-size:10px; padding-left:12px;">
+                  <li><b>1일차:</b> 남은 수량 20등분 무조건 매도(MOC)</li>
+                  <li><b>2일차~:</b> 별지점(5일선) 기준 공방전</li>
+                  <li style="padding-left:8px; color:var(--text2); list-style:none;">🔺 위면 매도 (수량 20등분)</li>
+                  <li style="padding-left:8px; color:var(--text2); list-style:none;">🔻 아래면 매수 (현재 잔금의 1/4)</li>
+                </ul>
+                <div class="flow-active-desc" style="font-size:10px; margin-top:8px;">▶ 영혼법 가동 중</div>
               </div>
             </div>
           </div>
@@ -402,8 +438,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
           <div class="flow-arrow" style="margin-left: 50%;">↓</div>
           
           <div class="flow-box" id="flow-exit" style="border-style:dashed;">
-            <div class="flow-title" style="font-size:13px; color:var(--purple);">탈출 조건 충족</div>
-            <div class="flow-desc" id="flow-exit-txt">종가가 평단 대비 -20% 위로 회복 시 일반모드 복귀</div>
+            <div class="flow-header" style="justify-content:center;">
+              <div class="flow-icon" style="font-size:16px;">🔄</div>
+              <div class="flow-title" style="font-size:13px; color:var(--purple);">탈출 조건 충족</div>
+            </div>
+            <div class="flow-desc" id="flow-exit-txt" style="text-align:center;">종가가 평단 대비 -20% 위로 회복 시<br>잔여 예산 재분배 후 일반모드 복귀</div>
           </div>
 
         </div>
@@ -615,7 +654,6 @@ function renderDashboard(data) {
       document.getElementById('ui-snowPercent').style.color = 'var(--cyan)';
   }
 
-  // 🚨 소수점 물방울 로직 최적화
   const dotHtml = Array.from({length: maxInstall}, (_, i) => {
     const step = i + 1;
     let cName = 'empty';
@@ -737,9 +775,9 @@ function renderDashboard(data) {
       </div>`;
   }
 
-  // 🗺️ 5. 상황판(플로우) 상태 매핑 로직
+  // 🗺️ 상황판(플로우) 상태 매핑 로직
   document.querySelectorAll('.flow-box, .flow-branch-box').forEach(b => b.classList.remove('active'));
-  document.getElementById('flow-exit-txt').textContent = `종가가 평단 대비 ${exitRate}% 위로 회복 시 일반모드 복귀`;
+  document.getElementById('flow-exit-txt').innerHTML = `종가가 평단 대비 <span style="color:var(--red); font-weight:700;">${exitRate}%</span> 위로 회복 시<br>잔여 예산 재분배 후 일반모드 복귀`;
 
   if (isReverse) {
       document.getElementById('flow-reverse').classList.add('active');
