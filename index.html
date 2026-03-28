@@ -35,7 +35,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .spinner{width:40px;height:40px;border:4px solid var(--border);border-top-color:var(--cyan);border-radius:50%;animation:spin 1s linear infinite;}
 @keyframes spin{100%{transform:rotate(360deg);}}
 
-/* 애니메이션 (네트워크 통신 느낌) */
 .pulse { animation: pulse 1.5s infinite; display: inline-block; margin-right: 3px; }
 @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
 
@@ -141,12 +140,30 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;}
 .bar{width:100%;border-radius:3px 3px 0 0;background:linear-gradient(180deg,var(--cyan),var(--cyan2));position:relative;transition:height 0.8s;min-height:4px;}
 
-.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(8,12,20,0.92);backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;padding:8px 0 env(safe-area-inset-bottom,8px);z-index:200;}
-.nav-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 20px;border:none;background:none;cursor:pointer;transition:transform 0.15s;}
-.nav-icon{font-size:22px;line-height:1;}
+.flow-container { display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 8px; }
+.flow-box { background: var(--surface2); border: 2px solid var(--border); border-radius: 12px; padding: 14px; width: 85%; text-align: center; position: relative; transition: all 0.4s ease; }
+.flow-box.active { border-color: var(--cyan); box-shadow: 0 0 15px rgba(0, 229, 255, 0.25); background: rgba(0, 229, 255, 0.05); transform: scale(1.02); }
+.flow-box.active.reverse { border-color: var(--red); box-shadow: 0 0 15px rgba(255, 61, 113, 0.3); background: rgba(255, 61, 113, 0.05); }
+.flow-icon { font-size: 20px; margin-bottom: 4px; }
+.flow-title { font-family: var(--body); font-weight: 700; font-size: 14px; color: var(--text); margin-bottom: 4px; }
+.flow-desc { font-family: var(--mono); font-size: 11px; color: var(--text3); line-height: 1.4; }
+.flow-active-desc { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--cyan); margin-top: 6px; display: none; }
+.flow-box.active .flow-active-desc { display: block; }
+.flow-box.active.reverse .flow-active-desc { color: var(--red); }
+.flow-arrow { color: var(--border2); font-size: 18px; }
+.flow-branch { display: flex; width: 90%; gap: 10px; justify-content: center; }
+.flow-branch-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.flow-branch-box { background: rgba(255,255,255,0.02); border: 1.5px dashed var(--border2); border-radius: 10px; padding: 12px; width: 100%; text-align: center; transition: all 0.3s; }
+.flow-branch-box.active { border-color: var(--cyan); border-style: solid; background: rgba(0, 229, 255, 0.05); box-shadow: 0 0 15px rgba(0, 229, 255, 0.2); }
+.flow-branch-box.active.reverse { border-color: var(--red); border-style: solid; background: rgba(255, 61, 113, 0.05); box-shadow: 0 0 15px rgba(255, 61, 113, 0.3); }
+
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(8,12,20,0.92);backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:8px 10px env(safe-area-inset-bottom,8px);z-index:200;}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;border:none;background:none;cursor:pointer;transition:transform 0.15s;}
+.nav-icon{font-size:20px;line-height:1;}
 .nav-label{font-size:10px;font-family:var(--body);font-weight:500;color:var(--text3);}
 .nav-btn.active .nav-label{color:var(--cyan);}
 .nav-btn.active .nav-icon{filter:drop-shadow(0 0 6px var(--cyan));}
+
 .tag{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-family:var(--mono);font-weight:700;}
 .tag.cyan{background:rgba(0,229,255,0.1);color:var(--cyan);border:1px solid rgba(0,229,255,0.25);}
 .tag.gold{background:rgba(255,215,64,0.1);color:var(--gold);border:1px solid rgba(255,215,64,0.25);}
@@ -156,7 +173,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .update-time{text-align:center;font-size:10px;color:var(--text3);font-family:var(--mono);padding:20px 8px;}
 .sys-version{text-align:center; font-size:10px; color:var(--border2); font-family:var(--mono); margin-top:20px; letter-spacing:1px;}
 .tab-content{display:none;}
-.tab-content.active{display:block;}
+.tab-content.active{display:block; animation: fadeIn 0.3s;}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 .empty-state{text-align:center;padding:30px;color:var(--text3);font-size:12px;font-family:var(--mono);border:1px dashed var(--border);border-radius:var(--r);margin:10px 16px;}
 </style>
 </head>
@@ -229,7 +247,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       </div>
 
       <div class="section">
-        <div class="section-title">스노우볼 회차 진행</div>
+        <div class="section-title">스노우볼 회차 진행 (소수점 정밀 표기)</div>
         <div class="kpi-card" style="border-radius:16px;">
           <div class="snowball-header">
             <span id="ui-snowTitle">사이클 #1</span>
@@ -238,7 +256,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
           <div class="snowball-progress" id="ui-snowballDots"></div>
           <div class="snowball-legend">
             <div class="legend-item"><div class="legend-color done"></div>완료</div>
-            <div class="legend-item"><div class="legend-color curr"></div>현재</div>
+            <div class="legend-item"><div class="legend-color curr"></div>부분/진행</div>
             <div class="legend-item"><div class="legend-color rev"></div>리버스</div>
             <div class="legend-item"><div class="legend-color rem"></div>남음</div>
           </div>
@@ -324,6 +342,75 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       <div style="height:20px;"></div>
     </div>
 
+    <div class="tab-content" id="tab-flow">
+      <div class="section" style="padding-top:16px;">
+        <div class="section-title">무한매수법 V4.0 진행 흐름도</div>
+        <div class="flow-container">
+          
+          <div class="flow-box" id="flow-ready">
+            <div class="flow-icon">💰</div>
+            <div class="flow-title">초기 설정 및 대기</div>
+            <div class="flow-desc">원금 설정 / 분할수 선택 완료</div>
+            <div class="flow-active-desc">▶ 봇이 매수 타이밍을 대기 중입니다.</div>
+          </div>
+          <div class="flow-arrow">↓</div>
+          
+          <div class="flow-box" id="flow-first">
+            <div class="flow-icon">🚀</div>
+            <div class="flow-title">최초 1회차 매수</div>
+            <div class="flow-desc">T=0, 종가(LOC) 무조건 매수</div>
+            <div class="flow-active-desc">▶ 첫 매수가 진행/완료되었습니다.</div>
+          </div>
+          <div class="flow-arrow">↓</div>
+          
+          <div class="flow-box" id="flow-regular">
+            <div class="flow-icon">📈</div>
+            <div class="flow-title">일반 모드 진행 (V4.0 Hybrid)</div>
+            <div class="flow-desc">스플릿 매수 / 별지점 상한가 방어<br>부분 체결 시 T값 정밀 계산</div>
+            <div class="flow-active-desc" id="flow-regular-txt">▶ 현재 0회차 진행 중</div>
+          </div>
+          <div class="flow-arrow">↓</div>
+          
+          <div class="flow-branch">
+            <div class="flow-branch-col">
+              <div class="flow-branch-box" id="flow-done">
+                <div style="font-size:16px; margin-bottom:4px;">🎉</div>
+                <div style="font-family:var(--body); font-weight:700; font-size:12px; color:var(--text); margin-bottom:2px;">전량 익절 달성</div>
+                <div style="font-size:10px; color:var(--text3); font-family:var(--mono);">보유수량 = 0</div>
+              </div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-box" style="width:100%; padding:10px;">
+                <div class="flow-title" style="font-size:12px; color:var(--green);">✅ 종료 및 재시작</div>
+              </div>
+            </div>
+            
+            <div class="flow-branch-col">
+              <div class="flow-branch-box" id="flow-exhausted">
+                <div style="font-size:16px; margin-bottom:4px;">🚨</div>
+                <div style="font-family:var(--body); font-weight:700; font-size:12px; color:var(--text); margin-bottom:2px;">목표 회차 소진</div>
+                <div style="font-size:10px; color:var(--text3); font-family:var(--mono);">T > 분할수</div>
+              </div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-box reverse" id="flow-reverse" style="width:100%; padding:10px;">
+                <div class="flow-title" style="font-size:12px; color:var(--red);">🏃 리버스 모드</div>
+                <div class="flow-desc" style="font-size:9px;">별지점 기준 손절+매수 반복</div>
+                <div class="flow-active-desc" style="font-size:10px;">▶ 영혼법 가동 중</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-arrow" style="margin-left: 50%;">↓</div>
+          
+          <div class="flow-box" id="flow-exit" style="border-style:dashed;">
+            <div class="flow-title" style="font-size:13px; color:var(--purple);">탈출 조건 충족</div>
+            <div class="flow-desc" id="flow-exit-txt">종가가 평단 대비 -20% 위로 회복 시 일반모드 복귀</div>
+          </div>
+
+        </div>
+      </div>
+      <div style="height:20px;"></div>
+    </div>
+
     <div class="tab-content" id="tab-info">
       <div class="section" style="padding-top:16px;">
         <div class="section-title">봇 설정 현황</div>
@@ -334,7 +421,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
             <div class="pos-row"><span class="pos-key">1일 매수 예산</span><span class="pos-val gold" id="ui-infoBudget">$0.00</span></div>
             <div class="pos-row"><span class="pos-key">익절 목표 수익률</span><span class="pos-val">+10.00%</span></div>
             <div class="pos-row"><span class="pos-key">리버스 탈출 목표</span><span class="pos-val red" id="ui-infoExitRate">-20.00%</span></div>
-            <div class="pos-row"><span class="pos-key">매수 방식</span><span class="pos-val" style="font-size:12px;">스플릿 (평단/LOC)</span></div>
+            <div class="pos-row"><span class="pos-key">매수 방식</span><span class="pos-val" style="font-size:11px;">스플릿 + 별지점(+5%) 방어</span></div>
+            <div class="pos-row"><span class="pos-key">T값(회차) 연산</span><span class="pos-val cyan" style="font-size:11px;">부분 체결 비례 소수점 정밀연산</span></div>
           </div>
         </div>
 
@@ -370,7 +458,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
           </div>
         </div>
         
-        <div class="sys-version">SYSTEM BUILD: v4.2 REVERSE EDITION</div>
+        <div class="sys-version">SYSTEM BUILD: v4.3 HYBRID EDITION</div>
       </div>
       <div style="height:20px;"></div>
     </div>
@@ -381,6 +469,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     <button class="nav-btn active" onclick="switchTab('home',this)"><span class="nav-icon">📊</span><span class="nav-label">대시보드</span></button>
     <button class="nav-btn" onclick="switchTab('trades',this)"><span class="nav-icon">📋</span><span class="nav-label">거래내역</span></button>
     <button class="nav-btn" onclick="switchTab('cycles',this)"><span class="nav-icon">🔄</span><span class="nav-label">사이클</span></button>
+    <button class="nav-btn" onclick="switchTab('flow',this)"><span class="nav-icon">🗺️</span><span class="nav-label">상황판</span></button>
     <button class="nav-btn" onclick="switchTab('info',this)"><span class="nav-icon">⚙️</span><span class="nav-label">정보</span></button>
   </div>
 </div>
@@ -526,11 +615,12 @@ function renderDashboard(data) {
       document.getElementById('ui-snowPercent').style.color = 'var(--cyan)';
   }
 
+  // 🚨 소수점 물방울 로직 최적화
   const dotHtml = Array.from({length: maxInstall}, (_, i) => {
     const step = i + 1;
     let cName = 'empty';
-    if(step < currInstall) cName = 'done';
-    else if(step === Math.floor(currInstall) || step === Math.ceil(currInstall)) cName = isReverse ? 'reverse' : 'current';
+    if(step <= Math.floor(currInstall)) cName = 'done';
+    else if(step === Math.ceil(currInstall) && currInstall > 0) cName = isReverse ? 'reverse' : 'current';
     return `<div class="snow-dot ${cName}">${step}</div>`;
   }).join('');
   document.getElementById('ui-snowballDots').innerHTML = dotHtml;
@@ -645,6 +735,23 @@ function renderDashboard(data) {
         <div class="bar" style="height:20px;background:linear-gradient(180deg,rgba(0,229,255,0.3),rgba(0,229,255,0.1));border:1px dashed var(--border2);"></div>
         <div class="bar-label" style="color:var(--gold);">#${cycleNum} 진행중</div>
       </div>`;
+  }
+
+  // 🗺️ 5. 상황판(플로우) 상태 매핑 로직
+  document.querySelectorAll('.flow-box, .flow-branch-box').forEach(b => b.classList.remove('active'));
+  document.getElementById('flow-exit-txt').textContent = `종가가 평단 대비 ${exitRate}% 위로 회복 시 일반모드 복귀`;
+
+  if (isReverse) {
+      document.getElementById('flow-reverse').classList.add('active');
+  } else if (totalQty === 0 && currInstall > 0) {
+      document.getElementById('flow-done').classList.add('active');
+  } else if (totalQty > 0 && currInstall <= 1.0) {
+      document.getElementById('flow-first').classList.add('active');
+  } else if (totalQty > 0 && currInstall > 1.0 && currInstall <= maxInstall) {
+      document.getElementById('flow-regular').classList.add('active');
+      document.getElementById('flow-regular-txt').textContent = `▶ 현재 ${currInstall.toFixed(1)}회차 진행 중`;
+  } else {
+      document.getElementById('flow-ready').classList.add('active');
   }
 
   document.getElementById('ui-infoTicker').textContent = ticker;
