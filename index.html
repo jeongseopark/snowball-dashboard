@@ -57,7 +57,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 
 .kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:14px 14px 12px;position:relative;overflow:hidden;}
-.kpi-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--accent,var(--cyan));}
+.kpi-card::after{content:'absolute;bottom:0;left:0;right:0;height:2px;background:var(--accent,var(--cyan));}
 .kpi-label{font-size:10px;color:var(--text3);font-family:var(--mono);letter-spacing:0.5px;margin-bottom:8px;display:flex;align-items:center;gap:5px;}
 .kpi-value{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--accent,var(--cyan));line-height:1;}
 .kpi-value.lg{font-size:26px;}
@@ -136,11 +136,14 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .cycle-ticker{font-family:var(--head);font-size:20px;font-weight:800;color:var(--text);margin-bottom:10px;}
 .cycle-profit{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--green);margin-bottom:4px;}
 .cycle-rate{font-size:11px;font-family:var(--mono);display:inline-flex;align-items:center;gap:3px;background:rgba(0,230,118,0.1);color:var(--green2);padding:2px 7px;border-radius:10px;}
-.bar-chart{display:flex;align-items:flex-end;gap:5px;height:60px;margin-top:10px;}
-.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;}
-.bar{width:100%;border-radius:3px 3px 0 0;background:linear-gradient(180deg,var(--cyan),var(--cyan2));position:relative;transition:height 0.8s;min-height:4px;}
 
-/* 🗺️ 플로우 탭 수퍼차지 CSS */
+/* 🚨 짱짱해진 막대 차트 전용 CSS */
+.bar-chart { display:flex; align-items:flex-end; justify-content:center; gap:20px; height:85px; margin-top:15px; padding-bottom:5px; overflow-x:auto; }
+.bar-wrap { display:flex; flex-direction:column; align-items:center; width:36px; flex-shrink:0; }
+.bar-value { font-size:10px; color:var(--cyan); font-family:var(--mono); font-weight:700; margin-bottom:6px; text-shadow:0 0 5px rgba(0,229,255,0.5); }
+.bar { width:100%; border-radius:4px 4px 0 0; background:linear-gradient(180deg, var(--cyan) 0%, rgba(0,229,255,0.1) 100%); position:relative; transition:height 0.8s cubic-bezier(0.4,0,0.2,1); min-height:4px; box-shadow:0 -2px 10px rgba(0,229,255,0.3); }
+.bar-label { font-size:10px; color:var(--text3); margin-top:6px; font-family:var(--mono); font-weight:700; }
+
 .flow-container { display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 10px; }
 .flow-box { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 12px; padding: 14px 16px; width: 90%; position: relative; transition: all 0.4s ease; }
 .flow-box.active { border-color: var(--cyan); box-shadow: 0 0 15px rgba(0, 229, 255, 0.25); background: rgba(0, 229, 255, 0.05); transform: scale(1.02); }
@@ -340,11 +343,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 
         <div class="section-title" style="margin-top:20px;">수익 추이 차트</div>
         <div class="kpi-card" style="border-radius:16px; padding:18px;">
-          <div style="font-size:11px;color:var(--text3);margin-bottom:8px;font-family:var(--mono);">사이클별 실현수익 ($)</div>
+          <div style="font-size:11px;color:var(--text3);font-family:var(--mono);">사이클별 실현수익 ($)</div>
           <div class="bar-chart" id="ui-barChart"></div>
         </div>
         
-        <div class="section-title" style="margin-top:14px;">완료된 사이클 히스토리</div>
+        <div class="section-title" style="margin-top:20px;">완료된 사이클 히스토리</div>
       </div>
       <div class="cycle-scroll" id="ui-cycleScroll"></div>
       
@@ -691,13 +694,10 @@ function renderDashboard(data) {
     });
   }
 
-  // 💡 [수퍼차지] API의 cycles 데이터를 믿지 않고, trades(영수증)에서 직접 완벽하게 재계산합니다!
   let myCycles = {};
   trades.forEach(t => {
       const cNum = parseInt(t[2]);
-      if (isNaN(cNum)) return;
-      // 완료된 사이클(현재 주기보다 작은 것)만 수집
-      if (cNum >= cycleNum) return;
+      if (isNaN(cNum) || cNum >= cycleNum) return;
 
       if (!myCycles[cNum]) {
           myCycles[cNum] = { num: cNum, ticker: t[1], profit: 0, buyAmt: 0, endDate: t[0] };
@@ -710,12 +710,14 @@ function renderDashboard(data) {
       if (isBuy) myCycles[cNum].buyAmt += amt;
       if (isSell && realized > 0) {
           myCycles[cNum].profit += realized;
-          myCycles[cNum].endDate = t[0]; // 마지막 익절 날짜로 업데이트
+          myCycles[cNum].endDate = t[0]; 
       }
   });
 
-  // 내림차순 정렬
   const cycleArr = Object.values(myCycles).sort((a,b) => b.num - a.num);
+  
+  // 🚨 [수정된 부분] 차트 전용 배열: 과거부터 시간순으로 (1, 2, 3...) 보여주기 위한 오름차순 정렬
+  const chartArr = [...cycleArr].sort((a,b) => a.num - b.num);
 
   document.getElementById('ui-cycleTotalProfit').textContent = `+$${totalProfit.toFixed(2)}`;
   document.getElementById('ui-cycleTotalCnt').textContent = `${completedCycles}주기`;
@@ -769,25 +771,28 @@ function renderDashboard(data) {
       </div>
     `}).join('');
     
-    const maxProfit = Math.max(...cycleArr.map(c => c.profit));
-    document.getElementById('ui-barChart').innerHTML = cycleArr.map(c => `
+    // 🚨 [수정된 부분] 짱짱하게 디자인된 막대 차트 로직
+    const maxProfit = Math.max(...chartArr.map(c => c.profit));
+    document.getElementById('ui-barChart').innerHTML = chartArr.map(c => `
       <div class="bar-wrap">
-        <div class="bar" style="height:${maxProfit > 0 ? (c.profit / maxProfit * 50).toFixed(0) : 0}px"></div>
+        <div class="bar-value">$${Math.round(c.profit)}</div>
+        <div class="bar" style="height:${maxProfit > 0 ? (c.profit / maxProfit * 45).toFixed(0) : 0}px"></div>
         <div class="bar-label">#${c.num}</div>
       </div>
     `).join('');
+    
     document.getElementById('ui-emptyCycle').style.display = 'none';
   } else {
     document.getElementById('ui-emptyCycle').style.display = 'block';
     document.getElementById('ui-cycleScroll').innerHTML = '';
     document.getElementById('ui-barChart').innerHTML = `
       <div class="bar-wrap">
-        <div class="bar" style="height:20px;background:linear-gradient(180deg,rgba(0,229,255,0.3),rgba(0,229,255,0.1));border:1px dashed var(--border2);"></div>
-        <div class="bar-label" style="color:var(--gold);">#${cycleNum} 진행중</div>
+        <div class="bar-value" style="color:var(--gold);">$0</div>
+        <div class="bar" style="height:20px;background:linear-gradient(180deg,rgba(255,215,64,0.5),rgba(255,215,64,0.1));"></div>
+        <div class="bar-label">#${cycleNum} 진행중</div>
       </div>`;
   }
 
-  // 🗺️ 상황판(플로우) 상태 매핑 로직
   document.querySelectorAll('.flow-box, .flow-branch-box').forEach(b => b.classList.remove('active'));
   document.getElementById('flow-exit-txt').innerHTML = `종가가 평단 대비 <span style="color:var(--red); font-weight:700;">${exitRate}%</span> 위로 회복 시<br>잔여 예산 재분배 후 일반모드 복귀`;
 
