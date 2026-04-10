@@ -57,7 +57,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 
 .kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:14px 14px 12px;position:relative;overflow:hidden;}
-.kpi-card::after{content:'absolute;bottom:0;left:0;right:0;height:2px;background:var(--accent,var(--cyan));}
+
+/* 🚨 여기가 문제였던 부분입니다! 완벽 복구 완료 */
+.kpi-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--accent,var(--cyan));}
+
 .kpi-label{font-size:10px;color:var(--text3);font-family:var(--mono);letter-spacing:0.5px;margin-bottom:8px;display:flex;align-items:center;gap:5px;}
 .kpi-value{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--accent,var(--cyan));line-height:1;}
 .kpi-value.lg{font-size:26px;}
@@ -715,8 +718,6 @@ function renderDashboard(data) {
   });
 
   const cycleArr = Object.values(myCycles).sort((a,b) => b.num - a.num);
-  
-  // 🚨 [수정된 부분] 차트 전용 배열: 과거부터 시간순으로 (1, 2, 3...) 보여주기 위한 오름차순 정렬
   const chartArr = [...cycleArr].sort((a,b) => a.num - b.num);
 
   document.getElementById('ui-cycleTotalProfit').textContent = `+$${totalProfit.toFixed(2)}`;
@@ -771,7 +772,6 @@ function renderDashboard(data) {
       </div>
     `}).join('');
     
-    // 🚨 [수정된 부분] 짱짱하게 디자인된 막대 차트 로직
     const maxProfit = Math.max(...chartArr.map(c => c.profit));
     document.getElementById('ui-barChart').innerHTML = chartArr.map(c => `
       <div class="bar-wrap">
