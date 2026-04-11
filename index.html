@@ -137,7 +137,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .cycle-profit{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--green);margin-bottom:4px;}
 .cycle-rate{font-size:11px;font-family:var(--mono);display:inline-flex;align-items:center;gap:3px;background:rgba(0,230,118,0.1);color:var(--green2);padding:2px 7px;border-radius:10px;}
 
-/* 🚨 여기가 수정된 막대 차트 전용 CSS 입니다! 높이를 확 키우고 마진을 줬습니다 */
 .bar-chart { display:flex; align-items:flex-end; justify-content:center; gap:25px; height:110px; margin-top:20px; padding-bottom:5px; overflow-x:auto; }
 .bar-wrap { display:flex; flex-direction:column; align-items:center; width:40px; flex-shrink:0; }
 .bar-value { font-size:12px; color:var(--cyan); font-family:var(--mono); font-weight:700; margin-bottom:8px; text-shadow:0 0 8px rgba(0,229,255,0.6); }
@@ -478,7 +477,29 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
           </div>
         </div>
 
-        <div class="sys-version">SYSTEM BUILD: v4.5 HYBRID (Neon Chart Edition)</div>
+        <div class="section-title" style="margin-top:14px;">스프레드시트 탭 구성 가이드</div>
+        <div class="position-card">
+          <div class="position-rows">
+            <div class="pos-row">
+              <div><div class="pos-key">봇_매매기록</div><div style="font-size:10px;color:var(--text3);margin-top:2px;">봇이 실시간 기록하는 Raw 영수증</div></div>
+              <span class="tag red">봇 전용</span>
+            </div>
+            <div class="pos-row">
+              <div><div class="pos-key">일별_추이</div><div style="font-size:10px;color:var(--text3);margin-top:2px;">현재 포지션 및 평단가 기록</div></div>
+              <span class="tag cyan">자동</span>
+            </div>
+            <div class="pos-row">
+              <div><div class="pos-key">현재_상태</div><div style="font-size:10px;color:var(--text3);margin-top:2px;">스코어카드 집계용 1줄 전광판</div></div>
+              <span class="tag cyan">자동</span>
+            </div>
+            <div class="pos-row" style="border:none;">
+              <div><div class="pos-key">사이클별_요약</div><div style="font-size:10px;color:var(--text3);margin-top:2px;">완료된 사이클 성과 통계</div></div>
+              <span class="tag gold">수동/수식</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sys-version">SYSTEM BUILD: v4.6 HYBRID (UI Restored Edition)</div>
       </div>
       <div style="height:20px;"></div>
     </div>
@@ -769,7 +790,6 @@ function renderDashboard(data) {
       </div>
     `}).join('');
     
-    // 🚨 넉넉하게 50px로 뻗어오르는 예쁜 막대 차트!
     const maxProfit = Math.max(...chartArr.map(c => c.profit));
     document.getElementById('ui-barChart').innerHTML = chartArr.map(c => `
       <div class="bar-wrap">
