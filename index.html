@@ -393,7 +393,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
             </div>
             <div class="flow-badge-group">
                <span class="flow-badge cyan">스플릿 매수</span>
-               <span class="flow-badge gold">+10% 전량익절</span>
+               <span class="flow-badge gold" id="flow-target-badge">+10% 전량익절</span>
             </div>
             <ul class="flow-list text-left">
               <li>👉 <b>매수:</b> 일일 예산을 평단/시장가로 분산 진입</li>
@@ -460,7 +460,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
             <div class="pos-row"><span class="pos-key">봇 구동 상태</span><span class="tag green"><span class="pulse">●</span> LIVE</span></div>
             <div class="pos-row"><span class="pos-key">운영 종목</span><span class="pos-val" style="font-size:14px; font-weight:800; color:var(--cyan)" id="ui-infoTicker">TICKER</span></div>
             <div class="pos-row"><span class="pos-key">1일 매수 예산</span><span class="pos-val gold" id="ui-infoBudget">$0.00</span></div>
-            <div class="pos-row"><span class="pos-key">익절 목표 수익률</span><span class="pos-val">+10.00%</span></div>
+            <div class="pos-row"><span class="pos-key">익절 목표 수익률</span><span class="pos-val" id="ui-infoTargetRate">+10.00%</span></div>
             <div class="pos-row"><span class="pos-key">리버스 탈출 목표</span><span class="pos-val red" id="ui-infoExitRate">-20.00%</span></div>
             <div class="pos-row"><span class="pos-key">매수 방식</span><span class="pos-val" style="font-size:11px;">스플릿 + 별지점(+5%) 방어</span></div>
             <div class="pos-row"><span class="pos-key">T값(회차) 연산</span><span class="pos-val cyan" style="font-size:11px;">부분 체결 비례 소수점 정밀연산</span></div>
@@ -499,7 +499,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
           </div>
         </div>
 
-        <div class="sys-version">SYSTEM BUILD: v4.6 HYBRID (UI Restored Edition)</div>
+        <div class="sys-version">SYSTEM BUILD: v4.7 HYBRID (Auto Target Sync)</div>
       </div>
       <div style="height:20px;"></div>
     </div>
@@ -564,6 +564,9 @@ function renderDashboard(data) {
   const totalQty = trend[7] || 0;
   const totalInvested = parseFloat(trend[8] || 0);
   const maxInstall = trades.length > 0 ? parseInt(trades[0][3] || 40) : 40;
+
+  // 🚨 [추가] 평단가와 목표가를 역산해서 '목표 수익률(%)' 자동 감지
+  const calcTargetRate = avgPrice > 0 ? Math.round(((targetPrice - avgPrice) / avgPrice) * 100) : 10;
 
   document.getElementById('ui-totalPnl').textContent = `+$${totalProfit.toFixed(2)}`;
   document.getElementById('ui-kpiCompleted').textContent = completedCycles;
@@ -640,7 +643,9 @@ function renderDashboard(data) {
       const progressRate = targetPrice > avgPrice ? ((closePrice - avgPrice) / (targetPrice - avgPrice)) * 100 : 0;
       gaugeBarEl.style.width = `${Math.min(Math.max(progressRate, 0), 100)}%`;
       gaugeBarEl.style.background = "linear-gradient(90deg, var(--cyan2), var(--cyan))";
-      gaugeRateEl.textContent = `▲ ${pnlRate.toFixed(2)}% / 10%`;
+      
+      // 🚨 자동 감지된 익절 목표율 반영
+      gaugeRateEl.textContent = `▲ ${pnlRate.toFixed(2)}% / ${calcTargetRate}%`;
       gaugeRateEl.className = "tag gold";
   }
 
@@ -747,6 +752,8 @@ function renderDashboard(data) {
       document.getElementById('ui-cycCurrent').style.color = "var(--red)";
       document.getElementById('ui-cycInstallTag').className = "tag red";
       document.getElementById('ui-cycInstallTag').textContent = "🚨 영혼법 진행중";
+      
+      // 🚨 자동 감지
       document.getElementById('ui-cycTargetTitle').innerHTML = `탈출 목표가 <span style="font-size:10px; color:var(--text3);">/ ${exitRate}%</span>`;
       document.getElementById('ui-cycTarget').textContent = `$${(avgPrice * (1 + exitRate / 100)).toFixed(2)}`;
       document.getElementById('ui-cycTarget').className = "pos-val red";
@@ -758,7 +765,9 @@ function renderDashboard(data) {
       document.getElementById('ui-cycCurrent').textContent = `사이클 #${cycleNum} 진행중`;
       document.getElementById('ui-cycInstallTag').className = "tag gold";
       document.getElementById('ui-cycInstallTag').textContent = `${currInstall.toFixed(1)} / ${maxInstall}회차`;
-      document.getElementById('ui-cycTargetTitle').innerHTML = `익절 목표가 <span style="font-size:10px; color:var(--text3);">/ +10%</span>`;
+      
+      // 🚨 자동 감지된 익절 목표율 반영
+      document.getElementById('ui-cycTargetTitle').innerHTML = `익절 목표가 <span style="font-size:10px; color:var(--text3);">/ +${calcTargetRate}%</span>`;
       document.getElementById('ui-cycTarget').textContent = `$${targetPrice.toFixed(2)}`;
       document.getElementById('ui-cycTarget').className = "pos-val gold";
       document.getElementById('ui-cycProgressPct').textContent = `${installPercent}%`;
@@ -830,6 +839,10 @@ function renderDashboard(data) {
   document.getElementById('ui-infoTicker').textContent = ticker;
   document.getElementById('ui-infoBudget').textContent = `$${dailyBudget.toFixed(2)}`;
   document.getElementById('ui-infoExitRate').textContent = `${exitRate.toFixed(2)}%`; 
+  
+  // 🚨 상황판 및 정보 탭의 목표 수익률 텍스트 자동 업데이트!
+  document.getElementById('flow-target-badge').textContent = `+${calcTargetRate}% 전량익절`;
+  document.getElementById('ui-infoTargetRate').textContent = `+${calcTargetRate.toFixed(2)}%`;
 
   const now = new Date();
   const pad = n => String(n).padStart(2,'0');
