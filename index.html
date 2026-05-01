@@ -9,7 +9,6 @@
 <title>VIP SNOWBALL & VR BOT</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 :root {
@@ -27,6 +26,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 
 /* ── 기본 레이아웃 ── */
 .app{display:flex;flex-direction:column;height:100svh;max-width:430px;margin:0 auto;position:relative;overflow:hidden;background:var(--bg);}
+#loader{position:absolute;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.5s;}
+.spinner{width:40px;height:40px;border:4px solid var(--border);border-top-color:var(--cyan);border-radius:50%;animation:spin 1s linear infinite;}
+@keyframes spin{100%{transform:rotate(360deg);}}
+
 .top-bar{position:relative;z-index:100;background:var(--bg);padding:env(safe-area-inset-top,12px) 20px 12px;display:flex;align-items:center;justify-content:space-between;}
 .top-bar-left{display:flex;align-items:center;gap:10px;}
 .bot-avatar{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--cyan),var(--purple));display:flex;align-items:center;justify-content:center;font-size:18px;}
@@ -95,7 +98,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .toggle-switch.on { background:var(--cyan); }
 .toggle-switch.on::after { transform:translateX(18px); }
 
-/* ── 흐름도 전용 CSS (네온 스타일 통일) ── */
+/* ── 흐름도 전용 CSS ── */
 .flow-container { display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 10px; }
 .flow-box { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 12px; padding: 14px 16px; width: 95%; position: relative; transition: all 0.4s ease; margin: 0 auto;}
 .flow-box.active { border-color: var(--cyan); box-shadow: 0 0 15px rgba(0, 229, 255, 0.25); background: rgba(0, 229, 255, 0.05); }
@@ -146,7 +149,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 </head>
 <body>
 <div class="app">
-  <!-- 상단 공통 헤더 -->
+  <div id="loader">
+    <div class="spinner"></div>
+    <div style="margin-top:15px;font-family:var(--mono);color:var(--cyan);font-size:12px;">관제탑 데이터 동기화 중...</div>
+  </div>
+
   <div class="top-bar">
     <div class="top-bar-left">
       <div class="bot-avatar">🤖</div>
@@ -158,7 +165,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     </div>
   </div>
 
-  <!-- 🚀 상단 플로팅 탭 네비게이션 (TOTAL 맨 앞으로 유지) -->
   <div class="floating-nav-wrap">
     <div class="floating-nav">
       <button class="float-btn active" onclick="switchMainTab('total', this)">🌐 TOTAL</button>
@@ -169,23 +175,21 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 
   <div class="scroll-area" id="scrollArea">
     
-    <!-- ==========================================
-         [ 탭 1 ] TOTAL (통합 관제탑 및 세팅) 
-         ========================================== -->
+    <!-- [ 탭 1 ] TOTAL -->
     <div class="tab-content active" id="tab-total">
       <div class="section">
         <div class="hero-card" style="background:linear-gradient(135deg, #1A1423 0%, #2D1B4E 100%); border-color:var(--purple);">
-          <div class="hero-label">TOTAL PORTFOLIO (USD 환산)</div>
-          <div class="hero-value" style="color:#fff;">$2,850.00</div>
-          <div style="font-family:var(--mono); color:var(--green); margin-top:8px; font-weight:700;">🟢 +$70.00 Total PnL</div>
+          <div class="hero-label">TOTAL CAPITAL (KRW / USD)</div>
+          <div class="hero-value" id="ui-tot-krw" style="color:#fff;">₩0</div>
+          <div style="font-family:var(--mono); color:var(--text2); margin-top:8px; font-weight:700;" id="ui-tot-usd">$0.00</div>
         </div>
       </div>
 
       <div class="section">
         <div class="section-title">가동 중인 봇 엔진</div>
         <div class="card" style="margin-bottom:16px;">
-          <div class="pos-row"><span class="pos-key">🇺🇸 TQQQ 스노우볼 봇</span><span class="tag cyan">1대 가동중</span></div>
-          <div class="pos-row"><span class="pos-key">🇰🇷 VIP VR 봇 (듀얼)</span><span class="tag gold">2대 대기중</span></div>
+          <div class="pos-row"><span class="pos-key">🇺🇸 TQQQ 스노우볼 봇</span><span class="tag cyan">가동중</span></div>
+          <div class="pos-row"><span class="pos-key">🇰🇷 VIP VR 봇 (듀얼)</span><span class="tag gold">대기/가동</span></div>
         </div>
 
         <div class="section-title">시스템 퀵 세팅</div>
@@ -231,19 +235,16 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       <div style="height:30px;"></div>
     </div>
 
-
-    <!-- ==========================================
-         [ 탭 2 ] 미국 주식 무한매수 (TQQQ) 
-         ========================================== -->
+    <!-- [ 탭 2 ] 무한매수 (TQQQ) -->
     <div class="tab-content" id="tab-infinite">
       <div class="section">
         <div class="hero-card">
           <div class="hero-label">TQQQ REALIZED PnL</div>
-          <div class="hero-value">+$70.00</div>
+          <div class="hero-value" id="ui-inf-pnl">+$0.00</div>
         </div>
         <div class="kpi-grid">
-          <div class="kpi-card"><div class="kpi-label">진행 사이클</div><div class="kpi-value">#3</div></div>
-          <div class="kpi-card"><div class="kpi-label">진행 회차</div><div class="kpi-value" style="color:var(--gold);">6.0 / 40</div></div>
+          <div class="kpi-card"><div class="kpi-label">진행 사이클</div><div class="kpi-value" id="ui-inf-cycle">#0</div></div>
+          <div class="kpi-card"><div class="kpi-label">진행 회차</div><div class="kpi-value" style="color:var(--gold);" id="ui-inf-install">0.0 / 40</div></div>
         </div>
       </div>
 
@@ -252,19 +253,17 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
         <div class="card">
           <div class="card-header">
             <span class="tag cyan"><span class="pulse">●</span> 매수 진행중</span>
-            <span style="font-family:var(--mono); font-size:12px; color:var(--text2);">평단 $59.70</span>
+            <span style="font-family:var(--mono); font-size:12px; color:var(--text2);" id="ui-inf-avg">평단 $0.00</span>
           </div>
-          <div class="pos-row"><span class="pos-key">보유 수량</span><span class="pos-val">24주</span></div>
-          <div class="pos-row"><span class="pos-key">평가 손익</span><span class="pos-val" style="color:var(--green);">+$92.50 (+6.46%)</span></div>
-          <div class="pos-row"><span class="pos-key">목표 달성률</span><span class="pos-val" style="color:var(--gold);">6.46% / 15.00%</span></div>
+          <div class="pos-row"><span class="pos-key">보유 수량</span><span class="pos-val" id="ui-inf-qty">0주</span></div>
+          <div class="pos-row"><span class="pos-key">평가 손익</span><span class="pos-val" id="ui-inf-eval" style="color:var(--green);">+$0.00 (0.00%)</span></div>
+          <div class="pos-row"><span class="pos-key">목표 달성률</span><span class="pos-val" style="color:var(--gold);" id="ui-inf-prog">0.00% / 15.00%</span></div>
         </div>
       </div>
 
-      <!-- 무한매수 네온 흐름도 -->
       <div class="section" style="margin-top:20px;">
         <div class="section-title">무한매수법 V4.0 하이브리드 흐름도</div>
         <div class="flow-container">
-          
           <div class="flow-box">
             <div class="flow-header">
               <div class="flow-icon">💰</div><div class="flow-title">초기 설정 및 대기</div>
@@ -275,7 +274,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
             </ul>
           </div>
           <div class="flow-arrow">↓</div>
-          
           <div class="flow-box">
             <div class="flow-header">
               <div class="flow-icon">🚀</div><div class="flow-title">최초 1회차 매수</div>
@@ -285,7 +283,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
             </ul>
           </div>
           <div class="flow-arrow">↓</div>
-          
           <div class="flow-box active">
             <div class="flow-header">
               <div class="flow-icon">📈</div><div class="flow-title">일반 모드 진행 (Hybrid)</div>
@@ -296,102 +293,60 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
             </div>
             <ul class="flow-list">
               <li><span>👉</span><span><b>매수:</b> 일일 예산을 평단/시장가로 분산 진입</span></li>
-              <li><span>🛡️</span><span><b>방어:</b> 별지점(+5%) 상한가로 고점 추격 원천 차단</span></li>
+              <li><span>🛡️</span><span><b>방어:</b> 별지점(+5%) 상한가로 고점 추격 차단</span></li>
               <li><span>🧮</span><span><b>T값:</b> 체결된 수량 비율만큼만 소수점 정밀 누적</span></li>
             </ul>
-            <div class="flow-active-desc">▶ 현재 6.0회차 진행 중</div>
+            <div class="flow-active-desc">▶ 매수 스케줄 대기 중</div>
           </div>
           <div class="flow-arrow">↓</div>
-          
           <div class="flow-branch">
             <div class="flow-branch-col">
               <div class="flow-branch-box">
                 <div style="font-size:18px; margin-bottom:4px;">🎉</div>
                 <div class="flow-branch-title">전량 익절 달성</div>
-                <div class="flow-branch-cond">보유수량 = 0</div>
-              </div>
-              <div class="flow-arrow">↓</div>
-              <div class="flow-box" style="width:100%; padding:10px; text-align:center;">
-                <div class="flow-title" style="font-size:12px; color:var(--green); margin:0;">✅ 종료 및 다음 사이클 재시작</div>
               </div>
             </div>
-            
             <div class="flow-branch-col">
               <div class="flow-branch-box">
                 <div style="font-size:18px; margin-bottom:4px;">🚨</div>
                 <div class="flow-branch-title">목표 회차 소진</div>
-                <div class="flow-branch-cond">T > 분할수</div>
-              </div>
-              <div class="flow-arrow">↓</div>
-              <div class="flow-box" style="width:100%; padding:12px 10px;">
-                <div class="flow-title" style="font-size:12px; color:var(--red); text-align:center; margin-bottom:8px;">🏃 리버스 모드 (영혼법)</div>
-                <ul class="flow-list" style="font-size:10px;">
-                  <li><span>▪️</span><span><b>1일차:</b> 남은 수량 20등분 무조건 매도(MOC)</span></li>
-                  <li><span>▪️</span><span><b>2일차~:</b> 별지점(5일선) 기준 공방전</span></li>
-                </ul>
               </div>
             </div>
           </div>
-          <div class="flow-arrow" style="margin-left: 50%;">↓</div>
-          
-          <div class="flow-box" style="border-style:dashed;">
-            <div class="flow-header" style="justify-content:center;">
-              <div class="flow-icon" style="font-size:16px;">🔄</div>
-              <div class="flow-title" style="font-size:13px; color:var(--purple); margin:0;">탈출 조건 충족</div>
-            </div>
-            <div style="font-size:11px; color:var(--text2); text-align:center; line-height:1.5;">종가가 평단 대비 <span style="color:var(--red); font-weight:700;">-20%</span> 위로 회복 시<br>잔여 예산 재분배 후 일반모드 복귀</div>
-          </div>
-          
         </div>
       </div>
 
-      <!-- 무한매수 영수증 기록 -->
       <div class="section" style="margin-top:20px;">
-        <div class="section-title">최근 무한매수 영수증 (최대 30건)</div>
-        <div class="trade-list" id="ui-tradeList">
-          <div class="trade-item">
-            <div class="trade-type-dot buy"></div>
-            <div class="trade-info">
-              <div class="trade-top"><span class="trade-ticker">TQQQ (T6.0)</span><span class="trade-pnl neu">-$278.91</span></div>
-              <div class="trade-bottom"><span class="trade-type-label buy">LOC 매수</span><span class="trade-meta">05/01 · $63.55 × 4주</span></div>
-            </div>
-          </div>
-          <div class="trade-item">
-            <div class="trade-type-dot buy"></div>
-            <div class="trade-info">
-              <div class="trade-top"><span class="trade-ticker">TQQQ (T5.5)</span><span class="trade-pnl neu">-$139.45</span></div>
-              <div class="trade-bottom"><span class="trade-type-label buy">지정가 매수</span><span class="trade-meta">04/30 · $62.10 × 2주</span></div>
-            </div>
-          </div>
+        <div class="section-title">최근 무한매수 영수증</div>
+        <div class="trade-list" id="ui-inf-tradeList">
+          <!-- 엑셀 데이터 연동 -->
         </div>
       </div>
       <div style="height:30px;"></div>
     </div>
 
 
-    <!-- ==========================================
-         [ 탭 3 ] 한국 주식 VR (부부 듀얼 모드) 
-         ========================================== -->
+    <!-- [ 탭 3 ] VR 봇 (듀얼 모드) -->
     <div class="tab-content" id="tab-vr">
       <div class="section">
         <div class="section-title">👨🏻 사장님 계좌 (나스닥100 레버리지)</div>
         <div class="card">
           <div class="card-header" style="background:rgba(255,255,255,0.03);">
-            <span class="tag gray">STANDBY</span>
-            <span style="font-family:var(--mono); font-size:12px; color:var(--text2);">총 자산 ₩1,000,000</span>
+            <span class="tag gray" id="ui-vr-status">STANDBY</span>
+            <span style="font-family:var(--mono); font-size:12px; color:var(--text2);" id="ui-vr-asset">총 자산 연결중..</span>
           </div>
-          <div class="pos-row"><span class="pos-key">현재가 / 보유수량</span><span class="pos-val">₩0 / 0주</span></div>
+          <div class="pos-row"><span class="pos-key">현재가 / 보유수량</span><span class="pos-val" id="ui-vr-price-qty">₩0 / 0주</span></div>
           <div class="pos-row">
             <span class="pos-key">V목표 / 밴드 (상~하)</span>
-            <span class="pos-val" style="color:var(--cyan); font-size:12px;">67만 / (80.4만 ~ 53.6만)</span>
+            <span class="pos-val" style="color:var(--cyan); font-size:12px;" id="ui-vr-band">0만 / (0만 ~ 0만)</span>
           </div>
           <div class="pos-row">
             <span class="pos-key">Pool (현금) / 비율</span>
-            <span class="pos-val">₩330,000 (49.3%)</span>
+            <span class="pos-val" id="ui-vr-pool">₩0 (0%)</span>
           </div>
           <div class="pos-row">
             <span class="pos-key">리밸런싱 D-Day</span>
-            <span class="pos-val" style="color:var(--text3);">2026-05-15 (AGGRESSIVE)</span>
+            <span class="pos-val" style="color:var(--text3);" id="ui-vr-rebal">-</span>
           </div>
         </div>
       </div>
@@ -401,7 +356,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
         <div class="card">
           <div class="card-header" style="background:rgba(255,255,255,0.03);">
             <span class="tag gray">STANDBY</span>
-            <span style="font-family:var(--mono); font-size:12px; color:var(--text2);">총 자산 ₩1,000,000</span>
+            <span style="font-family:var(--mono); font-size:12px; color:var(--text2);">총 자산 ₩1,000,000 (예정)</span>
           </div>
           <div class="pos-row"><span class="pos-key">현재가 / 보유수량</span><span class="pos-val">₩0 / 0주</span></div>
           <div class="pos-row">
@@ -413,22 +368,19 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
         </div>
       </div>
 
-      <!-- 🚀 VR 네온 상세 흐름도 (초고도화) -->
       <div class="section" style="margin-top:20px;">
         <div class="section-title">VR (Value Rebalancing) 로직 세부 가이드</div>
         <div class="flow-container">
-          
           <div class="flow-box">
             <div class="flow-header">
               <div class="flow-icon">💰</div><div class="flow-title">초기 설정 (VR 세팅)</div>
             </div>
             <ul class="flow-list">
-              <li><span>▪️</span><span><b>자산 분배:</b> V값(목표 주식 자산, 67%) / Pool(예비 현금, 33%) 세팅</span></li>
+              <li><span>▪️</span><span><b>자산 분배:</b> V값(목표 주식 자산) / Pool(예비 현금) 세팅</span></li>
               <li><span>▪️</span><span><b>밴드 설정:</b> V값 기준 상단(+20%) 및 하단(-20%) 밴드 계산</span></li>
             </ul>
           </div>
           <div class="flow-arrow">↓</div>
-
           <div class="flow-box active-vr">
             <div class="flow-header">
               <div class="flow-icon">⏱️</div><div class="flow-title">일일 자동 점검 (오후 3:10)</div>
@@ -443,54 +395,45 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
             <div class="flow-active-desc" style="color:var(--purple); background:rgba(124,77,255,0.1);">▶ 평가금액 밴드 이탈 모니터링 중</div>
           </div>
           <div class="flow-arrow">↓</div>
-
           <div class="flow-branch">
             <div class="flow-branch-col">
               <div class="flow-branch-box" style="border-color:var(--cyan); background:rgba(0,229,255,0.05);">
                 <div style="font-size:18px; margin-bottom:4px;">📈</div>
                 <div class="flow-branch-title" style="color:var(--cyan);">상단 밴드 돌파</div>
-                <div class="flow-branch-cond">평가금액 > Upper</div>
               </div>
               <div class="flow-arrow">↓</div>
               <div class="flow-box" style="width:100%; padding:10px; text-align:center;">
-                <div class="flow-title" style="font-size:12px; margin:0; color:var(--text);">초과분 <b>부분 매도</b><br><span style="font-size:10px; color:var(--text2); font-weight:normal;">(Pool 자금 추가 및 수익 실현)</span></div>
+                <div class="flow-title" style="font-size:12px; margin:0; color:var(--text);">초과분 <b>부분 매도</b></div>
               </div>
             </div>
-
             <div class="flow-branch-col">
               <div class="flow-branch-box" style="border-color:var(--red); background:rgba(255,61,113,0.05);">
                 <div style="font-size:18px; margin-bottom:4px;">📉</div>
                 <div class="flow-branch-title" style="color:var(--red);">하단 밴드 이탈</div>
-                <div class="flow-branch-cond">평가금액 < Lower</div>
               </div>
               <div class="flow-arrow">↓</div>
               <div class="flow-box" style="width:100%; padding:10px; text-align:center;">
-                <div class="flow-title" style="font-size:12px; margin:0; color:var(--text);">부족분 <b>추가 매수</b><br><span style="font-size:10px; color:var(--text2); font-weight:normal;">(Pool 자금으로 저가 매집)</span></div>
+                <div class="flow-title" style="font-size:12px; margin:0; color:var(--text);">부족분 <b>추가 매수</b></div>
               </div>
             </div>
           </div>
           <div class="flow-arrow" style="margin-left: 50%;">↓</div>
-
           <div class="flow-box" style="border-style:dashed;">
             <div class="flow-header" style="justify-content:center;">
                <div class="flow-icon" style="font-size:16px;">🔄</div>
                <div class="flow-title" style="color:var(--gold); margin:0;">2주 단위 정기 리밸런싱</div>
             </div>
             <ul class="flow-list" style="padding-left:10px; padding-right:10px;">
-              <li><span>▪️</span><span><b>자산 팽창:</b> 정해진 비율에 따라 V값 목표치를 상향 조정</span></li>
-              <li><span>▪️</span><span>새로운 V값에 맞춰 상/하단 밴드 폭 재계산 후 다음 사이클 대비</span></li>
+              <li><span>▪️</span><span>정해진 비율에 따라 V값 목표치를 상향 조정하여 자산 팽창</span></li>
             </ul>
           </div>
-          
         </div>
       </div>
 
-      <!-- VR 매매 기록 -->
       <div class="section" style="margin-top:20px;">
         <div class="section-title">최근 VR 매매 기록</div>
-        <div class="empty-state">
-           <div style="font-size:24px; margin-bottom:10px;">🧾</div>
-           아직 매매 기록이 없습니다.<br>다음 주부터 첫 거래 영수증이 이곳에 표시됩니다.
+        <div class="trade-list" id="ui-vr-tradeList">
+           <!-- 엑셀 데이터 연동 -->
         </div>
       </div>
       <div style="height:30px;"></div>
@@ -500,7 +443,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 </div>
 
 <script>
-// 시계 업데이트 로직
+// ⭐ 구글 앱스 스크립트 웹앱 주소를 여기에 넣어주세요!
+const API_URL = "https://script.google.com/macros/s/AKfycbxI6cIbRpL5-r8xnGLvtbTkCNxAolrFr7maCV6hr0D8tdUCK5wpyaSU6fa6m1wDZqSTvw/exec"; 
+
 function updateClocks() {
   const now = new Date();
   const opts = { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
@@ -510,20 +455,120 @@ function updateClocks() {
 setInterval(updateClocks, 1000);
 updateClocks(); 
 
-// 🚀 플로팅 탭 전환 로직
 function switchMainTab(tabId, btnElement) {
-  // 1. 모든 탭 컨텐츠 숨기기
   document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-  // 2. 모든 버튼 활성화 상태 제거
   document.querySelectorAll('.float-btn').forEach(el => el.classList.remove('active'));
-  
-  // 3. 선택된 탭과 버튼 활성화
   document.getElementById('tab-' + tabId).classList.add('active');
   btnElement.classList.add('active');
-  
-  // 4. 스크롤 맨 위로 올리기
   document.getElementById('scrollArea').scrollTop = 0;
 }
+
+// 데이터 포맷팅 헬퍼 함수
+function formatKRW(num) { return '₩' + Math.round(num).toLocaleString(); }
+function formatMan(num) { return (num / 10000).toLocaleString(undefined, {maximumFractionDigits:1}) + '만'; }
+function formatUSD(num) { return '$' + num.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2}); }
+
+// 구글 시트 데이터 가져오기
+async function initData() {
+  if (API_URL === "여기에_주소_넣기") {
+      document.getElementById('loader').style.display = 'none';
+      return; // 연결 전이면 로딩바만 끄고 대기
+  }
+  try {
+    const res = await fetch(API_URL);
+    const data = await res.json();
+    if(data.success) renderDashboard(data);
+  } catch(e) {
+    console.error("데이터 로딩 실패", e);
+  } finally {
+    document.getElementById('loader').style.opacity = '0';
+    setTimeout(() => document.getElementById('loader').style.display = 'none', 500);
+  }
+}
+
+function renderDashboard(data) {
+  const inf = data.infinite;
+  const vr = data.vr;
+
+  // 1. TOTAL 탭 연동
+  document.getElementById('ui-tot-krw').textContent = formatKRW(vr.totalAsset);
+  document.getElementById('ui-tot-usd').textContent = formatUSD(inf.invested + inf.totalProfit);
+
+  // 2. 무한매수 연동
+  document.getElementById('ui-inf-pnl').textContent = `+${formatUSD(inf.totalProfit)}`;
+  document.getElementById('ui-inf-cycle').textContent = `#${inf.cycle}`;
+  document.getElementById('ui-inf-install').textContent = `${inf.install.toFixed(1)} / 40`;
+  
+  const pnlValue = (inf.close - inf.avg) * inf.qty;
+  const pnlRate = inf.avg > 0 ? ((inf.close - inf.avg) / inf.avg) * 100 : 0;
+  const targetRate = inf.avg > 0 ? ((inf.target - inf.avg) / inf.avg) * 100 : 15;
+  
+  document.getElementById('ui-inf-avg').textContent = `평단 ${formatUSD(inf.avg)}`;
+  document.getElementById('ui-inf-qty').textContent = `${inf.qty}주`;
+  document.getElementById('ui-inf-eval').textContent = `${pnlValue>=0?'+':''}${formatUSD(pnlValue)} (${pnlValue>=0?'+':''}${pnlRate.toFixed(2)}%)`;
+  document.getElementById('ui-inf-eval').style.color = pnlValue >= 0 ? 'var(--green)' : 'var(--red)';
+  document.getElementById('ui-inf-prog').textContent = `${pnlRate.toFixed(2)}% / ${targetRate.toFixed(2)}%`;
+
+  // 무한매수 영수증 연동
+  if(inf.logs && inf.logs.length > 0) {
+    document.getElementById('ui-inf-tradeList').innerHTML = inf.logs.map(t => {
+       const isBuy = String(t[5]).includes('매수');
+       const typeClass = isBuy ? 'buy' : 'sell';
+       const realized = parseFloat(t[10] || 0);
+       const pnlStr = realized !== 0 ? `${realized>0?'+':''}${formatUSD(realized)}` : formatUSD(parseFloat(t[8] || 0));
+       const pnlClass = realized > 0 ? 'pos' : (realized < 0 ? 'neg' : (isBuy ? 'neu' : 'neg'));
+       let dateStr = String(t[0]).substring(5, 16);
+       
+       return `
+        <div class="trade-item">
+          <div class="trade-type-dot ${typeClass}"></div>
+          <div class="trade-info">
+            <div class="trade-top"><span class="trade-ticker">${t[1]} (T${t[4]})</span><span class="trade-pnl ${pnlClass}">${pnlStr}</span></div>
+            <div class="trade-bottom"><span class="trade-type-label ${typeClass}">${t[5]}</span><span class="trade-meta">${dateStr} · ${formatUSD(t[6])} × ${t[7]}주</span></div>
+          </div>
+        </div>`;
+    }).join('');
+  } else {
+     document.getElementById('ui-inf-tradeList').innerHTML = `<div class="empty-state"><div style="font-size:24px; margin-bottom:10px;">🧾</div>아직 매매 기록이 없습니다.</div>`;
+  }
+
+  // 3. VR 연동 (사장님 계좌)
+  if (vr.totalAsset > 0 || vr.vTarget > 0) {
+    document.getElementById('ui-vr-status').className = 'tag cyan';
+    document.getElementById('ui-vr-status').innerHTML = '<span class="pulse">●</span> LIVE';
+    document.getElementById('ui-vr-asset').textContent = `총 자산 ${formatKRW(vr.totalAsset)}`;
+    
+    document.getElementById('ui-vr-price-qty').textContent = `${formatKRW(vr.currentPrice)} / ${vr.qty}주`;
+    document.getElementById('ui-vr-band').textContent = `${formatMan(vr.vTarget)} / (${formatMan(vr.upper)} ~ ${formatMan(vr.lower)})`;
+    document.getElementById('ui-vr-pool').textContent = `${formatKRW(vr.pool)} (${Math.round(vr.poolRatio*100)}%)`;
+    
+    const rDate = new Date(vr.rebalanceDate);
+    let rStr = vr.rebalanceDate;
+    if (!isNaN(rDate)) rStr = `${rDate.getFullYear()}-${String(rDate.getMonth()+1).padStart(2,'0')}-${String(rDate.getDate()).padStart(2,'0')}`;
+    document.getElementById('ui-vr-rebal').textContent = `${rStr} (${vr.mode})`;
+
+    // VR 영수증 연동
+    if (vr.logs && vr.logs.length > 0) {
+      document.getElementById('ui-vr-tradeList').innerHTML = vr.logs.map(t => {
+        const isBuy = String(t[1]).includes('매수');
+        const typeClass = isBuy ? 'buy' : 'sell';
+        let dateStr = String(t[0]).substring(5, 16);
+        return `
+          <div class="trade-item">
+            <div class="trade-type-dot ${typeClass}"></div>
+            <div class="trade-info">
+              <div class="trade-top"><span class="trade-ticker">${vr.ticker || 'VR'}</span><span class="trade-pnl ${isBuy?'neu':'pos'}">${formatKRW(t[4])}</span></div>
+              <div class="trade-bottom"><span class="trade-type-label ${typeClass}">${t[1]}</span><span class="trade-meta">${dateStr} · ${formatKRW(t[2])} × ${t[3]}주</span></div>
+            </div>
+          </div>`;
+      }).join('');
+    } else {
+      document.getElementById('ui-vr-tradeList').innerHTML = `<div class="empty-state"><div style="font-size:24px; margin-bottom:10px;">🧾</div>아직 매매 기록이 없습니다.</div>`;
+    }
+  }
+}
+
+initData();
 </script>
 </body>
 </html>
