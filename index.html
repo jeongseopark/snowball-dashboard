@@ -95,31 +95,30 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .toggle-switch.on { background:var(--cyan); }
 .toggle-switch.on::after { transform:translateX(18px); }
 
-/* ── 상세 흐름도 전용 CSS (네온 스타일) ── */
+/* ── 흐름도 전용 CSS (네온 스타일 복구) ── */
 .flow-container { display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 10px; }
-.flow-box { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 12px; padding: 16px 14px; width: 100%; position: relative; }
-.flow-box.active { border-color: var(--cyan); box-shadow: 0 0 15px rgba(0, 229, 255, 0.2); background: rgba(0, 229, 255, 0.05); }
-.flow-box.reverse { border-color: var(--red); box-shadow: 0 0 15px rgba(255, 61, 113, 0.3); background: rgba(255, 61, 113, 0.05); }
+.flow-box { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 12px; padding: 14px 16px; width: 95%; position: relative; transition: all 0.4s ease; margin: 0 auto;}
+.flow-box.active { border-color: var(--cyan); box-shadow: 0 0 15px rgba(0, 229, 255, 0.25); background: rgba(0, 229, 255, 0.05); }
+.flow-box.active.reverse { border-color: var(--red); box-shadow: 0 0 15px rgba(255, 61, 113, 0.3); background: rgba(255, 61, 113, 0.05); }
 .flow-box.active-vr { border-color: var(--purple); box-shadow: 0 0 15px rgba(124, 77, 255, 0.25); background: rgba(124, 77, 255, 0.05); }
-.flow-arrow { color: var(--border2); font-size: 18px; text-align: center; width: 100%; margin: -4px 0; }
-.flow-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.flow-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
 .flow-icon { font-size: 20px; }
 .flow-title { font-family: var(--body); font-weight: 700; font-size: 14px; color: var(--text); }
-.flow-badge-group { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
-.flow-badge { font-size: 9px; font-family: var(--mono); font-weight: 700; padding: 4px 8px; border-radius: 4px; }
+.flow-badge-group { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+.flow-badge { font-size: 9px; font-family: var(--mono); font-weight: 700; padding: 2px 6px; border-radius: 4px; }
 .flow-badge.cyan { background: rgba(0,229,255,0.15); color: var(--cyan); }
 .flow-badge.gold { background: rgba(255,215,64,0.15); color: var(--gold); }
 .flow-list { margin: 0; padding-left: 0; list-style:none; font-size: 11px; color: var(--text2); font-family: var(--body); line-height: 1.6; }
 .flow-list li { margin-bottom: 6px; display: flex; gap: 6px; align-items: flex-start; text-align:left; }
 .flow-list li b { color: var(--text); }
-.flow-active-desc { background: rgba(0,229,255,0.1); padding: 8px; border-radius: 6px; color: var(--cyan); text-align: center; margin-top: 12px; font-size: 12px; font-weight: 700; font-family: var(--mono); }
+.flow-active-desc { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--cyan); margin-top: 10px; text-align: center; background: rgba(0,229,255,0.1); padding: 6px; border-radius: 6px;}
+.flow-arrow { color: var(--border2); font-size: 18px; text-align: center; width: 100%; margin: -4px 0; }
 
-/* 하단 흐름도 분기점 전용 (무한매수) */
-.flow-branch { display: flex; width: 100%; gap: 12px; justify-content: center; }
+.flow-branch { display: flex; width: 95%; gap: 12px; justify-content: center; margin: 0 auto; }
 .flow-branch-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-.flow-branch-box { background: rgba(255,255,255,0.02); border: 1.5px dashed var(--border2); border-radius: 10px; padding: 14px 10px; width: 100%; text-align: center; }
+.flow-branch-box { background: rgba(255,255,255,0.02); border: 1.5px dashed var(--border2); border-radius: 10px; padding: 12px; width: 100%; text-align: center; }
 .flow-branch-title { font-family: var(--body); font-weight: 700; font-size: 12px; color: var(--text); margin-bottom: 4px; margin-top:4px; }
-.flow-branch-cond { font-size: 10px; color: var(--text3); font-family: var(--mono); background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 4px; display: inline-block; }
+.flow-branch-cond { font-size: 10px; color: var(--text3); font-family: var(--mono); background: var(--bg); padding: 2px 6px; border-radius: 4px; display: inline-block; }
 
 /* ── 매매 기록(영수증) 리스트 ── */
 .trade-list{display:flex;flex-direction:column;gap:8px;}
@@ -159,7 +158,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     </div>
   </div>
 
-  <!-- 🚀 상단 플로팅 탭 네비게이션 (TOTAL 맨 앞으로) -->
+  <!-- 🚀 상단 플로팅 탭 네비게이션 (TOTAL 맨 앞으로 이동) -->
   <div class="floating-nav-wrap">
     <div class="floating-nav">
       <button class="float-btn active" onclick="switchMainTab('total', this)">🌐 TOTAL</button>
@@ -171,7 +170,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
   <div class="scroll-area" id="scrollArea">
     
     <!-- ==========================================
-         [ 탭 1 ] TOTAL (통합 관제탑 및 세팅) - 디자인 원복 완료 
+         [ 탭 1 ] TOTAL (통합 관제탑 및 세팅) 
          ========================================== -->
     <div class="tab-content active" id="tab-total">
       <div class="section">
@@ -206,21 +205,26 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
         </div>
       </div>
 
-      <!-- 이전에 OK 하셨던 심플한 좌우 파이프라인 (원복) -->
       <div class="section" style="margin-top:20px;">
         <div class="section-title">통합 자산 파이프라인</div>
-        <div class="flow-box" style="border-color:var(--gold); text-align:center;">
-          <div class="flow-title">🏦 Total Capital (시드 머니)</div>
-        </div>
-        <div class="flow-arrow">↓</div>
-        <div style="display:flex; gap:10px; padding:0 20px;">
-          <div class="flow-box" style="flex:1; border-color:var(--text3); text-align:center; padding:12px 10px; margin:0;">
-            <div class="flow-title">💵 USD 예수금</div>
-            <div style="font-size:10px; color:var(--text2); margin-top:4px;">무한매수 봇 연동</div>
+        <div class="flow-container">
+          <div class="flow-box" style="border-color:var(--gold); text-align:center; padding:12px;">
+            <div class="flow-title">🏦 Total Capital (시드 머니)</div>
           </div>
-          <div class="flow-box" style="flex:1; border-color:var(--text3); text-align:center; padding:12px 10px; margin:0;">
-            <div class="flow-title">₩ KRW 예수금</div>
-            <div style="font-size:10px; color:var(--text2); margin-top:4px;">ISA VR 봇 연동</div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-branch">
+            <div class="flow-branch-col">
+              <div class="flow-branch-box" style="border-color:var(--cyan); border-style:solid; background:rgba(0,229,255,0.05);">
+                <div class="flow-title">💵 USD 예수금</div>
+                <div style="font-size:10px; color:var(--text2); margin-top:4px;">무한매수 연동</div>
+              </div>
+            </div>
+            <div class="flow-branch-col">
+              <div class="flow-branch-box" style="border-color:var(--purple); border-style:solid; background:rgba(124,77,255,0.05);">
+                <div class="flow-title">₩ KRW 예수금</div>
+                <div style="font-size:10px; color:var(--text2); margin-top:4px;">ISA VR 연동</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -243,7 +247,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
         </div>
       </div>
 
-      <!-- 점박이 없애고 심플하게 원복한 현재 포지션 카드 -->
       <div class="section">
         <div class="section-title">현재 포지션 (TQQQ)</div>
         <div class="card">
@@ -257,7 +260,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
         </div>
       </div>
 
-      <!-- 무한매수 하이브리드 흐름도 (상세 버전) -->
+      <!-- 무한매수 네온 흐름도 (완벽 복구) -->
       <div class="section" style="margin-top:20px;">
         <div class="section-title">무한매수법 V4.0 하이브리드 흐름도</div>
         <div class="flow-container">
@@ -300,7 +303,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
           </div>
           <div class="flow-arrow">↓</div>
           
-          <!-- 하단 분기점 -->
           <div class="flow-branch">
             <div class="flow-branch-col">
               <div class="flow-branch-box">
@@ -309,7 +311,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
                 <div class="flow-branch-cond">보유수량 = 0</div>
               </div>
               <div class="flow-arrow">↓</div>
-              <div class="flow-box" style="width:100%; padding:10px; text-align:center; margin:0;">
+              <div class="flow-box" style="width:100%; padding:10px; text-align:center;">
                 <div class="flow-title" style="font-size:12px; color:var(--green); margin:0;">✅ 종료 및 다음 사이클 재시작</div>
               </div>
             </div>
@@ -321,7 +323,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
                 <div class="flow-branch-cond">T > 분할수</div>
               </div>
               <div class="flow-arrow">↓</div>
-              <div class="flow-box reverse" style="width:100%; padding:12px 10px; margin:0;">
+              <div class="flow-box" style="width:100%; padding:12px 10px;">
                 <div class="flow-title" style="font-size:12px; color:var(--red); text-align:center; margin-bottom:8px;">🏃 리버스 모드 (영혼법)</div>
                 <ul class="flow-list" style="font-size:10px;">
                   <li><span>▪️</span><span><b>1일차:</b> 남은 수량 20등분 무조건 매도(MOC)</span></li>
@@ -333,21 +335,21 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
           <div class="flow-arrow" style="margin-left: 50%;">↓</div>
           
           <div class="flow-box" style="border-style:dashed;">
-            <div class="flow-header" style="justify-content:center; margin-bottom:8px;">
+            <div class="flow-header" style="justify-content:center;">
               <div class="flow-icon" style="font-size:16px;">🔄</div>
               <div class="flow-title" style="font-size:13px; color:var(--purple); margin:0;">탈출 조건 충족</div>
             </div>
-            <div style="font-size:11px; color:var(--text2); text-align:center; line-height:1.5;">
-              종가가 평단 대비 <span style="color:var(--red); font-weight:700;">-20%</span> 위로 회복 시<br>잔여 예산 재분배 후 일반모드 복귀
-            </div>
+            <div style="font-size:11px; color:var(--text2); text-align:center; line-height:1.5;">종가가 평단 대비 <span style="color:var(--red); font-weight:700;">-20%</span> 위로 회복 시<br>잔여 예산 재분배 후 일반모드 복귀</div>
           </div>
+          
         </div>
       </div>
 
-      <!-- 영수증 영역 (유지) -->
+      <!-- 무한매수 영수증 기록 (신규 추가) -->
       <div class="section" style="margin-top:20px;">
         <div class="section-title">최근 무한매수 영수증 (최대 30건)</div>
         <div class="trade-list" id="ui-tradeList">
+          <!-- 앱스 스크립트가 연결되기 전 보여질 더미 데이터 -->
           <div class="trade-item">
             <div class="trade-type-dot buy"></div>
             <div class="trade-info">
@@ -362,6 +364,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
               <div class="trade-bottom"><span class="trade-type-label buy">지정가 매수</span><span class="trade-meta">04/30 · $62.10 × 2주</span></div>
             </div>
           </div>
+          <!-- Javascript 연동 시 이 영역이 실제 엑셀 데이터로 채워집니다. -->
         </div>
       </div>
       <div style="height:30px;"></div>
@@ -412,7 +415,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
         </div>
       </div>
 
-      <!-- VR 세부 흐름도 (유지) -->
+      <!-- VR 네온 흐름도 (신규 적용) -->
       <div class="section" style="margin-top:20px;">
         <div class="section-title">VR (Value Rebalancing) 로직</div>
         <div class="flow-container">
@@ -428,14 +431,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
               <li><span>🔻</span><span><b>하단(Lower) 이탈 시:</b> 부족분 매수 (저가 매집)</span></li>
               <li><span>➖</span><span><b>밴드 내 위치 시:</b> 관망 유지 (Hold)</span></li>
             </ul>
-            <div class="flow-active-desc" style="color:var(--purple); background:rgba(124,77,255,0.1);">
-              ▶ D-13 리밸런싱 대기 중
-            </div>
+            <div class="flow-active-desc" style="color:var(--purple); background:rgba(124,77,255,0.1);">▶ D-13 리밸런싱 대기 중</div>
           </div>
           <div class="flow-arrow">↓</div>
           
           <div class="flow-box" style="border-style:dashed;">
-            <div class="flow-header" style="justify-content:center; margin-bottom:8px;">
+            <div class="flow-header" style="justify-content:center;">
                <div class="flow-icon" style="font-size:16px;">🔄</div>
                <div class="flow-title" style="color:var(--gold); margin:0;">14일 간격 리밸런싱</div>
             </div>
@@ -444,6 +445,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
         </div>
       </div>
 
+      <!-- VR 매매 기록 -->
       <div class="section" style="margin-top:20px;">
         <div class="section-title">최근 VR 매매 기록</div>
         <div class="empty-state">
@@ -470,12 +472,16 @@ updateClocks();
 
 // 🚀 플로팅 탭 전환 로직
 function switchMainTab(tabId, btnElement) {
+  // 1. 모든 탭 컨텐츠 숨기기
   document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  // 2. 모든 버튼 활성화 상태 제거
   document.querySelectorAll('.float-btn').forEach(el => el.classList.remove('active'));
   
+  // 3. 선택된 탭과 버튼 활성화
   document.getElementById('tab-' + tabId).classList.add('active');
   btnElement.classList.add('active');
   
+  // 4. 스크롤 맨 위로 올리기
   document.getElementById('scrollArea').scrollTop = 0;
 }
 </script>
