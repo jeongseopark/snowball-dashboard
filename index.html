@@ -405,9 +405,32 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     <!-- ==========================================
          [ 탭 3 ] 한국 주식 VR (부부 듀얼 모드) 
          ========================================== -->
+    
     <div class="tab-content" id="tab-vr">
+      
+      <!-- 🚀 새로 추가된 VR 통합 현황 카드 -->
       <div class="section">
-        <div class="section-title">👨🏻 사장님 계좌 (나스닥100 레버리지)</div>
+        <div class="hero-card" style="border-color:var(--cyan); background:linear-gradient(135deg, var(--bg3) 0%, rgba(0,229,255,0.05) 100%);">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="hero-label" style="margin:0; color:var(--cyan);">VR INTEGRATED ASSET</div>
+            <div class="tag" style="background:rgba(0,229,255,0.1); color:var(--cyan);">🇰🇷 부부 합산 예정</div>
+          </div>
+          <div class="hero-value" style="margin-top:6px; color:var(--cyan);" id="vr-integrated-asset">₩0</div>
+        </div>
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">통합 보유 현금 (Pool)</div>
+            <div class="kpi-value" style="color:var(--text);" id="vr-integrated-pool">₩0</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">가동 중인 엔진</div>
+            <div class="kpi-value" style="color:var(--gold);">1 / 2 대</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">👨🏻 정서님 계좌 (나스닥100 레버리지)</div>
         <div class="card">
           <div class="card-header" style="background:rgba(0,229,255,0.05);">
             <span class="tag cyan"><span class="pulse">●</span> LIVE</span>
@@ -718,9 +741,26 @@ function renderAll(data) {
   document.getElementById('tot-krw-eval').style.color = evalColor;
 
   // ------------------------------------------------
-  // VR 탭 렌더링 (사장님 계좌에 맵핑)
+  // VR 탭 렌더링 (통합 카드 + 개별 계좌)
   // ------------------------------------------------
+  // 1. 최상단 통합 현황 (추후 혜진님 데이터 추가 시 vrAsset + vrAsset2 로 합산)
+  document.getElementById('vr-integrated-asset').innerText = formatKRW(vrAsset);
+  document.getElementById('vr-integrated-pool').innerText = formatKRW(vrPool);
+
+  // 2. 사장님 계좌 개별 상세
   document.getElementById('vr1-total').innerText = `총 자산 ${formatKRW(vrAsset)}`;
+  
+  // V목표 67만, 밴드는 만원 단위로 절삭 표기
+  const vMan = (vrV / 10000).toFixed(1);
+  const upperMan = (vrUpper / 10000).toFixed(1);
+  const lowerMan = (vrLower / 10000).toFixed(1);
+  document.getElementById('vr1-band').innerText = `${vMan}만 / (${upperMan}만 ~ ${lowerMan}만)`;
+  
+  const poolRatio = vrAsset > 0 ? ((vrPool / vrAsset) * 100).toFixed(1) : 0;
+  document.getElementById('vr1-pool').innerText = `${formatKRW(vrPool)} (${poolRatio}%)`;
+  
+  document.getElementById('vr1-status').innerText = vrStatus;
+  document.getElementById('vr-flow-active').innerText = `▶ 현재 밴드 상태: ${vrStatus}`;
   
   // V목표 67만, 밴드는 만원 단위로 절삭 표기
   const vMan = (vrV / 10000).toFixed(1);
