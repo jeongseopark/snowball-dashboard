@@ -188,7 +188,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       <div class="section">
         <div class="section-title">가동 중인 봇 엔진</div>
         <div class="card" style="margin-bottom:16px;">
-          <div class="pos-row"><span class="pos-key">🇺🇸 TQQQ 스노우볼 봇</span><span class="tag cyan">가동중</span></div>
+          <div class="pos-row"><span class="pos-key">🇺🇸 무한매수 봇 연동</span><span class="tag cyan">가동중</span></div>
           <div class="pos-row"><span class="pos-key">🇰🇷 VIP VR 봇 (듀얼)</span><span class="tag gold">대기/가동</span></div>
         </div>
 
@@ -235,11 +235,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       <div style="height:30px;"></div>
     </div>
 
-    <!-- [ 탭 2 ] 무한매수 (TQQQ) -->
+    <!-- [ 탭 2 ] 무한매수 -->
     <div class="tab-content" id="tab-infinite">
       <div class="section">
         <div class="hero-card">
-          <div class="hero-label">TQQQ REALIZED PnL</div>
+          <div class="hero-label" id="ui-inf-pnl-label">TQQQ REALIZED PnL</div>
           <div class="hero-value" id="ui-inf-pnl">+$0.00</div>
         </div>
         <div class="kpi-grid">
@@ -249,7 +249,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       </div>
 
       <div class="section">
-        <div class="section-title">현재 포지션 (TQQQ)</div>
+        <div class="section-title" id="ui-inf-pos-label">현재 포지션 (TQQQ)</div>
         <div class="card">
           <div class="card-header">
             <span class="tag cyan"><span class="pulse">●</span> 매수 진행중</span>
@@ -443,7 +443,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 </div>
 
 <script>
-// ⭐ 구글 앱스 스크립트 웹앱 주소를 여기에 넣어주세요!
+// ⭐ 구글 앱스 스크립트 웹앱 주소 적용 완료!
 const API_URL = "https://script.google.com/macros/s/AKfycbxI6cIbRpL5-r8xnGLvtbTkCNxAolrFr7maCV6hr0D8tdUCK5wpyaSU6fa6m1wDZqSTvw/exec"; 
 
 function updateClocks() {
@@ -472,7 +472,7 @@ function formatUSD(num) { return '$' + num.toLocaleString(undefined, {minimumFra
 async function initData() {
   if (API_URL === "여기에_주소_넣기") {
       document.getElementById('loader').style.display = 'none';
-      return; // 연결 전이면 로딩바만 끄고 대기
+      return; 
   }
   try {
     const res = await fetch(API_URL);
@@ -491,33 +491,43 @@ function renderDashboard(data) {
   const vr = data.vr;
 
   // 1. TOTAL 탭 연동
-  document.getElementById('ui-tot-krw').textContent = formatKRW(vr.totalAsset);
-  document.getElementById('ui-tot-usd').textContent = formatUSD(inf.invested + inf.totalProfit);
+  document.getElementById('ui-tot-krw').textContent = formatKRW(vr.totalAsset || 0);
+  document.getElementById('ui-tot-usd').textContent = formatUSD((inf.invested || 0) + (inf.totalProfit || 0));
 
-  // 2. 무한매수 연동
-  document.getElementById('ui-inf-pnl').textContent = `+${formatUSD(inf.totalProfit)}`;
-  document.getElementById('ui-inf-cycle').textContent = `#${inf.cycle}`;
-  document.getElementById('ui-inf-install').textContent = `${inf.install.toFixed(1)} / 40`;
+  // 2. 무한매수 연동 (WEBL 등 동적 연동)
+  const infTicker = inf.ticker && inf.ticker !== "WAIT" ? inf.ticker : "TQQQ";
+  document.getElementById('ui-inf-pnl-label').textContent = `${infTicker} REALIZED PnL`;
+  document.getElementById('ui-inf-pos-label').textContent = `현재 포지션 (${infTicker})`;
+
+  document.getElementById('ui-inf-pnl').textContent = `+${formatUSD(inf.totalProfit || 0)}`;
+  document.getElementById('ui-inf-cycle').textContent = `#${inf.cycle || 0}`;
+  document.getElementById('ui-inf-install').textContent = `${(inf.install || 0).toFixed(1)} / 40`;
   
-  const pnlValue = (inf.close - inf.avg) * inf.qty;
-  const pnlRate = inf.avg > 0 ? ((inf.close - inf.avg) / inf.avg) * 100 : 0;
-  const targetRate = inf.avg > 0 ? ((inf.target - inf.avg) / inf.avg) * 100 : 15;
+  const pnlValue = ((inf.close || 0) - (inf.avg || 0)) * (inf.qty || 0);
+  const pnlRate = inf.avg > 0 ? (((inf.close || 0) - inf.avg) / inf.avg) * 100 : 0;
   
-  document.getElementById('ui-inf-avg').textContent = `평단 ${formatUSD(inf.avg)}`;
-  document.getElementById('ui-inf-qty').textContent = `${inf.qty}주`;
+  let targetRate = 15.00;
+  if (inf.target && inf.avg > 0) {
+      targetRate = ((inf.target - inf.avg) / inf.avg) * 100;
+  }
+
+  document.getElementById('ui-inf-avg').textContent = `평단 ${formatUSD(inf.avg || 0)}`;
+  document.getElementById('ui-inf-qty').textContent = `${inf.qty || 0}주`;
   document.getElementById('ui-inf-eval').textContent = `${pnlValue>=0?'+':''}${formatUSD(pnlValue)} (${pnlValue>=0?'+':''}${pnlRate.toFixed(2)}%)`;
   document.getElementById('ui-inf-eval').style.color = pnlValue >= 0 ? 'var(--green)' : 'var(--red)';
   document.getElementById('ui-inf-prog').textContent = `${pnlRate.toFixed(2)}% / ${targetRate.toFixed(2)}%`;
 
-  // 무한매수 영수증 연동
-  if(inf.logs && inf.logs.length > 0) {
-    document.getElementById('ui-inf-tradeList').innerHTML = inf.logs.map(t => {
+  // ⭐ 무한매수 영수증 역순(최신순) 정렬 적용
+  const validInfLogs = (inf.logs || []).filter(t => t && t[0] !== "");
+  if(validInfLogs.length > 0) {
+    const reversedLogs = validInfLogs.reverse();
+    document.getElementById('ui-inf-tradeList').innerHTML = reversedLogs.map(t => {
        const isBuy = String(t[5]).includes('매수');
        const typeClass = isBuy ? 'buy' : 'sell';
        const realized = parseFloat(t[10] || 0);
        const pnlStr = realized !== 0 ? `${realized>0?'+':''}${formatUSD(realized)}` : formatUSD(parseFloat(t[8] || 0));
        const pnlClass = realized > 0 ? 'pos' : (realized < 0 ? 'neg' : (isBuy ? 'neu' : 'neg'));
-       let dateStr = String(t[0]).substring(5, 16);
+       let dateStr = String(t[0]).substring(5, 16).replace('T', ' '); 
        
        return `
         <div class="trade-item">
@@ -547,12 +557,14 @@ function renderDashboard(data) {
     if (!isNaN(rDate)) rStr = `${rDate.getFullYear()}-${String(rDate.getMonth()+1).padStart(2,'0')}-${String(rDate.getDate()).padStart(2,'0')}`;
     document.getElementById('ui-vr-rebal').textContent = `${rStr} (${vr.mode})`;
 
-    // VR 영수증 연동
-    if (vr.logs && vr.logs.length > 0) {
-      document.getElementById('ui-vr-tradeList').innerHTML = vr.logs.map(t => {
+    // ⭐ VR 영수증 역순(최신순) 정렬 적용
+    const validVrLogs = (vr.logs || []).filter(t => t && t[0] !== "");
+    if (validVrLogs.length > 0) {
+      const reversedVrLogs = validVrLogs.reverse();
+      document.getElementById('ui-vr-tradeList').innerHTML = reversedVrLogs.map(t => {
         const isBuy = String(t[1]).includes('매수');
         const typeClass = isBuy ? 'buy' : 'sell';
-        let dateStr = String(t[0]).substring(5, 16);
+        let dateStr = String(t[0]).substring(5, 16).replace('T', ' ');
         return `
           <div class="trade-item">
             <div class="trade-type-dot ${typeClass}"></div>
