@@ -3,67 +3,70 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>SNOWBALL BOT CONTROL</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@700&family=Syne:wght@800&family=DM+Sans:wght@700&display=swap" rel="stylesheet">
+<title>SNOWBALL CONTROL v5.4</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@700&family=Syne:wght@800&family=DM+Sans:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #080C14; --surface: #162035; --border: #1E2F4A;
+  --bg: #080C14; --bg2: #0D1520; --surface: #162035; --border: #1E2F4A;
   --cyan: #00E5FF; --green: #00E676; --red: #FF3D71; --gold: #FFD740;
-  --text: #E8F0FF; --text2: #8FA8CC;
+  --text: #E8F0FF; --text2: #8FA8CC; --text3: #4A6080;
 }
-*{box-sizing:border-box;margin:0;padding:0;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 body{background:var(--bg);color:var(--text);font-family: 'DM Sans', sans-serif; overflow:hidden;}
 
-/* ── 상단 플로팅 네비게이션 ── */
+/* ── 상단 플로팅 네비게이션 (글자 크기 18px로 확대) ── */
 .nav-wrapper {
   position: fixed; top: 15px; left: 50%; transform: translateX(-50%);
-  width: 90%; max-width: 400px; z-index: 1000;
+  width: 92%; max-width: 400px; z-index: 1000;
 }
 .floating-nav {
   background: rgba(22, 32, 53, 0.85); backdrop-filter: blur(15px);
-  border: 1px solid var(--border); border-radius: 25px;
-  display: flex; padding: 5px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  border: 1px solid var(--border); border-radius: 30px;
+  display: flex; padding: 6px; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
 }
 .nav-btn {
   flex: 1; border: none; background: none; color: var(--text2);
-  padding: 12px 0; font-size: 14px; font-weight: 700; cursor: pointer;
-  border-radius: 20px; transition: 0.3s;
+  padding: 14px 0; font-size: 18px; font-weight: 800; cursor: pointer; 
+  border-radius: 25px; transition: 0.3s; font-family: 'Syne';
 }
-.nav-btn.active { background: var(--cyan); color: #000; }
+.nav-btn.active { background: var(--cyan); color: #000; box-shadow: 0 4px 15px rgba(0,229,255,0.3); }
 
-.scroll-area { height: 100vh; overflow-y: auto; padding-top: 90px; padding-bottom: 50px; }
-.section { padding: 20px; }
+.scroll-area { height: 100vh; overflow-y: auto; padding-top: 100px; padding-bottom: 40px; }
+.section { padding: 16px; }
 
-/* ── 큼직한 카드 UI ── */
-.card { background: var(--surface); border-radius: 20px; padding: 25px; margin-bottom: 20px; border: 1px solid var(--border); }
-.label { font-size: 14px; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
-.value-lg { font-family: 'Space Mono'; font-size: 42px; font-weight: 800; color: var(--green); line-height: 1.1; }
-.value-md { font-family: 'Space Mono'; font-size: 28px; font-weight: 700; color: var(--cyan); }
+/* ── 카드 사이즈 최적화 (v5.2 기준) ── */
+.card { background: var(--surface); border-radius: 16px; padding: 20px; margin-bottom: 12px; border: 1px solid var(--border); }
+.label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; font-family: 'Space Mono'; }
+.value-lg { font-family: 'Space Mono'; font-size: 32px; font-weight: 700; color: var(--green); line-height: 1; }
+.value-md { font-family: 'Space Mono'; font-size: 22px; font-weight: 700; color: var(--cyan); }
 
-/* ── VR 밴드 미터 ── */
-.band-meter { position: relative; height: 40px; background: #0D1520; border-radius: 10px; margin: 20px 0; border: 1px solid var(--border); }
-.band-range { position: absolute; height: 100%; background: rgba(0, 229, 255, 0.1); border-left: 3px solid var(--cyan); border-right: 3px solid var(--red); }
-.price-marker { position: absolute; top: 0; bottom: 0; width: 3px; background: var(--gold); box-shadow: 0 0 15px var(--gold); z-index: 2; transition: left 1s; }
+.kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.kpi-box { background: var(--surface); border: 1px solid var(--border); padding: 16px; border-radius: 12px; text-align: center; }
 
-.kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-.kpi-box { background: var(--surface); border: 1px solid var(--border); padding: 20px; border-radius: 18px; text-align: center; }
+/* VR 밴드 미터 시각화 */
+.band-meter { position: relative; height: 32px; background: #0D1520; border-radius: 8px; margin: 15px 0 10px; border: 1px solid var(--border); overflow: hidden; }
+.band-range { position: absolute; height: 100%; background: rgba(0, 229, 255, 0.1); border-left: 2px solid var(--cyan); border-right: 2px solid var(--red); }
+.price-marker { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--gold); box-shadow: 0 0 10px var(--gold); z-index: 2; transition: left 1s; }
 
-#loader { position: fixed; inset: 0; background: var(--bg); z-index: 2000; display: flex; align-items: center; justify-content: center; font-family: 'Space Mono'; color: var(--cyan); }
+#loader { position: fixed; inset: 0; background: var(--bg); z-index: 2000; display: flex; align-items: center; justify-content: center; font-family: 'Space Mono'; color: var(--cyan); font-size: 14px; }
 
 .tab-content { display: none; }
-.tab-content.active { display: block; animation: fadeInUp 0.4s ease-out; }
-@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.tab-content.active { display: block; animation: fadeIn 0.3s; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.log-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+.log-ticker { font-family: 'Space Mono'; font-weight: 700; color: var(--cyan); }
 </style>
 </head>
 <body>
 
-<div id="loader">INITIALIZING...</div>
+<div id="loader">SYNCING DATA...</div>
 
 <div class="nav-wrapper">
   <div class="floating-nav">
     <button class="nav-btn active" onclick="switchTab('inf', this)">무한매수</button>
     <button class="nav-btn" onclick="switchTab('vr', this)">VR 관제</button>
-    <button class="nav-btn" onclick="switchTab('logs', this)">매매기록</button>
+    <button class="nav-btn" onclick="switchTab('logs', this)">기록</button>
   </div>
 </div>
 
@@ -79,13 +82,13 @@ body{background:var(--bg);color:var(--text);font-family: 'DM Sans', sans-serif; 
         <div class="kpi-box"><div class="label">Cycle</div><div class="value-md" id="inf-cycle">#0</div></div>
         <div class="kpi-box"><div class="label">Install</div><div class="value-md" id="inf-install">0/40</div></div>
       </div>
-      <div class="card" style="margin-top:20px;">
-        <div class="label">Current Position</div>
-        <div style="display:flex; justify-content:space-between; align-items:flex-end;">
-          <div id="inf-ticker" style="font-size:24px; font-weight:800; color:var(--cyan);">TICKER</div>
-          <div id="inf-pnl-rate" style="font-size:24px; font-weight:800;">0.00%</div>
+      <div class="card" style="margin-top:12px;">
+        <div class="label">Position Detail</div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div id="inf-ticker" style="font-size:20px; font-weight:700; color:var(--cyan);">WAIT</div>
+          <div id="inf-pnl-rate" style="font-family:'Space Mono'; font-size:20px; font-weight:700;">0.00%</div>
         </div>
-        <div style="margin-top:15px; font-size:16px; color:var(--text2); font-family:'Space Mono';">
+        <div style="margin-top:10px; font-size:13px; color:var(--text2); font-family:'Space Mono';">
           AVG: <span id="inf-avg" style="color:var(--text)">$0.00</span> / NOW: <span id="inf-now" style="color:var(--text)">$0.00</span>
         </div>
       </div>
@@ -105,7 +108,7 @@ body{background:var(--bg);color:var(--text);font-family: 'DM Sans', sans-serif; 
           <div class="band-range" id="vr-band-range"></div>
           <div class="price-marker" id="vr-marker"></div>
         </div>
-        <div style="display:flex; justify-content:space-between; font-family:'Space Mono'; font-size:12px; color:var(--text2);">
+        <div style="display:flex; justify-content:space-between; font-family:'Space Mono'; font-size:10px; color:var(--text2);">
           <span>LOW: <b id="vr-low">0</b></span>
           <span style="color:var(--cyan)">V: <b id="vr-v">0</b></span>
           <span>HIGH: <b id="vr-high">0</b></span>
@@ -120,13 +123,15 @@ body{background:var(--bg);color:var(--text);font-family: 'DM Sans', sans-serif; 
 
   <!-- 기록 탭 -->
   <div class="tab-content" id="tab-logs">
-    <div class="section" id="log-list">
-      <!-- 로그 항목 생성 -->
+    <div class="section">
+        <div class="label" style="margin-bottom:15px;">Recent Trades</div>
+        <div id="log-list"></div>
     </div>
   </div>
 </div>
 
 <script>
+// 제공해주신 API 주소를 적용했습니다
 const API_URL = "https://script.google.com/macros/s/AKfycbxI6cIbRpL5-r8xnGLvtbTkCNxAolrFr7maCV6hr0D8tdUCK5wpyaSU6fa6m1wDZqSTvw/exec"; 
 
 async function fetchData() {
@@ -134,32 +139,41 @@ async function fetchData() {
     const res = await fetch(API_URL);
     const data = await res.json();
     if(data.success) {
-      // ── 무매 데이터 (인덱스 보강) ──
+      // ── 무매 매핑 ──
       const inf = data.infinite;
-      document.getElementById('inf-total-pnl').innerText = `$${parseFloat(inf.status[4] || 0).toFixed(2)}`;
-      document.getElementById('inf-cycle').innerText = `#${inf.trend[2] || 0}`;
-      document.getElementById('inf-install').innerText = `${inf.trend[3] || 0}/40`;
-      document.getElementById('inf-ticker').innerText = inf.trend[1] || "WAIT";
-      document.getElementById('inf-avg').innerText = `$${parseFloat(inf.trend[5] || 0).toFixed(2)}`;
-      document.getElementById('inf-now').innerText = `$${parseFloat(inf.trend[4] || 0).toFixed(2)}`;
+      document.getElementById('inf-total-pnl').innerText = `$${inf.totalProfit.toFixed(2)}`;
+      document.getElementById('inf-cycle').innerText = `#${inf.cycle}`;
+      document.getElementById('inf-install').innerText = `${inf.install}/40`;
+      document.getElementById('inf-ticker').innerText = inf.ticker;
+      document.getElementById('inf-avg').innerText = `$${inf.avg.toFixed(2)}`;
+      document.getElementById('inf-now').innerText = `$${inf.close.toFixed(2)}`;
       
-      const pnl = inf.trend[5] > 0 ? ((inf.trend[4] - inf.trend[5]) / inf.trend[5] * 100).toFixed(2) : 0;
+      const pnl = inf.avg > 0 ? ((inf.close - inf.avg) / inf.avg * 100).toFixed(2) : 0;
       const pnlEl = document.getElementById('inf-pnl-rate');
       pnlEl.innerText = `${pnl}%`;
       pnlEl.style.color = pnl >= 0 ? 'var(--green)' : 'var(--red)';
 
-      // ── VR 데이터 ──
+      // ── VR 매핑 ──
       const vr = data.vr;
-      document.getElementById('vr-total').innerText = `${Math.round(vr.curr_value).toLocaleString()}원`;
+      document.getElementById('vr-total').innerText = `${Math.round(vr.asset).toLocaleString()}원`;
       document.getElementById('vr-pool').innerText = `${Math.round(vr.pool).toLocaleString()}원`;
-      document.getElementById('vr-v').innerText = Math.round(vr.v_value).toLocaleString();
+      document.getElementById('vr-v').innerText = Math.round(vr.v).toLocaleString();
       document.getElementById('vr-low').innerText = Math.round(vr.lower).toLocaleString();
       document.getElementById('vr-high').innerText = Math.round(vr.upper).toLocaleString();
       document.getElementById('vr-status').innerText = vr.status;
 
       const range = vr.upper - vr.lower;
-      const pos = range > 0 ? ((vr.curr_value - vr.lower) / range) * 100 : 50;
+      const pos = range > 0 ? ((vr.asset - vr.lower) / range) * 100 : 50;
       document.getElementById('vr-marker').style.left = `${Math.min(Math.max(pos, 0), 100)}%`;
+
+      // ── 로그 매핑 ──
+      const logList = document.getElementById('log-list');
+      logList.innerHTML = inf.logs.slice(0, 15).map(l => `
+        <div class="log-item">
+          <div><span class="log-ticker">${l[1]}</span> <span style="color:var(--text3); margin-left:5px;">${l[0].toString().substring(5,10)}</span></div>
+          <div style="color:${l[5].includes('매수')?'var(--cyan)':'var(--red)'}">${l[5]} ${l[7]}주</div>
+        </div>
+      `).join('');
     }
   } catch(e) { console.error("Error:", e); }
   finally { document.getElementById('loader').style.display = 'none'; }
@@ -173,7 +187,7 @@ function switchTab(id, btn) {
 }
 
 fetchData();
-setInterval(fetchData, 60000); // 1분마다 갱신
+setInterval(fetchData, 60000); // 1분 자동 갱신
 </script>
 </body>
 </html>
