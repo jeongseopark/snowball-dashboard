@@ -3,861 +3,178 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-<meta property="og:title" content="SNOWBALL BOT ❄️">
-<meta property="og:description" content="나만의 무한매수법 VIP 자동매매 관제탑">
-<meta property="og:image" content="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1200&auto=format&fit=crop">
-
-<title>SNOWBALL BOT</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<title>SNOWBALL BOT CONTROL</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@800&family=DM+Sans:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:       #080C14; --bg2:      #0D1520; --bg3:      #111B2E;
-  --surface:  #162035; --surface2: #1C2940; --border:   #1E2F4A;
-  --border2:  #243858; --cyan:     #00E5FF; --cyan2:    #00B8CC;
-  --green:    #00E676; --green2:   #00C060; --red:      #FF3D71;
-  --gold:     #FFD740; --gold2:    #E6B800; --purple:   #7C4DFF;
-  --text:     #E8F0FF; --text2:    #8FA8CC; --text3:    #4A6080;
-  --mono:     'Space Mono', monospace; --head: 'Syne', sans-serif; --body: 'DM Sans', sans-serif;
-  --r: 16px; --r2: 12px;
+  --bg: #080C14; --bg2: #0D1520; --surface: #162035; --border: #1E2F4A;
+  --cyan: #00E5FF; --green: #00E676; --red: #FF3D71; --gold: #FFD740;
+  --text: #E8F0FF; --text2: #8FA8CC; --mono: 'Space Mono', monospace;
 }
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--body);overflow:hidden;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family: 'DM Sans', sans-serif; overflow:hidden;}
 
-/* ── 앱 컨테이너 & 로딩 ── */
-.app{display:flex;flex-direction:column;height:100svh;max-width:430px;margin:0 auto;position:relative;overflow:hidden;background:var(--bg);}
-#loader{position:absolute;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.5s;}
-.spinner{width:40px;height:40px;border:4px solid var(--border);border-top-color:var(--cyan);border-radius:50%;animation:spin 1s linear infinite;}
-@keyframes spin{100%{transform:rotate(360deg);}}
+.app{display:flex;flex-direction:column;height:100vh;max-width:430px;margin:0 auto;background:var(--bg);}
+#loader{position:absolute;inset:0;background:var(--bg);z-index:999;display:flex;align-items:center;justify-content:center;}
+.top-bar{padding:15px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.bot-logo{font-family:'Syne';font-weight:800;font-size:18px;letter-spacing:1px;color:var(--cyan);}
 
-.pulse { animation: pulse 1.5s infinite; display: inline-block; margin-right: 3px; }
-@keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
+.scroll-area{flex:1;overflow-y:auto;padding-bottom:100px;}
+.section{padding:16px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:12px;}
 
-.scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;padding:0 0 80px;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;}
-.scroll-area::-webkit-scrollbar{display:none;}
-.top-bar{position:sticky;top:0;z-index:100;background:var(--bg);padding:env(safe-area-inset-top,12px) 20px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(20px);}
-.top-bar-left{display:flex;align-items:center;gap:10px;}
-.bot-avatar{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--cyan),var(--purple));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
-.bot-name{font-family:var(--head);font-weight:800;font-size:17px;letter-spacing:0.5px;}
-.bot-sub{font-size:11px;color:var(--text3);font-family:var(--mono);}
+/* VR 밴드 시각화 */
+.band-meter { position: relative; height: 32px; background: var(--bg2); border-radius: 8px; margin: 15px 0; border: 1px solid var(--border); overflow: hidden; }
+.band-range { position: absolute; height: 100%; background: rgba(0, 229, 255, 0.1); border-left: 2px solid var(--cyan); border-right: 2px solid var(--red); }
+.price-marker { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--gold); box-shadow: 0 0 10px var(--gold); z-index: 2; transition: left 1s ease; }
 
-.dual-clock {display:flex; flex-direction:column; align-items:flex-end; gap:3px;}
-.clock-row {display:flex; align-items:center; gap:5px; font-family:var(--mono); font-size:10px; background:var(--surface); padding:2px 6px; border-radius:6px; border:1px solid var(--border);}
-.clock-flag {font-size:12px; line-height:1;}
-.clock-time {color:var(--text2); font-weight:700; letter-spacing:0.5px;}
+.kpi-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+.kpi-box { background: var(--bg2); padding: 12px; border-radius: 10px; text-align: center; }
+.kpi-val { font-family: var(--mono); font-size: 16px; font-weight: 700; color: var(--cyan); }
+.kpi-lab { font-size: 10px; color: var(--text2); margin-top: 4px; }
 
-.section{padding:16px 16px 0;}
-.section-title{font-family:var(--head);font-size:11px;font-weight:700;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
-.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.bottom-nav{position:fixed;bottom:0;width:100%;max-width:430px;background:rgba(8,12,20,0.95);display:flex;padding:10px;border-top:1px solid var(--border);}
+.nav-btn{flex:1;border:none;background:none;color:var(--text2);font-size:10px;cursor:pointer;}
+.nav-btn.active{color:var(--cyan);}
+.tab-content{display:none;} .tab-content.active{display:block;}
 
-.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:14px 14px 12px;position:relative;overflow:hidden;}
-.kpi-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--accent,var(--cyan));}
-.kpi-label{font-size:10px;color:var(--text3);font-family:var(--mono);letter-spacing:0.5px;margin-bottom:8px;display:flex;align-items:center;gap:5px;}
-.kpi-value{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--accent,var(--cyan));line-height:1;}
-.kpi-value.lg{font-size:26px;}
-.kpi-unit{font-size:11px;color:var(--text3);margin-top:4px;font-family:var(--body);}
-
-.hero-card{background:linear-gradient(135deg,var(--bg3) 0%,var(--surface2) 100%);border:1px solid var(--border2);border-radius:var(--r);padding:24px 20px;position:relative;overflow:hidden;margin-bottom:10px;}
-.hero-card::before{content:'';position:absolute;top:-40px;right:-40px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(0,229,255,0.12) 0%,transparent 70%);}
-.hero-label{font-size:11px;color:var(--text3);font-family:var(--mono);letter-spacing:1px;margin-bottom:6px;}
-.hero-value{font-family:var(--mono);font-size:38px;font-weight:700;color:var(--green);line-height:1;margin-bottom:4px;}
-
-.position-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
-.position-header{padding:14px 16px;background:var(--surface2);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
-.ticker-chip{background:linear-gradient(135deg,var(--cyan2),var(--purple));color:#fff;font-family:var(--mono);font-weight:700;font-size:14px;padding:4px 12px;border-radius:8px;letter-spacing:1px;}
-.position-rows{display:flex;flex-direction:column;}
-.pos-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);}
-.pos-row:last-child{border-bottom:none;}
-.pos-key{font-size:12px;color:var(--text3);font-family:var(--body);}
-.pos-val{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--text);text-align:right;}
-.pos-val.cyan{color:var(--cyan);}
-.pos-val.gold{color:var(--gold);}
-.pos-val.green{color:var(--green);}
-.pos-val.red{color:var(--red);}
-
-.target-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px;}
-.gauge-wrap{position:relative;margin:12px 0 6px;}
-.gauge-track{height:8px;border-radius:4px;background:var(--border2);overflow:hidden;}
-.gauge-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--cyan2),var(--cyan));transition:width 1s cubic-bezier(0.4,0,0.2,1);position:relative;}
-.gauge-fill::after{content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);width:14px;height:14px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);margin-right:-7px;}
-.target-info{display:flex;justify-content:space-between;align-items:center;margin-top:10px;}
-
-.trade-list{display:flex;flex-direction:column;gap:8px;}
-.trade-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:12px 14px;display:flex;align-items:center;gap:12px;}
-.trade-type-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-.trade-type-dot.buy{background:var(--cyan);}
-.trade-type-dot.sell{background:var(--green);}
-.trade-info{flex:1;min-width:0;}
-.trade-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;}
-.trade-ticker{font-family:var(--mono);font-size:13px;font-weight:700;}
-.trade-pnl{font-family:var(--mono);font-size:13px;font-weight:700;}
-.trade-pnl.pos{color:var(--green);}
-.trade-pnl.neg{color:var(--red);}
-.trade-pnl.neu{color:var(--text3);}
-.trade-bottom{display:flex;align-items:center;justify-content:space-between;}
-.trade-type-label{font-size:11px;font-family:var(--mono);}
-.trade-type-label.buy{color:var(--cyan);}
-.trade-type-label.sell{color:var(--green);}
-.trade-meta{font-size:10px;color:var(--text3);font-family:var(--mono);}
-
-.snowball-header { display: flex; justify-content: space-between; font-size: 11px; color: var(--text2); margin-bottom: 12px; font-family: var(--mono); font-weight: 700;}
-.snowball-progress{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;padding:0 0 8px;}
-.snow-dot{width:18px;height:18px;border-radius:50%;margin:3px;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:8px;font-family:var(--mono);color:var(--text3);transition:all 0.3s;}
-.snow-dot.done{background:linear-gradient(135deg,var(--cyan2),var(--purple));border-color:transparent;color:#fff;font-weight:700;}
-.snow-dot.current{background:linear-gradient(135deg,var(--gold2),var(--gold));border-color:var(--gold);color:#000;font-weight:700;box-shadow:0 0 10px rgba(255,215,64,0.4);}
-.snow-dot.empty{background:rgba(255,255,255,0.03);}
-.snow-dot.reverse{background:rgba(255,61,113,0.2); border-color:var(--red); color:var(--red); font-weight:700; box-shadow:0 0 10px rgba(255,61,113,0.4);}
-
-.snowball-legend { display: flex; justify-content: center; gap: 16px; font-size: 10px; color: var(--text3); margin-top: 8px; font-family: var(--body); }
-.legend-item { display: flex; align-items: center; gap: 5px; }
-.legend-color { width: 10px; height: 10px; border-radius: 50%; }
-.legend-color.done { background: var(--cyan); }
-.legend-color.curr { background: var(--gold); }
-.legend-color.rem { background: transparent; border: 1.5px solid var(--border2); }
-.legend-color.rev { background: var(--red); }
-
-.mini-progress { height: 6px; background: var(--border2); border-radius: 3px; overflow: hidden; margin-top: 8px; }
-.mini-progress-fill { height: 100%; background: linear-gradient(90deg, var(--cyan2), var(--cyan)); border-radius: 3px; transition: width 0.5s; }
-
-.summary-row{display:flex;justify-content:space-around;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r2);padding:14px;margin-bottom:10px;}
-.sum-item{text-align:center;}
-.sum-val{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--cyan);}
-.sum-key{font-size:10px;color:var(--text3);margin-top:3px;font-family:var(--body);}
-.cycle-scroll{display:flex;gap:10px;overflow-x:auto;padding:0 16px 4px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
-.cycle-scroll::-webkit-scrollbar{display:none;}
-.cycle-card{flex-shrink:0;width:160px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:14px;}
-.cycle-num{font-size:10px;color:var(--text3);font-family:var(--mono);letter-spacing:1px;margin-bottom:4px;}
-.cycle-ticker{font-family:var(--head);font-size:20px;font-weight:800;color:var(--text);margin-bottom:10px;}
-.cycle-profit{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--green);margin-bottom:4px;}
-.cycle-rate{font-size:11px;font-family:var(--mono);display:inline-flex;align-items:center;gap:3px;background:rgba(0,230,118,0.1);color:var(--green2);padding:2px 7px;border-radius:10px;}
-
-.bar-chart { display:flex; align-items:flex-end; justify-content:center; gap:25px; height:110px; margin-top:20px; padding-bottom:5px; overflow-x:auto; }
-.bar-wrap { display:flex; flex-direction:column; align-items:center; width:40px; flex-shrink:0; }
-.bar-value { font-size:12px; color:var(--cyan); font-family:var(--mono); font-weight:700; margin-bottom:8px; text-shadow:0 0 8px rgba(0,229,255,0.6); }
-.bar { width:100%; border-radius:6px 6px 0 0; background:linear-gradient(180deg, var(--cyan) 0%, rgba(0,229,255,0.05) 100%); position:relative; transition:height 0.8s cubic-bezier(0.4,0,0.2,1); min-height:4px; box-shadow:0 -3px 12px rgba(0,229,255,0.4); }
-.bar-label { font-size:11px; color:var(--text3); margin-top:8px; font-family:var(--mono); font-weight:700; }
-
-.flow-container { display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 10px; }
-.flow-box { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 12px; padding: 14px 16px; width: 90%; position: relative; transition: all 0.4s ease; }
-.flow-box.active { border-color: var(--cyan); box-shadow: 0 0 15px rgba(0, 229, 255, 0.25); background: rgba(0, 229, 255, 0.05); transform: scale(1.02); }
-.flow-box.active.reverse { border-color: var(--red); box-shadow: 0 0 15px rgba(255, 61, 113, 0.3); background: rgba(255, 61, 113, 0.05); }
-.flow-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-.flow-icon { font-size: 22px; }
-.flow-title { font-family: var(--body); font-weight: 700; font-size: 14px; color: var(--text); }
-.flow-badge-group { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
-.flow-badge { font-size: 9px; font-family: var(--mono); font-weight: 700; padding: 2px 6px; border-radius: 4px; }
-.flow-badge.cyan { background: rgba(0,229,255,0.15); color: var(--cyan); }
-.flow-badge.gold { background: rgba(255,215,64,0.15); color: var(--gold); }
-.flow-badge.red { background: rgba(255,61,113,0.15); color: var(--red); }
-.flow-list { margin: 0; padding-left: 18px; font-size: 11px; color: var(--text2); font-family: var(--body); line-height: 1.6; }
-.flow-list li { margin-bottom: 4px; }
-.flow-list li b { color: var(--text); }
-.flow-active-desc { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--cyan); margin-top: 10px; display: none; text-align: center; background: rgba(0,229,255,0.1); padding: 6px; border-radius: 6px;}
-.flow-box.active .flow-active-desc { display: block; }
-.flow-box.active.reverse .flow-active-desc { color: var(--red); background: rgba(255,61,113,0.1); }
-.flow-arrow { color: var(--border2); font-size: 18px; text-align: center; width: 100%; margin: -4px 0; }
-
-.flow-branch { display: flex; width: 95%; gap: 12px; justify-content: center; }
-.flow-branch-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-.flow-branch-box { background: rgba(255,255,255,0.02); border: 1.5px dashed var(--border2); border-radius: 10px; padding: 12px; width: 100%; text-align: center; transition: all 0.3s; }
-.flow-branch-box.active { border-color: var(--cyan); border-style: solid; background: rgba(0, 229, 255, 0.05); box-shadow: 0 0 15px rgba(0, 229, 255, 0.2); transform: scale(1.03); }
-.flow-branch-box.active.reverse { border-color: var(--red); border-style: solid; background: rgba(255, 61, 113, 0.05); box-shadow: 0 0 15px rgba(255, 61, 113, 0.3); transform: scale(1.03); }
-.flow-branch-title { font-family: var(--body); font-weight: 700; font-size: 13px; color: var(--text); margin-bottom: 4px; margin-top:4px; }
-.flow-branch-cond { font-size: 10px; color: var(--text3); font-family: var(--mono); background: var(--bg); padding: 2px 6px; border-radius: 4px; display: inline-block; }
-
-.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(8,12,20,0.92);backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:8px 10px env(safe-area-inset-bottom,8px);z-index:200;}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;border:none;background:none;cursor:pointer;transition:transform 0.15s;}
-.nav-icon{font-size:20px;line-height:1;}
-.nav-label{font-size:10px;font-family:var(--body);font-weight:500;color:var(--text3);}
-.nav-btn.active .nav-label{color:var(--cyan);}
-.nav-btn.active .nav-icon{filter:drop-shadow(0 0 6px var(--cyan));}
-
-.tag{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-family:var(--mono);font-weight:700;}
-.tag.cyan{background:rgba(0,229,255,0.1);color:var(--cyan);border:1px solid rgba(0,229,255,0.25);}
-.tag.gold{background:rgba(255,215,64,0.1);color:var(--gold);border:1px solid rgba(255,215,64,0.25);}
-.tag.green{background:rgba(0,230,118,0.1);color:var(--green);border:1px solid rgba(0,230,118,0.25);}
-.tag.red{background:rgba(255,61,113,0.1);color:var(--red);border:1px solid rgba(255,61,113,0.25);}
-.tag.purple{background:rgba(124,77,255,0.1);color:var(--purple);border:1px solid rgba(124,77,255,0.25);}
-.update-time{text-align:center;font-size:10px;color:var(--text3);font-family:var(--mono);padding:20px 8px;}
-.sys-version{text-align:center; font-size:10px; color:var(--border2); font-family:var(--mono); margin-top:20px; letter-spacing:1px;}
-.tab-content{display:none;}
-.tab-content.active{display:block; animation: fadeIn 0.3s;}
-@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-.empty-state{text-align:center;padding:30px;color:var(--text3);font-size:12px;font-family:var(--mono);border:1px dashed var(--border);border-radius:var(--r);margin:10px 16px;}
+.log-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+.log-ticker { font-family: var(--mono); font-weight: 700; }
+.log-side.buy { color: var(--cyan); } .log-side.sell { color: var(--red); }
 </style>
 </head>
 <body>
 <div class="app">
-  <div id="loader">
-    <div class="spinner"></div>
-    <div style="margin-top:15px;font-family:var(--mono);color:var(--cyan);font-size:12px;">데이터 동기화 중...</div>
-  </div>
-
+  <div id="loader"><div style="color:var(--cyan);font-family:var(--mono);">LOADING...</div></div>
   <div class="top-bar">
-    <div class="top-bar-left">
-      <div class="bot-avatar">🤖</div>
-      <div><div class="bot-name">SNOWBALL BOT</div><div class="bot-sub">VIP AUTO TRADING</div></div>
-    </div>
-    <div class="dual-clock">
-      <div class="clock-row"><span class="clock-flag">🇺🇸</span><span class="clock-time" id="clock-ny">--:--:--</span></div>
-      <div class="clock-row"><span class="clock-flag">🇰🇷</span><span class="clock-time" id="clock-kr">--:--:--</span></div>
-    </div>
+    <div class="bot-logo">SNOWBALL CONTROL</div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--text2);" id="sys-clock">--:--:--</div>
   </div>
 
-  <div class="scroll-area" id="scrollArea">
-    <div class="tab-content active" id="tab-home">
-      <div class="section" style="padding-top:16px;">
-        <div class="hero-card">
-          <div class="hero-label">TOTAL REALIZED PnL</div>
-          <div class="hero-value" id="ui-totalPnl">$0.00</div>
-        </div>
-        <div class="kpi-grid">
-          <div class="kpi-card" style="--accent:var(--gold)"><div class="kpi-label">🏆 달성 사이클</div><div class="kpi-value lg" id="ui-kpiCompleted">0</div><div class="kpi-unit">회 완료</div></div>
-          <div class="kpi-card" style="--accent:var(--cyan)"><div class="kpi-label">📈 현재 주기</div><div class="kpi-value lg" id="ui-kpiCycle">#1</div><div class="kpi-unit">진행 중</div></div>
-          <div class="kpi-card" style="--accent:var(--purple)"><div class="kpi-label">🎯 진행 회차</div><div class="kpi-value" id="ui-kpiInstall">0</div><div class="kpi-unit">목표 회차</div></div>
-          <div class="kpi-card" style="--accent:var(--green)"><div class="kpi-label">💵 1일 예산</div><div class="kpi-value" id="ui-kpiBudget">$0.00</div><div class="kpi-unit">현재 적용 중</div></div>
-        </div>
-      </div>
-
+  <div class="scroll-area">
+    <!-- 무한매수 대시보드 -->
+    <div class="tab-content active" id="tab-inf">
       <div class="section">
-        <div class="section-title">현재 포지션 상세</div>
-        <div class="position-card">
-          <div class="position-header">
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div class="ticker-chip" id="ui-posTicker">TICKER</div>
-              <div style="font-size:12px;color:var(--text2);font-family:var(--mono);" id="ui-posCycleStr">사이클 #1</div>
-            </div>
-            <span class="tag cyan" id="ui-posBadge"><span class="pulse">●</span> 매수 진행중</span>
+        <div class="card" style="border-left:4px solid var(--green)">
+          <div style="font-size:11px;color:var(--text2);margin-bottom:8px;">TOTAL REALIZED PROFIT</div>
+          <div style="font-family:var(--mono);font-size:32px;font-weight:700;color:var(--green);" id="inf-total-pnl">$0.00</div>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi-box"><div class="kpi-val" id="inf-cycle">#0</div><div class="kpi-lab">현재 주기</div></div>
+          <div class="kpi-box"><div class="kpi-val" id="inf-install">0/40</div><div class="kpi-lab">진행 회차</div></div>
+        </div>
+        <div class="card" style="margin-top:12px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+            <span id="inf-ticker" style="font-family:var(--mono);font-weight:700;">TICKER</span>
+            <span id="inf-pnl-rate" class="kpi-val">0.00%</span>
           </div>
-          <div class="position-rows">
-            <div class="pos-row"><span class="pos-key">현재 평단가</span><span class="pos-val cyan" id="ui-posAvgPrice">$0.00</span></div>
-            <div class="pos-row"><span class="pos-key">현재 종가</span><span class="pos-val" id="ui-posClosePrice">$0.00</span></div>
-            <div class="pos-row"><span class="pos-key">평가 손익</span><span class="pos-val" id="ui-posPnl">$0.00 (0.00%)</span></div>
-            <div class="pos-row"><span class="pos-key">보유 수량</span><span class="pos-val" id="ui-posQty">0주</span></div>
-            <div class="pos-row"><span class="pos-key">누적 투입금</span><span class="pos-val" id="ui-posInvested">$0.00</span></div>
-          </div>
+          <div style="font-size:12px;color:var(--text2);">평단: <span id="inf-avg" style="color:var(--text)">$0.00</span> / 현재: <span id="inf-now" style="color:var(--text)">$0.00</span></div>
         </div>
       </div>
+    </div>
 
+    <!-- VR 대시보드 -->
+    <div class="tab-content" id="tab-vr">
       <div class="section">
-        <div class="section-title">익절/탈출 목표</div>
-        <div class="target-card">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-            <span style="font-size:12px;color:var(--text2);" id="ui-gaugeTitle">목표 달성률</span>
-            <span class="tag gold" id="ui-gaugeRate">▲ 0.00% / 10%</span>
+        <div class="card">
+          <div style="font-size:11px;color:var(--text2);margin-bottom:8px;">VR ASSET VALUE</div>
+          <div style="font-family:var(--mono);font-size:28px;font-weight:700;color:var(--cyan);" id="vr-total">0원</div>
+        </div>
+        <div class="card">
+          <div style="font-size:11px;color:var(--text2);">BAND MONITORING</div>
+          <div class="band-meter">
+            <div class="band-range" id="vr-band-range"></div>
+            <div class="price-marker" id="vr-marker"></div>
           </div>
-          <div class="gauge-wrap"><div class="gauge-track"><div class="gauge-fill" id="ui-gaugeBar" style="width:0%"></div></div></div>
-          <div class="target-info" style="margin-top:14px;">
-            <div><div style="font-size:10px;color:var(--text3);margin-bottom:3px;">목표까지 남은 거리</div><div style="font-family:var(--mono);font-size:18px;font-weight:700;color:var(--gold);" id="ui-targetDist">$0.00</div></div>
-            <div style="text-align:right;"><div style="font-size:10px;color:var(--text3);margin-bottom:3px;" id="ui-targetPriceTitle">익절 목표가</div><div style="font-family:var(--mono);font-size:18px;font-weight:700;color:var(--gold);" id="ui-targetPrice">$0.00</div></div>
+          <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--text2);">
+            <span>LOW: <b id="vr-low">0</b></span>
+            <span>BASE(V): <b id="vr-v">0</b></span>
+            <span>HIGH: <b id="vr-high">0</b></span>
           </div>
         </div>
+        <div class="kpi-row">
+          <div class="kpi-box"><div class="kpi-val" id="vr-pool">0원</div><div class="kpi-lab">보유 현금(Pool)</div></div>
+          <div class="kpi-box"><div class="kpi-val" id="vr-status">HOLD</div><div class="kpi-lab">현재 상태</div></div>
+        </div>
       </div>
+    </div>
 
+    <!-- 통합 거래 기록 -->
+    <div class="tab-content" id="tab-logs">
       <div class="section">
-        <div class="section-title">스노우볼 회차 진행 (소수점 정밀 표기)</div>
-        <div class="kpi-card" style="border-radius:16px;">
-          <div class="snowball-header">
-            <span id="ui-snowTitle">사이클 #1</span>
-            <span id="ui-snowPercent" style="color:var(--cyan);">0/0 회차 0% 완료</span>
-          </div>
-          <div class="snowball-progress" id="ui-snowballDots"></div>
-          <div class="snowball-legend">
-            <div class="legend-item"><div class="legend-color done"></div>완료</div>
-            <div class="legend-item"><div class="legend-color curr"></div>부분/진행</div>
-            <div class="legend-item"><div class="legend-color rev"></div>리버스</div>
-            <div class="legend-item"><div class="legend-color rem"></div>남음</div>
-          </div>
-        </div>
-      </div>
-      <div class="update-time" id="ui-updateTime"></div>
-    </div>
-
-    <div class="tab-content" id="tab-trades">
-      <div class="section" style="padding-top:16px;">
-        <div class="summary-row">
-          <div class="sum-item"><div class="sum-val" id="ui-tradeCount">0건</div><div class="sum-key">기록된 거래</div></div>
-          <div class="sum-item"><div class="sum-val" style="color:var(--green);" id="ui-tradeSells">0건</div><div class="sum-key">매도 기록</div></div>
-          <div class="sum-item"><div class="sum-val" style="color:var(--gold);" id="ui-tradeBuys">0건</div><div class="sum-key">분할 매수</div></div>
-        </div>
-        
-        <div class="section-title" style="margin-top:14px;">일별 투입금액 & 매수 수량 추이</div>
-        <div class="kpi-card" style="border-radius:16px; padding:12px; height:200px;">
-          <canvas id="trendChart"></canvas>
-        </div>
-
-        <div class="section-title" style="margin-top:20px;">최근 매매 영수증 (최대 30건)</div>
-        <div class="trade-list" id="ui-tradeList"></div>
+        <div class="section-title">최근 매매 기록</div>
+        <div id="combined-logs"></div>
       </div>
     </div>
-
-    <div class="tab-content" id="tab-cycles">
-      <div class="section" style="padding-top:16px;">
-        
-        <div class="summary-row">
-          <div class="sum-item"><div class="sum-val" style="color:var(--green);" id="ui-cycleTotalProfit">$0.00</div><div class="sum-key">총 실현수익</div></div>
-          <div class="sum-item"><div class="sum-val" style="color:var(--cyan);" id="ui-cycleTotalCnt">0주기</div><div class="sum-key">완료 사이클</div></div>
-        </div>
-
-        <div class="section-title" style="margin-top:14px;">현재 진행 사이클 현황</div>
-        <div class="position-card">
-          <div class="position-header">
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div class="ticker-chip" id="ui-cycTicker">TICKER</div>
-              <div style="font-size:12px;color:var(--text3);font-family:var(--mono);" id="ui-cycCurrent">사이클 #1 진행중</div>
-            </div>
-            <span class="tag gold" id="ui-cycInstallTag">0 / 0회차</span>
-          </div>
-          <div style="padding:14px 16px 10px; border-bottom:1px solid var(--border);">
-             <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text3); font-family:var(--mono);">
-               <span>매수 진행률</span><span id="ui-cycProgressPct" style="color:var(--cyan); font-weight:700;">0%</span>
-             </div>
-             <div class="mini-progress"><div class="mini-progress-fill" id="ui-cycProgressBar" style="width:0%"></div></div>
-          </div>
-          <div class="position-rows">
-            <div class="pos-row">
-              <span class="pos-key">총 투입금액 <span style="font-size:10px; color:var(--text3);">/ 보유수량</span></span>
-              <span class="pos-val cyan" id="ui-cycInvested">$0.00 / 0주</span>
-            </div>
-            <div class="pos-row">
-              <span class="pos-key">현재 평단가 <span style="font-size:10px; color:var(--text3);">/ 현재가</span></span>
-              <span class="pos-val" id="ui-cycAvgPrice">$0.00 <span style="font-size:10px; color:var(--text2);">($0.00)</span></span>
-            </div>
-            <div class="pos-row">
-              <span class="pos-key">현재 평가 손익</span>
-              <span class="pos-val" id="ui-cycPnl">$0.00 (0.00%)</span>
-            </div>
-            <div class="pos-row">
-              <span class="pos-key" id="ui-cycTargetTitle">익절 목표가 <span style="font-size:10px; color:var(--text3);">/ +10%</span></span>
-              <span class="pos-val gold" id="ui-cycTarget">$0.00</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="section-title" style="margin-top:20px;">수익 추이 차트</div>
-        <div class="kpi-card" style="border-radius:16px; padding:18px;">
-          <div style="font-size:11px;color:var(--text3);font-family:var(--mono);">사이클별 실현수익 ($)</div>
-          <div class="bar-chart" id="ui-barChart"></div>
-        </div>
-        
-        <div class="section-title" style="margin-top:20px;">완료된 사이클 히스토리</div>
-      </div>
-      <div class="cycle-scroll" id="ui-cycleScroll"></div>
-      
-      <div id="ui-emptyCycle" class="empty-state" style="display:none;">
-        완료된 사이클 데이터가 아직 없습니다.
-      </div>
-      <div style="height:20px;"></div>
-    </div>
-
-    <div class="tab-content" id="tab-flow">
-      <div class="section" style="padding-top:16px;">
-        <div class="section-title">무한매수법 V4.0 하이브리드 흐름도</div>
-        <div class="flow-container">
-          
-          <div class="flow-box" id="flow-ready">
-            <div class="flow-header">
-              <div class="flow-icon">💰</div>
-              <div class="flow-title">초기 설정 및 대기</div>
-            </div>
-            <ul class="flow-list">
-              <li><b>예산 분배:</b> 보유 원금 ÷ 분할수(20/40)</li>
-              <li><b>목표:</b> 매일 정해진 예산만큼 스노우볼 굴리기</li>
-            </ul>
-            <div class="flow-active-desc">▶ 봇이 매수 타이밍을 대기 중입니다.</div>
-          </div>
-          <div class="flow-arrow">↓</div>
-          
-          <div class="flow-box" id="flow-first">
-            <div class="flow-header">
-              <div class="flow-icon">🚀</div>
-              <div class="flow-title">최초 1회차 매수</div>
-            </div>
-            <ul class="flow-list">
-              <li><b>T=0 상태:</b> 현재가 +10% 지정가 무조건 매수</li>
-            </ul>
-            <div class="flow-active-desc">▶ 첫 매수가 진행/완료되었습니다.</div>
-          </div>
-          <div class="flow-arrow">↓</div>
-          
-          <div class="flow-box" id="flow-regular">
-            <div class="flow-header">
-              <div class="flow-icon">📈</div>
-              <div class="flow-title">일반 모드 진행 (Hybrid)</div>
-            </div>
-            <div class="flow-badge-group">
-               <span class="flow-badge cyan">스플릿 매수</span>
-               <span class="flow-badge gold" id="flow-target-badge">+10% 전량익절</span>
-            </div>
-            <ul class="flow-list text-left">
-              <li>👉 <b>매수:</b> 일일 예산을 평단/시장가로 분산 진입</li>
-              <li>🛡️ <b>방어:</b> 별지점(+5%) 상한가로 고점 추격 원천 차단</li>
-              <li>🧮 <b>T값:</b> 체결된 수량 비율만큼만 소수점 정밀 누적</li>
-            </ul>
-            <div class="flow-active-desc" id="flow-regular-txt">▶ 현재 0회차 진행 중</div>
-          </div>
-          <div class="flow-arrow">↓</div>
-          
-          <div class="flow-branch">
-            <div class="flow-branch-col">
-              <div class="flow-branch-box" id="flow-done">
-                <div style="font-size:18px; margin-bottom:4px;">🎉</div>
-                <div class="flow-branch-title">전량 익절 달성</div>
-                <div class="flow-branch-cond">보유수량 = 0</div>
-              </div>
-              <div class="flow-arrow">↓</div>
-              <div class="flow-box" style="width:100%; padding:10px; border-style:dashed;">
-                <div class="flow-title" style="font-size:12px; color:var(--green); text-align:center;">✅ 종료 및 다음 사이클 재시작</div>
-              </div>
-            </div>
-            
-            <div class="flow-branch-col">
-              <div class="flow-branch-box" id="flow-exhausted">
-                <div style="font-size:18px; margin-bottom:4px;">🚨</div>
-                <div class="flow-branch-title">목표 회차 소진</div>
-                <div class="flow-branch-cond">T > 분할수</div>
-              </div>
-              <div class="flow-arrow">↓</div>
-              <div class="flow-box reverse" id="flow-reverse" style="width:100%; padding:12px 10px;">
-                <div class="flow-title" style="font-size:12px; color:var(--red); text-align:center; margin-bottom:8px;">🏃 리버스 모드 (영혼법)</div>
-                <ul class="flow-list" style="font-size:10px; padding-left:12px;">
-                  <li><b>1일차:</b> 남은 수량 20등분 무조건 매도(MOC)</li>
-                  <li><b>2일차~:</b> 별지점(5일선) 기준 공방전</li>
-                  <li style="padding-left:8px; color:var(--text2); list-style:none;">🔺 위면 매도 (수량 20등분)</li>
-                  <li style="padding-left:8px; color:var(--text2); list-style:none;">🔻 아래면 매수 (현재 잔금의 1/4)</li>
-                </ul>
-                <div class="flow-active-desc" style="font-size:10px; margin-top:8px;">▶ 영혼법 가동 중</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="flow-arrow" style="margin-left: 50%;">↓</div>
-          
-          <div class="flow-box" id="flow-exit" style="border-style:dashed;">
-            <div class="flow-header" style="justify-content:center;">
-              <div class="flow-icon" style="font-size:16px;">🔄</div>
-              <div class="flow-title" style="font-size:13px; color:var(--purple);">탈출 조건 충족</div>
-            </div>
-            <div class="flow-desc" id="flow-exit-txt" style="text-align:center;">종가가 평단 대비 -20% 위로 회복 시<br>잔여 예산 재분배 후 일반모드 복귀</div>
-          </div>
-
-        </div>
-      </div>
-      <div style="height:20px;"></div>
-    </div>
-
-    <div class="tab-content" id="tab-info">
-      <div class="section" style="padding-top:16px;">
-        <div class="section-title">봇 설정 현황</div>
-        <div class="position-card">
-          <div class="position-rows">
-            <div class="pos-row"><span class="pos-key">봇 구동 상태</span><span class="tag green"><span class="pulse">●</span> LIVE</span></div>
-            <div class="pos-row"><span class="pos-key">운영 종목</span><span class="pos-val" style="font-size:14px; font-weight:800; color:var(--cyan)" id="ui-infoTicker">TICKER</span></div>
-            <div class="pos-row"><span class="pos-key">1일 매수 예산</span><span class="pos-val gold" id="ui-infoBudget">$0.00</span></div>
-            <div class="pos-row"><span class="pos-key">익절 목표 수익률</span><span class="pos-val" id="ui-infoTargetRate">+10.00%</span></div>
-            <div class="pos-row"><span class="pos-key">리버스 탈출 목표</span><span class="pos-val red" id="ui-infoExitRate">-20.00%</span></div>
-            <div class="pos-row"><span class="pos-key">매수 방식</span><span class="pos-val" style="font-size:11px;">스플릿 + 별지점(+5%) 방어</span></div>
-            <div class="pos-row"><span class="pos-key">T값(회차) 연산</span><span class="pos-val cyan" style="font-size:11px;">부분 체결 비례 소수점 정밀연산</span></div>
-          </div>
-        </div>
-
-        <div class="section-title" style="margin-top:14px;">데이터 연동 아키텍처</div>
-        <div class="position-card">
-          <div class="position-rows">
-            <div class="pos-row"><span class="pos-key">Google Sheets API</span><span class="tag green"><span class="pulse">●</span> Connected</span></div>
-            <div class="pos-row"><span class="pos-key">Telegram Bot API</span><span class="tag green"><span class="pulse">●</span> Active</span></div>
-            <div class="pos-row"><span class="pos-key">한국투자증권 (KIS) API</span><span class="tag cyan"><span class="pulse">●</span> Verified</span></div>
-            <div class="pos-row"><span class="pos-key">Google Cloud Server</span><span class="tag purple"><span class="pulse">●</span> Running (KST)</span></div>
-          </div>
-        </div>
-
-        <div class="section-title" style="margin-top:14px;">스프레드시트 탭 구성 가이드</div>
-        <div class="position-card">
-          <div class="position-rows">
-            <div class="pos-row">
-              <div><div class="pos-key">봇_매매기록</div><div style="font-size:10px;color:var(--text3);margin-top:2px;">봇이 실시간 기록하는 Raw 영수증</div></div>
-              <span class="tag red">봇 전용</span>
-            </div>
-            <div class="pos-row">
-              <div><div class="pos-key">일별_추이</div><div style="font-size:10px;color:var(--text3);margin-top:2px;">현재 포지션 및 평단가 기록</div></div>
-              <span class="tag cyan">자동</span>
-            </div>
-            <div class="pos-row">
-              <div><div class="pos-key">현재_상태</div><div style="font-size:10px;color:var(--text3);margin-top:2px;">스코어카드 집계용 1줄 전광판</div></div>
-              <span class="tag cyan">자동</span>
-            </div>
-            <div class="pos-row" style="border:none;">
-              <div><div class="pos-key">사이클별_요약</div><div style="font-size:10px;color:var(--text3);margin-top:2px;">완료된 사이클 성과 통계</div></div>
-              <span class="tag gold">수동/수식</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="sys-version">SYSTEM BUILD: v4.7 HYBRID (Auto Target Sync)</div>
-      </div>
-      <div style="height:20px;"></div>
-    </div>
-
   </div>
 
   <div class="bottom-nav">
-    <button class="nav-btn active" onclick="switchTab('home',this)"><span class="nav-icon">📊</span><span class="nav-label">대시보드</span></button>
-    <button class="nav-btn" onclick="switchTab('trades',this)"><span class="nav-icon">📋</span><span class="nav-label">거래내역</span></button>
-    <button class="nav-btn" onclick="switchTab('cycles',this)"><span class="nav-icon">🔄</span><span class="nav-label">사이클</span></button>
-    <button class="nav-btn" onclick="switchTab('flow',this)"><span class="nav-icon">🗺️</span><span class="nav-label">상황판</span></button>
-    <button class="nav-btn" onclick="switchTab('info',this)"><span class="nav-icon">⚙️</span><span class="nav-label">정보</span></button>
+    <button class="nav-btn active" onclick="switchTab('inf',this)">♾️ 무매</button>
+    <button class="nav-btn" onclick="switchTab('vr',this)">⚖️ VR</button>
+    <button class="nav-btn" onclick="switchTab('logs',this)">📋 기록</button>
   </div>
 </div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbxI6cIbRpL5-r8xnGLvtbTkCNxAolrFr7maCV6hr0D8tdUCK5wpyaSU6fa6m1wDZqSTvw/exec";
-let trendChartInstance = null;
+const API_URL = "배포된_스크립트_URL"; // Apps Script 배포 후 URL 입력
 
-function updateClocks() {
-  const now = new Date();
-  const opts = { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
-  document.getElementById('clock-ny').innerText = now.toLocaleTimeString('en-US', { timeZone: 'America/New_York', ...opts });
-  document.getElementById('clock-kr').innerText = now.toLocaleTimeString('ko-KR', { timeZone: 'Asia/Seoul', ...opts });
+function updateTime() {
+  document.getElementById('sys-clock').innerText = new Date().toLocaleTimeString('ko-KR', {hour12:false});
 }
-setInterval(updateClocks, 1000);
-updateClocks(); 
+setInterval(updateTime, 1000);
 
-async function initData() {
+async function loadData() {
   try {
     const res = await fetch(API_URL);
     const data = await res.json();
-    if(data.success) renderDashboard(data);
-    else alert("데이터 로딩 실패: " + data.error);
-  } catch(e) {
-    alert("🔍 에러 원인: " + e.message);
-  } finally {
-    document.getElementById('loader').style.opacity = '0';
-    setTimeout(() => document.getElementById('loader').style.display = 'none', 500);
-  }
+    if(data.success) {
+      // ── 무매 데이터 매핑 ──
+      const inf = data.infinite;
+      document.getElementById('inf-total-pnl').innerText = `$${parseFloat(inf.status[4]).toFixed(2)}`;
+      document.getElementById('inf-cycle').innerText = `#${inf.trend[2]}`;
+      document.getElementById('inf-install').innerText = `${inf.trend[3]} / 40`;
+      document.getElementById('inf-ticker').innerText = inf.trend[1];
+      document.getElementById('inf-avg').innerText = `$${parseFloat(inf.trend[5]).toFixed(2)}`;
+      document.getElementById('inf-now').innerText = `$${parseFloat(inf.trend[4]).toFixed(2)}`;
+      
+      const pnl = ((inf.trend[4] - inf.trend[5]) / inf.trend[5] * 100).toFixed(2);
+      document.getElementById('inf-pnl-rate').innerText = `${pnl}%`;
+      document.getElementById('inf-pnl-rate').style.color = pnl >= 0 ? 'var(--green)' : 'var(--red)';
+
+      // ── VR 데이터 매핑 ──
+      const vr = data.vr;
+      document.getElementById('vr-total').innerText = `${vr.curr_value.toLocaleString()}원`;
+      document.getElementById('vr-pool').innerText = `${vr.pool.toLocaleString()}원`;
+      document.getElementById('vr-v').innerText = vr.v_value.toLocaleString();
+      document.getElementById('vr-low').innerText = vr.lower.toLocaleString();
+      document.getElementById('vr-high').innerText = vr.upper.toLocaleString();
+      document.getElementById('vr-status').innerText = vr.status;
+
+      const range = vr.upper - vr.lower;
+      const pos = ((vr.curr_value - vr.lower) / range) * 100;
+      document.getElementById('vr-marker').style.left = `${Math.min(Math.max(pos, 0), 100)}%`;
+
+      // ── 로그 통합 ──
+      const logContainer = document.getElementById('combined-logs');
+      logContainer.innerHTML = inf.logs.slice(0, 15).map(l => `
+        <div class="log-item">
+          <div><span class="log-ticker">${l[1]}</span> <span style="color:var(--text2);margin-left:5px;">${l[0].toString().substring(5,10)}</span></div>
+          <div class="log-side ${l[5].includes('매수')?'buy':'sell'}">${l[5]} ${l[7]}주</div>
+        </div>
+      `).join('');
+    }
+  } catch(e) { console.error(e); }
+  finally { document.getElementById('loader').style.display = 'none'; }
 }
 
-function renderDashboard(data) {
-  const status = data.status || [];
-  const trend = data.trend || [];
-  const trades = data.trades || [];
-  const trendHistory = data.trend_history || []; 
-
-  const totalProfit = parseFloat(status[4] || 0);
-  const completedCycles = status[2] || 0;
-  const dailyBudget = parseFloat(status[3] || 0);
-  
-  const isReverse = String(status[5]).toUpperCase() === 'TRUE';
-  const exitRate = parseFloat(status[6] || -20.0);
-  
-  const ticker = trend[1] || 'WAIT';
-  const cycleNum = parseInt(trend[2] || 1);
-  const currInstall = parseFloat(trend[3] || 0);
-  const closePrice = parseFloat(trend[4] || 0);
-  const avgPrice = parseFloat(trend[5] || 0);
-  const targetPrice = parseFloat(trend[6] || 0);
-  const totalQty = trend[7] || 0;
-  const totalInvested = parseFloat(trend[8] || 0);
-  const maxInstall = trades.length > 0 ? parseInt(trades[0][3] || 40) : 40;
-
-  // 🚨 [추가] 평단가와 목표가를 역산해서 '목표 수익률(%)' 자동 감지
-  const calcTargetRate = avgPrice > 0 ? Math.round(((targetPrice - avgPrice) / avgPrice) * 100) : 10;
-
-  document.getElementById('ui-totalPnl').textContent = `+$${totalProfit.toFixed(2)}`;
-  document.getElementById('ui-kpiCompleted').textContent = completedCycles;
-  document.getElementById('ui-kpiCycle').textContent = `#${cycleNum}`;
-  document.getElementById('ui-kpiInstall').innerHTML = `${currInstall.toFixed(1)}<span style="font-size:14px;color:var(--text3)"> / ${maxInstall}</span>`;
-  document.getElementById('ui-kpiBudget').textContent = `$${dailyBudget.toFixed(2)}`;
-  document.getElementById('ui-posTicker').textContent = ticker;
-  
-  const formatDate = (dateString) => {
-    let dt = new Date(dateString);
-    return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
-  };
-  const formatShortDate = (dateString) => {
-    let dt = new Date(dateString);
-    return `${String(dt.getMonth()+1).padStart(2,'0')}/${String(dt.getDate()).padStart(2,'0')}`;
-  };
-
-  let startDateStr = '알 수 없음';
-  const cycleTrends = trendHistory.filter(t => String(t[2]) === String(cycleNum));
-  if (cycleTrends.length > 0) startDateStr = formatDate(cycleTrends[0][0]);
-  
-  document.getElementById('ui-posCycleStr').textContent = `사이클 #${cycleNum} (시작: ${startDateStr})`;
-  document.getElementById('ui-posAvgPrice').textContent = `$${avgPrice.toFixed(2)}`;
-  document.getElementById('ui-posClosePrice').textContent = `$${closePrice.toFixed(2)}`;
-  
-  const pnlValue = (closePrice - avgPrice) * totalQty;
-  const pnlRate = avgPrice > 0 ? ((closePrice - avgPrice) / avgPrice) * 100 : 0;
-  const pnlEl = document.getElementById('ui-posPnl');
-  pnlEl.textContent = `${pnlValue >= 0 ? '+' : ''}$${pnlValue.toFixed(2)} (${pnlRate >= 0 ? '+' : ''}${pnlRate.toFixed(2)}%)`;
-  pnlEl.className = `pos-val ${pnlValue >= 0 ? 'green' : 'red'}`;
-  
-  document.getElementById('ui-posQty').textContent = `${totalQty}주`;
-  document.getElementById('ui-posInvested').textContent = `$${totalInvested.toFixed(2)}`;
-
-  const badgeEl = document.getElementById('ui-posBadge');
-  const targetDistEl = document.getElementById('ui-targetDist');
-  const targetPriceEl = document.getElementById('ui-targetPrice');
-  const gaugeBarEl = document.getElementById('ui-gaugeBar');
-  const gaugeRateEl = document.getElementById('ui-gaugeRate');
-
-  if (isReverse) {
-      badgeEl.innerHTML = `<span class="pulse">●</span> 🚨 리버스 모드`;
-      badgeEl.className = "tag red";
-      document.getElementById('ui-gaugeTitle').textContent = "탈출 목표까지";
-      document.getElementById('ui-targetPriceTitle').textContent = "탈출 목표가";
-      
-      const exitPrice = avgPrice * (1 + exitRate / 100);
-      targetPriceEl.textContent = `$${exitPrice.toFixed(2)}`;
-      targetPriceEl.style.color = "var(--red)";
-      
-      const distVal = exitPrice - closePrice;
-      const distRate = closePrice > 0 ? (distVal / closePrice) * 100 : 0;
-      targetDistEl.textContent = `$${Math.abs(distVal).toFixed(2)} (${distRate.toFixed(2)}%)`;
-      targetDistEl.style.color = "var(--red)";
-      
-      gaugeRateEl.textContent = `${pnlRate.toFixed(2)}% / ${exitRate}%`;
-      gaugeRateEl.className = "tag red";
-      gaugeBarEl.style.background = "linear-gradient(90deg, #FF3D71, #FF8A80)";
-      gaugeBarEl.style.width = "100%"; 
-  } else {
-      badgeEl.innerHTML = `<span class="pulse">●</span> 매수 진행중`;
-      badgeEl.className = "tag cyan";
-      document.getElementById('ui-gaugeTitle').textContent = "목표 달성률";
-      document.getElementById('ui-targetPriceTitle').textContent = "익절 목표가";
-      
-      targetPriceEl.textContent = `$${targetPrice.toFixed(2)}`;
-      targetPriceEl.style.color = "var(--gold)";
-      
-      const distVal = targetPrice - closePrice;
-      const distRate = closePrice > 0 ? (distVal / closePrice) * 100 : 0;
-      targetDistEl.textContent = `$${Math.abs(distVal).toFixed(2)} (${distRate.toFixed(2)}%)`;
-      targetDistEl.style.color = "var(--gold)";
-      
-      const progressRate = targetPrice > avgPrice ? ((closePrice - avgPrice) / (targetPrice - avgPrice)) * 100 : 0;
-      gaugeBarEl.style.width = `${Math.min(Math.max(progressRate, 0), 100)}%`;
-      gaugeBarEl.style.background = "linear-gradient(90deg, var(--cyan2), var(--cyan))";
-      
-      // 🚨 자동 감지된 익절 목표율 반영
-      gaugeRateEl.textContent = `▲ ${pnlRate.toFixed(2)}% / ${calcTargetRate}%`;
-      gaugeRateEl.className = "tag gold";
-  }
-
-  const installPercent = maxInstall > 0 ? Math.round((currInstall / maxInstall) * 100) : 0;
-  document.getElementById('ui-snowTitle').textContent = `사이클 #${cycleNum}`;
-  
-  if (isReverse) {
-      document.getElementById('ui-snowPercent').textContent = `🚨 영혼법 진행 중 (${currInstall.toFixed(1)} 회차)`;
-      document.getElementById('ui-snowPercent').style.color = 'var(--red)';
-  } else {
-      document.getElementById('ui-snowPercent').textContent = `${currInstall.toFixed(1)}/${maxInstall} 회차 ${installPercent}% 완료`;
-      document.getElementById('ui-snowPercent').style.color = 'var(--cyan)';
-  }
-
-  const dotHtml = Array.from({length: maxInstall}, (_, i) => {
-    const step = i + 1;
-    let cName = 'empty';
-    if(step <= Math.floor(currInstall)) cName = 'done';
-    else if(step === Math.ceil(currInstall) && currInstall > 0) cName = isReverse ? 'reverse' : 'current';
-    return `<div class="snow-dot ${cName}">${step}</div>`;
-  }).join('');
-  document.getElementById('ui-snowballDots').innerHTML = dotHtml;
-
-  let buyCnt = 0; let sellCnt = 0;
-  document.getElementById('ui-tradeList').innerHTML = trades.map(t => {
-    const isBuy = String(t[5]).includes('매수');
-    if(isBuy) buyCnt++; else sellCnt++;
-    const typeClass = isBuy ? 'buy' : 'sell';
-    const realized = parseFloat(t[10] || 0);
-    const pnlStr = realized !== 0 ? `${realized > 0 ? '+' : ''}$${realized.toFixed(2)}` : `$${parseFloat(t[8] || 0).toFixed(2)}`;
-    const pnlClass = realized > 0 ? 'pos' : (realized < 0 ? 'neg' : (isBuy ? 'neu' : 'neg'));
-    let dateStr = t[0].length > 10 ? t[0].substring(5, 16) : t[0];
-
-    return `
-      <div class="trade-item">
-        <div class="trade-type-dot ${typeClass}"></div>
-        <div class="trade-info">
-          <div class="trade-top"><span class="trade-ticker">${t[1]} (T${t[4]})</span><span class="trade-pnl ${pnlClass}">${pnlStr}</span></div>
-          <div class="trade-bottom"><span class="trade-type-label ${typeClass}">${t[5]}</span><span class="trade-meta">${dateStr} · $${parseFloat(t[6]).toFixed(2)} × ${t[7]}주</span></div>
-        </div>
-      </div>`;
-  }).join('');
-  
-  document.getElementById('ui-tradeCount').textContent = `${trades.length}건`;
-  document.getElementById('ui-tradeBuys').textContent = `${buyCnt}건`;
-  document.getElementById('ui-tradeSells').textContent = `${sellCnt}건`;
-
-  if(trendHistory.length > 0) {
-    const ctx = document.getElementById('trendChart').getContext('2d');
-    const chartLabels = trendHistory.map(t => formatShortDate(t[0]));
-    const chartAmtData = trendHistory.map(t => parseFloat(t[8] || 0)); 
-    const chartQtyData = trendHistory.map(t => parseInt(t[7] || 0));   
-
-    if(trendChartInstance) trendChartInstance.destroy();
-    trendChartInstance = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: chartLabels,
-        datasets: [
-          { label: '누적 투입금 ($)', data: chartAmtData, borderColor: '#00E5FF', backgroundColor: 'rgba(0, 229, 255, 0.15)', borderWidth: 2, fill: true, tension: 0.3, pointRadius: 2, yAxisID: 'y' },
-          { type: 'bar', label: '누적 수량 (주)', data: chartQtyData, backgroundColor: 'rgba(255, 215, 64, 0.4)', borderColor: '#FFD740', borderWidth: 1, borderRadius: 4, yAxisID: 'y1' }
-        ]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
-        scales: {
-          x: { grid: { display: false }, ticks: { color: '#8FA8CC', font: {family: 'Space Mono', size: 9} } },
-          y: { type: 'linear', display: true, position: 'left', grid: { color: '#1E2F4A', borderDash: [3, 3] }, ticks: { color: '#00E5FF', font: {family: 'Space Mono', size: 9} } },
-          y1: { type: 'linear', display: true, position: 'right', grid: { drawOnChartArea: false }, ticks: { color: '#FFD740', font: {family: 'Space Mono', size: 9} } }
-        }
-      }
-    });
-  }
-
-  let myCycles = {};
-  trades.forEach(t => {
-      const cNum = parseInt(t[2]);
-      if (isNaN(cNum) || cNum >= cycleNum) return;
-
-      if (!myCycles[cNum]) {
-          myCycles[cNum] = { num: cNum, ticker: t[1], profit: 0, buyAmt: 0, endDate: t[0] };
-      }
-      const isBuy = String(t[5]).includes('매수');
-      const isSell = String(t[5]).includes('매도');
-      const amt = parseFloat(t[8] || 0);
-      const realized = parseFloat(t[10] || 0);
-
-      if (isBuy) myCycles[cNum].buyAmt += amt;
-      if (isSell && realized > 0) {
-          myCycles[cNum].profit += realized;
-          myCycles[cNum].endDate = t[0]; 
-      }
-  });
-
-  const cycleArr = Object.values(myCycles).sort((a,b) => b.num - a.num);
-  const chartArr = [...cycleArr].sort((a,b) => a.num - b.num);
-
-  document.getElementById('ui-cycleTotalProfit').textContent = `+$${totalProfit.toFixed(2)}`;
-  document.getElementById('ui-cycleTotalCnt').textContent = `${completedCycles}주기`;
-  
-  document.getElementById('ui-cycTicker').textContent = ticker;
-  if (isReverse) {
-      document.getElementById('ui-cycCurrent').textContent = `사이클 #${cycleNum} (리버스 모드)`;
-      document.getElementById('ui-cycCurrent').style.color = "var(--red)";
-      document.getElementById('ui-cycInstallTag').className = "tag red";
-      document.getElementById('ui-cycInstallTag').textContent = "🚨 영혼법 진행중";
-      
-      // 🚨 자동 감지
-      document.getElementById('ui-cycTargetTitle').innerHTML = `탈출 목표가 <span style="font-size:10px; color:var(--text3);">/ ${exitRate}%</span>`;
-      document.getElementById('ui-cycTarget').textContent = `$${(avgPrice * (1 + exitRate / 100)).toFixed(2)}`;
-      document.getElementById('ui-cycTarget').className = "pos-val red";
-      document.getElementById('ui-cycProgressPct').textContent = "리버스 가동";
-      document.getElementById('ui-cycProgressPct').style.color = "var(--red)";
-      document.getElementById('ui-cycProgressBar').style.background = "var(--red)";
-      document.getElementById('ui-cycProgressBar').style.width = "100%";
-  } else {
-      document.getElementById('ui-cycCurrent').textContent = `사이클 #${cycleNum} 진행중`;
-      document.getElementById('ui-cycInstallTag').className = "tag gold";
-      document.getElementById('ui-cycInstallTag').textContent = `${currInstall.toFixed(1)} / ${maxInstall}회차`;
-      
-      // 🚨 자동 감지된 익절 목표율 반영
-      document.getElementById('ui-cycTargetTitle').innerHTML = `익절 목표가 <span style="font-size:10px; color:var(--text3);">/ +${calcTargetRate}%</span>`;
-      document.getElementById('ui-cycTarget').textContent = `$${targetPrice.toFixed(2)}`;
-      document.getElementById('ui-cycTarget').className = "pos-val gold";
-      document.getElementById('ui-cycProgressPct').textContent = `${installPercent}%`;
-      document.getElementById('ui-cycProgressPct').style.color = "var(--cyan)";
-      document.getElementById('ui-cycProgressBar').style.background = "linear-gradient(90deg, var(--cyan2), var(--cyan))";
-      document.getElementById('ui-cycProgressBar').style.width = `${installPercent}%`;
-  }
-  
-  document.getElementById('ui-cycInvested').innerHTML = `$${totalInvested.toFixed(2)} <span style="color:var(--text); font-size:12px;">/ ${totalQty}주</span>`;
-  document.getElementById('ui-cycAvgPrice').innerHTML = `$${avgPrice.toFixed(2)} <span style="font-size:10px; color:var(--text2);">($${closePrice.toFixed(2)})</span>`;
-  
-  const cycPnlEl = document.getElementById('ui-cycPnl');
-  cycPnlEl.textContent = pnlEl.textContent;
-  cycPnlEl.className = pnlEl.className;
-
-  if(cycleArr.length > 0) {
-    document.getElementById('ui-cycleScroll').innerHTML = cycleArr.map(c => {
-      const rate = c.buyAmt > 0 ? (c.profit / c.buyAmt) * 100 : 0;
-      const dateStr = c.endDate.substring(0, 10);
-      return `
-      <div class="cycle-card">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <div class="cycle-num">CYCLE #${c.num}</div>
-          <div style="font-size:9px; color:var(--text3); font-family:var(--mono);">${dateStr}</div>
-        </div>
-        <div class="cycle-ticker" style="margin-bottom:6px;">${c.ticker}</div>
-        <div class="cycle-profit">+$${c.profit.toFixed(2)}</div>
-        <div class="cycle-rate">▲ ${rate.toFixed(2)}%</div>
-      </div>
-    `}).join('');
-    
-    const maxProfit = Math.max(...chartArr.map(c => c.profit));
-    document.getElementById('ui-barChart').innerHTML = chartArr.map(c => `
-      <div class="bar-wrap">
-        <div class="bar-value">$${Math.round(c.profit)}</div>
-        <div class="bar" style="height:${maxProfit > 0 ? (c.profit / maxProfit * 50).toFixed(0) : 0}px"></div>
-        <div class="bar-label">#${c.num}</div>
-      </div>
-    `).join('');
-    
-    document.getElementById('ui-emptyCycle').style.display = 'none';
-  } else {
-    document.getElementById('ui-emptyCycle').style.display = 'block';
-    document.getElementById('ui-cycleScroll').innerHTML = '';
-    document.getElementById('ui-barChart').innerHTML = `
-      <div class="bar-wrap">
-        <div class="bar-value" style="color:var(--gold);">$0</div>
-        <div class="bar" style="height:20px;background:linear-gradient(180deg,rgba(255,215,64,0.5),rgba(255,215,64,0.1));"></div>
-        <div class="bar-label">#${cycleNum} 진행중</div>
-      </div>`;
-  }
-
-  document.querySelectorAll('.flow-box, .flow-branch-box').forEach(b => b.classList.remove('active'));
-  document.getElementById('flow-exit-txt').innerHTML = `종가가 평단 대비 <span style="color:var(--red); font-weight:700;">${exitRate}%</span> 위로 회복 시<br>잔여 예산 재분배 후 일반모드 복귀`;
-
-  if (isReverse) {
-      document.getElementById('flow-reverse').classList.add('active');
-  } else if (totalQty === 0 && currInstall > 0) {
-      document.getElementById('flow-done').classList.add('active');
-  } else if (totalQty > 0 && currInstall <= 1.0) {
-      document.getElementById('flow-first').classList.add('active');
-  } else if (totalQty > 0 && currInstall > 1.0 && currInstall <= maxInstall) {
-      document.getElementById('flow-regular').classList.add('active');
-      document.getElementById('flow-regular-txt').textContent = `▶ 현재 ${currInstall.toFixed(1)}회차 진행 중`;
-  } else {
-      document.getElementById('flow-ready').classList.add('active');
-  }
-
-  document.getElementById('ui-infoTicker').textContent = ticker;
-  document.getElementById('ui-infoBudget').textContent = `$${dailyBudget.toFixed(2)}`;
-  document.getElementById('ui-infoExitRate').textContent = `${exitRate.toFixed(2)}%`; 
-  
-  // 🚨 상황판 및 정보 탭의 목표 수익률 텍스트 자동 업데이트!
-  document.getElementById('flow-target-badge').textContent = `+${calcTargetRate}% 전량익절`;
-  document.getElementById('ui-infoTargetRate').textContent = `+${calcTargetRate.toFixed(2)}%`;
-
-  const now = new Date();
-  const pad = n => String(n).padStart(2,'0');
-  document.getElementById('ui-updateTime').textContent = `동기화 완료: ${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
-}
-
-function switchTab(tab, btn) {
-  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-  document.getElementById('tab-' + tab).classList.add('active');
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
   btn.classList.add('active');
-  document.getElementById('scrollArea').scrollTop = 0;
 }
 
-initData();
+loadData();
 </script>
 </body>
 </html>
