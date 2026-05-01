@@ -35,24 +35,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .clock-row {display:flex; align-items:center; gap:5px; font-family:var(--mono); font-size:10px; background:var(--surface); padding:2px 6px; border-radius:6px; border:1px solid var(--border);}
 .clock-time {color:var(--text2); font-weight:700;}
 
-/* ── 🚀 상단 플로팅 탭 ── */
-.floating-nav-wrap {
-  position: sticky; top: 0; z-index: 90;
-  padding: 10px 16px; background: rgba(8, 12, 20, 0.85);
-  backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
-}
-.floating-nav {
-  display: flex; background: var(--surface2);
-  border-radius: 30px; padding: 4px; border: 1px solid var(--border);
-}
-.float-btn {
-  flex: 1; padding: 10px 0; border: none; background: transparent;
-  color: var(--text3); font-family: var(--head); font-size: 12px; font-weight: 700;
-  border-radius: 26px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
-}
-.float-btn.active {
-  background: var(--cyan); color: #000; box-shadow: 0 4px 12px rgba(0,229,255,0.3);
-}
+/* ── 상단 플로팅 탭 ── */
+.floating-nav-wrap { position: sticky; top: 0; z-index: 90; padding: 10px 16px; background: rgba(8, 12, 20, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+.floating-nav { display: flex; background: var(--surface2); border-radius: 30px; padding: 4px; border: 1px solid var(--border); }
+.float-btn { flex: 1; padding: 10px 0; border: none; background: transparent; color: var(--text3); font-family: var(--head); font-size: 12px; font-weight: 700; border-radius: 26px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
+.float-btn.active { background: var(--cyan); color: #000; box-shadow: 0 4px 12px rgba(0,229,255,0.3); }
 
 .scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;padding:0 0 40px;scroll-behavior:smooth;}
 .scroll-area::-webkit-scrollbar{display:none;}
@@ -64,37 +51,39 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .section{padding:16px 16px 0;}
 .section-title{font-family:var(--head);font-size:11px;font-weight:700;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
 .section-title::after{content:'';flex:1;height:1px;background:var(--border);}
-
 .hero-card{background:linear-gradient(135deg,var(--bg3) 0%,var(--surface2) 100%);border:1px solid var(--border2);border-radius:var(--r);padding:24px 20px;margin-bottom:10px; position:relative;}
 .hero-label{font-size:11px;color:var(--text3);font-family:var(--mono);letter-spacing:1px;margin-bottom:6px;}
 .hero-value{font-family:var(--mono);font-size:38px;font-weight:700;color:var(--green);line-height:1;}
-
 .kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:14px;}
 .kpi-label{font-size:10px;color:var(--text3);font-family:var(--mono);margin-bottom:8px;}
 .kpi-value{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--cyan);}
-
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
 .card-header{padding:14px 16px;background:var(--surface2);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
 .pos-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);}
 .pos-row:last-child{border-bottom:none;}
 .pos-key{font-size:12px;color:var(--text3);font-family:var(--body);}
 .pos-val{font-family:var(--mono);font-size:13px;font-weight:700;}
-
 .tag{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-family:var(--mono);font-weight:700;}
 .tag.cyan{background:rgba(0,229,255,0.1);color:var(--cyan);border:1px solid rgba(0,229,255,0.25);}
 .tag.gold{background:rgba(255,215,64,0.1);color:var(--gold);border:1px solid rgba(255,215,64,0.25);}
 .tag.red{background:rgba(255,61,113,0.1);color:var(--red);border:1px solid rgba(255,61,113,0.25);}
 .tag.gray{background:rgba(255,255,255,0.05);color:var(--text2);border:1px solid rgba(255,255,255,0.1);}
 
-/* ── 퀵 세팅 스위치 & 토글 버튼 ── */
+/* ── 퀵 세팅 및 버튼 ── */
 .toggle-row { display:flex; justify-content:space-between; align-items:center; padding: 14px 16px; border-bottom: 1px solid var(--border); background:var(--surface);}
 .toggle-switch { width:40px; height:22px; background:var(--border2); border-radius:11px; position:relative; cursor:pointer; transition:0.3s;}
 .toggle-switch::after { content:''; position:absolute; top:2px; left:2px; width:18px; height:18px; background:#fff; border-radius:50%; transition:0.3s;}
 .toggle-switch.on { background:var(--cyan); }
 .toggle-switch.on::after { transform:translateX(18px); }
-.currency-btn { background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; border-radius:8px; padding:4px 10px; font-size:11px; font-family:var(--mono); font-weight:700; cursor:pointer; transition:0.2s;}
+.currency-btn { background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; border-radius:8px; padding:6px 12px; font-size:11px; font-family:var(--mono); font-weight:700; cursor:pointer; transition:0.2s;}
 .currency-btn:active { transform:scale(0.95); }
+
+/* ── TOTAL 상세 내역 행 ── */
+.total-detail-row { display:flex; justify-content:space-between; align-items:center; padding: 10px 0; border-bottom:1px solid rgba(255,255,255,0.06); }
+.total-detail-row:last-child { border-bottom: none; padding-bottom: 0; }
+.total-detail-key { font-size:12px; color:var(--text2); font-family:var(--body); }
+.total-detail-val { font-family:var(--mono); font-weight:700; font-size:14px; }
 
 /* ── 흐름도 전용 CSS ── */
 .flow-container { display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 10px; }
@@ -111,7 +100,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .flow-badge.cyan { background: rgba(0,229,255,0.15); color: var(--cyan); }
 .flow-badge.gold { background: rgba(255,215,64,0.15); color: var(--gold); }
 .flow-list { margin: 0; padding-left: 0; list-style:none; font-size: 11px; color: var(--text2); font-family: var(--body); line-height: 1.6; }
-.flow-list li { margin-bottom: 8px; display: flex; gap: 6px; align-items: flex-start; text-align:left; }
+.flow-list li { margin-bottom: 6px; display: flex; gap: 6px; align-items: flex-start; text-align:left; }
 .flow-list li b { color: var(--text); }
 .flow-active-desc { background: rgba(0,229,255,0.1); padding: 8px; border-radius: 6px; color: var(--cyan); text-align: center; margin-top: 12px; font-size: 12px; font-weight: 700; font-family: var(--mono); }
 
@@ -176,15 +165,57 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
          ========================================== -->
     <div class="tab-content active" id="tab-total">
       <div class="section">
-        <!-- 🟢 원/달러 변환 버튼 및 환율 표시 복구 -->
-        <div class="hero-card" style="background:linear-gradient(135deg, #1A1423 0%, #2D1B4E 100%); border-color:var(--purple);">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
-            <div class="hero-label" style="margin:0;">TOTAL PORTFOLIO</div>
+        <div class="hero-card" style="background:linear-gradient(135deg, #1A1423 0%, #2D1B4E 100%); border-color:var(--purple); padding-bottom:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;">
+            <div class="hero-label" style="margin:0; color:#B39DDB;">TOTAL PORTFOLIO</div>
+            <!-- 🟢 원/달러 변환 토글 버튼 -->
             <button id="currency-toggle" class="currency-btn">🇰🇷 KRW 보기</button>
           </div>
-          <div class="hero-value" id="ui-total-val" style="color:#fff; transition:0.3s;">$31,500.00</div>
-          <div style="font-family:var(--mono); color:var(--green); margin-top:8px; font-weight:700; transition:0.3s;" id="ui-total-pnl">🟢 +$420.50 Total PnL</div>
-          <div style="font-size:10px; color:var(--text3); font-family:var(--mono); margin-top:14px;">적용 환율: ₩1,350.00 / $1</div>
+          
+          <!-- 🇺🇸 달러 보기 화면 (초기값) -->
+          <div id="view-usd">
+            <div style="font-size:11px; color:var(--text2); margin-bottom:4px;">현재 계좌 총 금액 (시드 합산)</div>
+            <div class="hero-value" style="color:#fff;">$11,897.14</div>
+            <div style="margin-top:20px; border-top:1px dashed rgba(255,255,255,0.15); padding-top:12px;">
+              <div class="total-detail-row">
+                <span class="total-detail-key">현재 매수 금액 (투입금)</span>
+                <span class="total-detail-val">$1,432.80</span>
+              </div>
+              <div class="total-detail-row">
+                <span class="total-detail-key">누적 실현 수익</span>
+                <span class="total-detail-val" style="color:var(--green);">+$70.00</span>
+              </div>
+              <div class="total-detail-row">
+                <span class="total-detail-key">현재 평가 수익</span>
+                <span class="total-detail-val" style="color:var(--green);">+$92.50 (+6.46%)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 🇰🇷 원화 보기 화면 (숨김) -->
+          <div id="view-krw" style="display:none;">
+            <div style="font-size:11px; color:var(--text2); margin-bottom:4px;">현재 계좌 총 금액 (시드 합산)</div>
+            <div class="hero-value" style="color:#fff;">₩16,061,140</div>
+            <div style="margin-top:20px; border-top:1px dashed rgba(255,255,255,0.15); padding-top:12px;">
+              <div class="total-detail-row">
+                <span class="total-detail-key">현재 매수 금액 (투입금)</span>
+                <span class="total-detail-val">₩1,934,280</span>
+              </div>
+              <div class="total-detail-row">
+                <span class="total-detail-key">누적 실현 수익</span>
+                <span class="total-detail-val" style="color:var(--green);">+₩94,500</span>
+              </div>
+              <div class="total-detail-row">
+                <span class="total-detail-key">현재 평가 수익</span>
+                <span class="total-detail-val" style="color:var(--green);">+₩124,875 (+6.46%)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 환율 정보 -->
+          <div style="font-size:10px; color:var(--text3); font-family:var(--mono); margin-top:16px; text-align:right;">
+            적용 환율: ₩1,350.00 / $1
+          </div>
         </div>
       </div>
 
@@ -238,7 +269,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
          ========================================== -->
     <div class="tab-content" id="tab-infinite">
       <div class="section">
-        <!-- 🟢 수익률 표시에 '완료회차(2회 완료)' 추가 -->
         <div class="hero-card">
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <div class="hero-label" style="margin:0;">TQQQ REALIZED PnL</div>
@@ -259,7 +289,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
             <span class="tag cyan"><span class="pulse">●</span> 매수 진행중</span>
             <span style="font-family:var(--mono); font-size:12px; color:var(--text2);">TQQQ</span>
           </div>
-          <!-- 🟢 현재 평단가, 누적 투입금 명시적 추가 -->
           <div class="pos-row"><span class="pos-key">현재 평단가</span><span class="pos-val" style="color:var(--cyan);">$59.70</span></div>
           <div class="pos-row"><span class="pos-key">현재가 (종가)</span><span class="pos-val">$63.55</span></div>
           <div class="pos-row"><span class="pos-key">보유 수량</span><span class="pos-val">24주</span></div>
@@ -384,7 +413,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       <div class="section">
         <div class="section-title">👨🏻 사장님 계좌 (나스닥100 레버리지)</div>
         <div class="card">
-          <!-- 🟢 연동 풀린 것 수정! 다시 LIVE로 살려놓았습니다 -->
           <div class="card-header" style="background:rgba(0,229,255,0.05);">
             <span class="tag cyan"><span class="pulse">●</span> LIVE</span>
             <span style="font-family:var(--mono); font-size:12px; color:var(--text2);">총 자산 ₩1,000,000</span>
@@ -408,7 +436,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       <div class="section">
         <div class="section-title">👩🏻 혜진님 계좌 (나스닥100 레버리지)</div>
         <div class="card">
-          <!-- 🟢 사모님 계좌도 동일하게 LIVE 적용 -->
           <div class="card-header" style="background:rgba(255,215,64,0.05);">
             <span class="tag gold"><span class="pulse">●</span> LIVE</span>
             <span style="font-family:var(--mono); font-size:12px; color:var(--text2);">총 자산 ₩1,000,000</span>
@@ -423,7 +450,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
         </div>
       </div>
 
-      <!-- 🟢 VR 로직 대폭 상세화 -->
       <div class="section" style="margin-top:20px;">
         <div class="section-title">VR (Value Rebalancing) 상세 로직</div>
         <div class="flow-container">
@@ -497,27 +523,24 @@ function switchMainTab(tabId, btnElement) {
 
 // 3. 🟢 TOTAL 탭 환율 토글 스위치 로직
 let isUSD = true;
-const EXCHANGE_RATE = 1350.00;
-const BASE_TOTAL_USD = 31500.00;
-const BASE_PNL_USD = 420.50;
 
 document.getElementById('currency-toggle').addEventListener('click', function() {
   isUSD = !isUSD;
-  const valEl = document.getElementById('ui-total-val');
-  const pnlEl = document.getElementById('ui-total-pnl');
+  const viewUsd = document.getElementById('view-usd');
+  const viewKrw = document.getElementById('view-krw');
   
   if (isUSD) {
     this.innerText = "🇰🇷 KRW 보기";
     this.style.background = "rgba(255,255,255,0.1)";
     this.style.borderColor = "rgba(255,255,255,0.2)";
-    valEl.innerText = `$${BASE_TOTAL_USD.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}`;
-    pnlEl.innerText = `🟢 +$${BASE_PNL_USD.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})} Total PnL`;
+    viewUsd.style.display = "block";
+    viewKrw.style.display = "none";
   } else {
     this.innerText = "🇺🇸 USD 보기";
     this.style.background = "rgba(0,229,255,0.2)";
     this.style.borderColor = "var(--cyan)";
-    valEl.innerText = `₩${(BASE_TOTAL_USD * EXCHANGE_RATE).toLocaleString('ko-KR')}`;
-    pnlEl.innerText = `🟢 +₩${(BASE_PNL_USD * EXCHANGE_RATE).toLocaleString('ko-KR')} Total PnL`;
+    viewUsd.style.display = "none";
+    viewKrw.style.display = "block";
   }
 });
 </script>
