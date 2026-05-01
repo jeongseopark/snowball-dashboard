@@ -310,7 +310,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       <div class="section" style="margin-top:20px;">
         <div class="section-title">무한매수법 V4.0 하이브리드 흐름도</div>
         <div class="flow-container">
-          
           <div class="flow-box">
             <div class="flow-header">
               <div class="flow-icon">💰</div><div class="flow-title">초기 설정 및 대기</div>
@@ -393,7 +392,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       </div>
 
       <div class="section" style="margin-top:20px;">
-        <div class="section-title">최근 무한매수 영수증 (최대 30건)</div>
+        <div class="section-title">최근 무한매수 영수증 (최신순)</div>
         <div class="trade-list" id="ui-tradeList">
           <!-- JS에서 동적으로 생성됨 -->
         </div>
@@ -405,12 +404,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     <!-- ==========================================
          [ 탭 3 ] 한국 주식 VR (부부 듀얼 모드) 
          ========================================== -->
-    
     <div class="tab-content" id="tab-vr">
       
       <!-- 🚀 새로 추가된 VR 통합 현황 카드 -->
       <div class="section">
-        <div class="hero-card" style="border-color:var(--cyan); background:linear-gradient(135deg, var(--bg3) 0%, rgba(0,229,255,0.05) 100%);">
+        <div class="hero-card" style="border-color:var(--cyan); background:linear-gradient(135deg, var(--bg3) 0%, rgba(0,229,255,0.05) 100%); padding-bottom:20px;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <div class="hero-label" style="margin:0; color:var(--cyan);">VR INTEGRATED ASSET</div>
             <div class="tag" style="background:rgba(0,229,255,0.1); color:var(--cyan);">🇰🇷 부부 합산 예정</div>
@@ -423,14 +421,14 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
             <div class="kpi-value" style="color:var(--text);" id="vr-integrated-pool">₩0</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-label">가동 중인 엔진</div>
+            <div class="kpi-label">가동 중인 계좌</div>
             <div class="kpi-value" style="color:var(--gold);">1 / 2 대</div>
           </div>
         </div>
       </div>
 
       <div class="section">
-        <div class="section-title">👨🏻 정서님 계좌 (나스닥100 레버리지)</div>
+        <div class="section-title">👨🏻 사장님 계좌 (나스닥100 레버리지)</div>
         <div class="card">
           <div class="card-header" style="background:rgba(0,229,255,0.05);">
             <span class="tag cyan"><span class="pulse">●</span> LIVE</span>
@@ -452,7 +450,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
         </div>
       </div>
 
-      <!-- 혜진님 계좌는 일단 구조만 유지 -->
       <div class="section">
         <div class="section-title">👩🏻 혜진님 계좌 (나스닥100 레버리지)</div>
         <div class="card">
@@ -474,7 +471,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       <div class="section" style="margin-top:20px;">
         <div class="section-title">VR (Value Rebalancing) 상세 흐름도</div>
         <div class="flow-container">
-          
           <div class="flow-box">
             <div class="flow-header">
               <div class="flow-icon">💰</div><div class="flow-title">초기 설정 및 최초 매수</div>
@@ -529,15 +525,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
               <li style="justify-content:center; margin-bottom:0;"><span>▪️</span><span><b>효과:</b> 밴드가 위로 올라가며 강제로 자산 덩치를 키우는 스노우볼링</span></li>
             </ul>
           </div>
-          
         </div>
       </div>
 
       <div class="section" style="margin-top:20px;">
-        <div class="section-title">최근 VR 매매 기록</div>
-        <div class="empty-state">
-           <div style="font-size:24px; margin-bottom:10px;">🧾</div>
-           아직 매매 기록이 없습니다.<br>첫 거래 영수증이 이곳에 표시됩니다.
+        <div class="section-title">최근 VR 매매 기록 (최신순)</div>
+        <div class="trade-list" id="vr-tradeList">
+          <!-- JS에서 동적으로 생성됨 -->
         </div>
       </div>
       <div style="height:30px;"></div>
@@ -568,11 +562,10 @@ function switchMainTab(tabId, btnElement) {
 }
 
 // ==========================================
-// 환율 및 TOTAL 탭 글로벌 변수
+// 환율 및 글로벌 포맷팅
 // ==========================================
 let isUSD = true;
-const EXCHANGE_RATE = 1350.00; // 하드코딩 환율
-let globalData = null; // API 데이터 저장용
+const EXCHANGE_RATE = 1350.00;
 
 document.getElementById('currency-toggle').addEventListener('click', function() {
   isUSD = !isUSD;
@@ -594,7 +587,6 @@ document.getElementById('currency-toggle').addEventListener('click', function() 
   }
 });
 
-// 포맷팅 헬퍼
 function formatUSD(val) { return '$' + parseFloat(val).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}); }
 function formatKRW(val) { return '₩' + Math.round(val).toLocaleString('ko-KR'); }
 function formatSignUSD(val) { return (val >= 0 ? '+' : '') + formatUSD(val); }
@@ -611,7 +603,6 @@ async function loadLiveData() {
     const data = await response.json();
     
     if(data && data.success) {
-      globalData = data;
       renderAll(data);
     } else {
       console.error("API Error or Invalid Data");
@@ -656,7 +647,7 @@ function renderAll(data) {
   const totalUsdInvested = infInvested;
   const totalUsdEval = infEvalVal;
   const totalUsdRealized = infTotalProfit;
-  const totalUsdAsset = (vrAsset / EXCHANGE_RATE) + infInvested + infEvalVal; // 임시: VR원화 + 무매달러(평가액포함)
+  const totalUsdAsset = (vrAsset / EXCHANGE_RATE) + infInvested + infEvalVal;
 
   const totalKrwInvested = (infInvested * EXCHANGE_RATE);
   const totalKrwEval = (infEvalVal * EXCHANGE_RATE);
@@ -670,13 +661,11 @@ function renderAll(data) {
   document.getElementById('inf-cycle-badge').innerText = `🏆 ${infCycle-1 >= 0 ? infCycle-1 : 0}회 완료`;
   document.getElementById('inf-realized-pnl').innerText = formatSignUSD(infTotalProfit);
   document.getElementById('inf-cycle-num').innerText = `#${infCycle}`;
-  // 🚨 여기서 요청하신 6.5 등의 소수점 진행회차가 그대로 반영됩니다
   document.getElementById('inf-install-num').innerText = `${infInstall.toFixed(1)} / 40`; 
   
   document.getElementById('inf-pos-ticker').innerText = infTicker;
   document.getElementById('inf-avg-price').innerText = formatUSD(infAvg);
   document.getElementById('inf-curr-price').innerText = formatUSD(infClose);
-  // 🚨 보유 수량 (26주 등)
   document.getElementById('inf-qty').innerText = `${infQty}주`;
   document.getElementById('inf-invested').innerText = formatUSD(infInvested);
   
@@ -691,14 +680,17 @@ function renderAll(data) {
 
   document.getElementById('inf-flow-active').innerText = `▶ 현재 ${infInstall.toFixed(1)}회차 진행 중`;
 
-  // 무한매수 영수증 리스트 렌더링
+  // 🚨 무한매수 영수증 정렬 (내림차순 적용) 🚨
   const tradeList = document.getElementById('ui-tradeList');
-  if (inf.logs && inf.logs.length > 0) {
-    tradeList.innerHTML = inf.logs.slice(0, 30).map(log => {
-      // log = [날짜, 티커, 주기, 목표회차, 진행회차, 매매구분, 단가, 수량, 총금액, 평단, 실현]
-      if(!log[0]) return '';
+  let validInfLogs = (inf.logs || []).filter(log => log && log[0]);
+  
+  if (validInfLogs.length > 0) {
+    // 날짜 기준 내림차순 정렬 (최신이 상단)
+    validInfLogs.sort((a, b) => new Date(b[0]) - new Date(a[0]));
+    
+    tradeList.innerHTML = validInfLogs.slice(0, 30).map(log => {
       const dateRaw = new Date(log[0]);
-      const dateStr = !isNaN(dateRaw) ? `${String(dateRaw.getMonth()+1).padStart(2,'0')}/${String(dateRaw.getDate()).padStart(2,'0')}` : log[0].toString().substring(5,10);
+      const dateStr = !isNaN(dateRaw) ? `${String(dateRaw.getMonth()+1).padStart(2,'0')}/${String(dateRaw.getDate()).padStart(2,'0')}` : String(log[0]).substring(5,10);
       
       const isBuy = String(log[5]).includes('매수');
       const dotClass = isBuy ? 'buy' : 'sell';
@@ -726,14 +718,12 @@ function renderAll(data) {
   // ------------------------------------------------
   // TOTAL 탭 렌더링
   // ------------------------------------------------
-  // USD View
   document.getElementById('tot-usd-asset').innerText = formatUSD(totalUsdAsset);
   document.getElementById('tot-usd-invest').innerText = formatUSD(totalUsdInvested);
   document.getElementById('tot-usd-realized').innerText = formatSignUSD(totalUsdRealized);
   document.getElementById('tot-usd-eval').innerText = `${formatSignUSD(totalUsdEval)} (${infEvalRate.toFixed(2)}%)`;
   document.getElementById('tot-usd-eval').style.color = evalColor;
 
-  // KRW View
   document.getElementById('tot-krw-asset').innerText = formatKRW(totalKrwAsset);
   document.getElementById('tot-krw-invest').innerText = formatKRW(totalKrwInvested);
   document.getElementById('tot-krw-realized').innerText = formatSignKRW(totalKrwRealized);
@@ -741,16 +731,15 @@ function renderAll(data) {
   document.getElementById('tot-krw-eval').style.color = evalColor;
 
   // ------------------------------------------------
-  // VR 탭 렌더링 (통합 카드 + 개별 계좌)
+  // VR 탭 렌더링
   // ------------------------------------------------
-  // 1. 최상단 통합 현황 (추후 혜진님 데이터 추가 시 vrAsset + vrAsset2 로 합산)
+  // 통합 현황 카드 (추후 혜진님 계좌 추가시 vrAsset + vrAsset2 처럼 합산)
   document.getElementById('vr-integrated-asset').innerText = formatKRW(vrAsset);
   document.getElementById('vr-integrated-pool').innerText = formatKRW(vrPool);
 
-  // 2. 사장님 계좌 개별 상세
+  // 사장님 계좌 상세
   document.getElementById('vr1-total').innerText = `총 자산 ${formatKRW(vrAsset)}`;
   
-  // V목표 67만, 밴드는 만원 단위로 절삭 표기
   const vMan = (vrV / 10000).toFixed(1);
   const upperMan = (vrUpper / 10000).toFixed(1);
   const lowerMan = (vrLower / 10000).toFixed(1);
@@ -761,18 +750,47 @@ function renderAll(data) {
   
   document.getElementById('vr1-status').innerText = vrStatus;
   document.getElementById('vr-flow-active').innerText = `▶ 현재 밴드 상태: ${vrStatus}`;
-  
-  // V목표 67만, 밴드는 만원 단위로 절삭 표기
-  const vMan = (vrV / 10000).toFixed(1);
-  const upperMan = (vrUpper / 10000).toFixed(1);
-  const lowerMan = (vrLower / 10000).toFixed(1);
-  document.getElementById('vr1-band').innerText = `${vMan}만 / (${upperMan}만 ~ ${lowerMan}만)`;
-  
-  const poolRatio = vrAsset > 0 ? ((vrPool / vrAsset) * 100).toFixed(1) : 0;
-  document.getElementById('vr1-pool').innerText = `${formatKRW(vrPool)} (${poolRatio}%)`;
-  
-  document.getElementById('vr1-status').innerText = vrStatus;
-  document.getElementById('vr-flow-active').innerText = `▶ 현재 밴드 상태: ${vrStatus}`;
+
+  // 🚨 VR 매매 영수증 정렬 (내림차순 적용) 🚨
+  const vrTradeList = document.getElementById('vr-tradeList');
+  let validVrLogs = (vr.logs || []).filter(log => log && log[0]);
+
+  if (validVrLogs.length > 0) {
+    // 날짜 기준 내림차순 정렬 (최신이 상단)
+    validVrLogs.sort((a, b) => new Date(b[0]) - new Date(a[0]));
+
+    vrTradeList.innerHTML = validVrLogs.slice(0, 15).map(log => {
+      const dateRaw = new Date(log[0]);
+      const dateStr = !isNaN(dateRaw) ? `${String(dateRaw.getMonth()+1).padStart(2,'0')}/${String(dateRaw.getDate()).padStart(2,'0')}` : String(log[0]).substring(5,10);
+      
+      const isBuy = String(log[5]).includes('매수');
+      const dotClass = isBuy ? 'buy' : 'sell';
+      const labelClass = isBuy ? 'buy' : 'sell';
+      
+      const amt = parseFloat(log[8]) || 0;
+      const realized = parseFloat(log[10]) || 0;
+      // VR은 한국 시장 베이스이므로 원화(KRW) 포맷 적용
+      const pnlStr = realized !== 0 ? formatSignKRW(realized) : `-${formatKRW(amt)}`;
+      const pnlClass = realized > 0 ? 'pos' : (realized < 0 ? 'neg' : 'neu');
+
+      return `
+      <div class="trade-item">
+        <div class="trade-type-dot ${dotClass}"></div>
+        <div class="trade-info">
+          <div class="trade-top"><span class="trade-ticker">${log[1] || 'VR'}</span><span class="trade-pnl ${pnlClass}">${pnlStr}</span></div>
+          <div class="trade-bottom"><span class="trade-type-label ${labelClass}">${log[5]}</span><span class="trade-meta">${dateStr} · ₩${parseFloat(log[6] || 0).toLocaleString()} × ${log[7] || 0}주</span></div>
+        </div>
+      </div>
+      `;
+    }).join('');
+  } else {
+    vrTradeList.innerHTML = `
+      <div class="empty-state">
+         <div style="font-size:24px; margin-bottom:10px;">🧾</div>
+         아직 매매 기록이 없습니다.<br>첫 거래 영수증이 이곳에 표시됩니다.
+      </div>
+    `;
+  }
 }
 
 // 초기 데이터 로드 실행
