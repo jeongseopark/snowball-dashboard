@@ -35,7 +35,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .clock-row {display:flex; align-items:center; gap:5px; font-family:var(--mono); font-size:10px; background:var(--surface); padding:2px 6px; border-radius:6px; border:1px solid var(--border);}
 .clock-time {color:var(--text2); font-weight:700;}
 
-/* ── 상단 플로팅 탭 ── */
+/* ── 🚀 상단 플로팅 탭 ── */
 .floating-nav-wrap { position: sticky; top: 0; z-index: 90; padding: 10px 16px; background: rgba(8, 12, 20, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
 .floating-nav { display: flex; background: var(--surface2); border-radius: 30px; padding: 4px; border: 1px solid var(--border); }
 .float-btn { flex: 1; padding: 10px 0; border: none; background: transparent; color: var(--text3); font-family: var(--head); font-size: 12px; font-weight: 700; border-radius: 26px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
@@ -168,7 +168,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
         <div class="hero-card" style="background:linear-gradient(135deg, #1A1423 0%, #2D1B4E 100%); border-color:var(--purple); padding-bottom:16px;">
           <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;">
             <div class="hero-label" style="margin:0; color:#B39DDB;">TOTAL PORTFOLIO</div>
-            <!-- 🟢 원/달러 변환 토글 버튼 -->
             <button id="currency-toggle" class="currency-btn">🇰🇷 KRW 보기</button>
           </div>
           
@@ -424,7 +423,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
           </div>
           <div class="pos-row">
             <span class="pos-key">Pool (현금) / 비율</span>
-            <span class="pos-val">₩330,000 (49.3%)</span>
+            <span class="pos-val">₩330,000 (33.0%)</span>
           </div>
           <div class="pos-row">
             <span class="pos-key">리밸런싱 D-Day</span>
@@ -445,26 +444,52 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
              <span class="pos-key">V목표 / 밴드 (상~하)</span>
              <span class="pos-val" style="color:var(--gold); font-size:12px;">67만 / (80.4만 ~ 53.6만)</span>
           </div>
-          <div class="pos-row"><span class="pos-key">Pool (현금) / 비율</span><span class="pos-val">₩330,000 (49.3%)</span></div>
+          <div class="pos-row"><span class="pos-key">Pool (현금) / 비율</span><span class="pos-val">₩330,000 (33.0%)</span></div>
           <div class="pos-row"><span class="pos-key">리밸런싱 D-Day</span><span class="pos-val" style="color:var(--text3);">2026-05-15 (AGGRESSIVE)</span></div>
         </div>
       </div>
 
+      <!-- 🟢 VR 로직 대폭 상세화 (무한매수 급) -->
       <div class="section" style="margin-top:20px;">
-        <div class="section-title">VR (Value Rebalancing) 상세 로직</div>
+        <div class="section-title">VR (Value Rebalancing) 상세 흐름도</div>
         <div class="flow-container">
-          <div class="flow-box active-vr">
+          
+          <div class="flow-box">
             <div class="flow-header">
-              <div class="flow-icon">📊</div><div class="flow-title">오후 3:10 밴드 이탈 체크 (매일)</div>
-            </div>
-            <div class="flow-badge-group">
-               <span class="flow-badge" style="background:rgba(124,77,255,0.15); color:var(--purple);">V목표 = 67만</span>
-               <span class="flow-badge" style="background:rgba(255,255,255,0.1); color:var(--text2);">상단(+20%) / 하단(-20%)</span>
+              <div class="flow-icon">💰</div><div class="flow-title">초기 설정 및 최초 매수</div>
             </div>
             <ul class="flow-list">
-              <li><span>🔺</span><span><b>상단(Upper) 돌파 시:</b> 현재 평가금이 상단 밴드(80.4만)보다 커지면, 초과분만큼 <b>부분 매도</b>하여 Pool 비중 확보 및 수익 실현</span></li>
-              <li><span>🔻</span><span><b>하단(Lower) 이탈 시:</b> 현재 평가금이 하단 밴드(53.6만)보다 작아지면, 부족분만큼 Pool에서 꺼내 <b>추가 매수</b>하여 저가 매집</span></li>
-              <li><span>➖</span><span><b>밴드 내 위치 시:</b> 평가금이 상/하단 밴드 사이에 있다면 매매 없이 관망 (Hold)</span></li>
+              <li><span>▪️</span><span><b>자산 분배:</b> 총 시드머니를 V값(초기 목표금)과 Pool(예비 현금)로 분할 (예: 67% vs 33%)</span></li>
+              <li><span>▪️</span><span><b>최초 진입:</b> 초기 V값(67만 원)만큼 레버리지 ETF를 매수하여 포지션 구축</span></li>
+            </ul>
+          </div>
+          <div class="flow-arrow">↓</div>
+          
+          <div class="flow-box">
+            <div class="flow-header">
+              <div class="flow-icon">🎯</div><div class="flow-title">방어선(Band) 세팅</div>
+            </div>
+            <div class="flow-badge-group">
+               <span class="flow-badge" style="background:rgba(255,255,255,0.1); color:var(--text2);">상단 밴드 = V값 + 20%</span>
+               <span class="flow-badge" style="background:rgba(255,255,255,0.1); color:var(--text2);">하단 밴드 = V값 - 20%</span>
+            </div>
+            <ul class="flow-list">
+              <li><span>▪️</span><span><b>원칙:</b> 주가가 요동치더라도 이 상/하단 밴드(±20%) 안에서 움직일 때는 매매하지 않고 관망함</span></li>
+            </ul>
+          </div>
+          <div class="flow-arrow">↓</div>
+
+          <div class="flow-box active-vr">
+            <div class="flow-header">
+              <div class="flow-icon">📊</div><div class="flow-title">오후 3:10 밴드 이탈 체크</div>
+            </div>
+            <div class="flow-badge-group">
+               <span class="flow-badge" style="background:rgba(124,77,255,0.15); color:var(--purple);">매일 장 마감 직전</span>
+            </div>
+            <ul class="flow-list">
+              <li><span style="color:var(--red);">🔻</span><span><b>하단 이탈 시 (폭락):</b> 평가금이 하단선보다 낮아지면, Pool 현금으로 <b>추가 매수</b>하여 하단선까지 강제로 끌어올림 (싸게 매집)</span></li>
+              <li><span style="color:var(--green);">🔺</span><span><b>상단 돌파 시 (급등):</b> 평가금이 상단선보다 높아지면, 초과분을 <b>부분 매도</b>하여 상단선에 맞추고 Pool을 채움 (비싸게 익절)</span></li>
+              <li><span>➖</span><span><b>밴드 내 위치 시:</b> 평가금이 밴드 사이에 있다면 매매 없이 관망 (Hold)</span></li>
             </ul>
             <div class="flow-active-desc" style="color:var(--purple); background:rgba(124,77,255,0.1);">
               ▶ 현재 밴드 내 대기 중 (매매 없음)
@@ -478,11 +503,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
                <div class="flow-title" style="color:var(--gold); margin:0;">14일 간격 리밸런싱 (자산 팽창)</div>
             </div>
             <ul class="flow-list" style="text-align:center; display:inline-block; margin:0 auto;">
-              <li style="justify-content:center; margin-bottom:6px;"><span>▪️</span><span><b>발동 조건:</b> 매 2주(14일) 경과 시점</span></li>
-              <li style="justify-content:center; margin-bottom:6px;"><span>▪️</span><span><b>목표 상향:</b> 남은 Pool의 일정 비율을 V목표에 더함</span></li>
-              <li style="justify-content:center; margin-bottom:0;"><span>▪️</span><span><b>효과:</b> 밴드 자체가 위로 올라가며 자산 덩치를 스노우볼링</span></li>
+              <li style="justify-content:center; margin-bottom:6px;"><span>▪️</span><span><b>주기:</b> 매 2주(14일) 경과 시점</span></li>
+              <li style="justify-content:center; margin-bottom:6px;"><span>▪️</span><span><b>목표 상향:</b> 남은 Pool의 일부(예: 10%)를 V목표에 더함</span></li>
+              <li style="justify-content:center; margin-bottom:0;"><span>▪️</span><span><b>효과:</b> 밴드가 위로 올라가며 강제로 자산 덩치를 키우는 스노우볼링</span></li>
             </ul>
           </div>
+          
         </div>
       </div>
 
@@ -523,6 +549,10 @@ function switchMainTab(tabId, btnElement) {
 
 // 3. 🟢 TOTAL 탭 환율 토글 스위치 로직
 let isUSD = true;
+// 실제 사장님 데이터 기준
+const EXCHANGE_RATE = 1350.00;
+// 무한매수 총 시드 (278.91 * 40 = 11156.40) + VR 총 시드 (1,000,000원 = $740.74) = $11,897.14
+// 무한매수 실현손익 = $70.00 / 평가수익 = $92.50
 
 document.getElementById('currency-toggle').addEventListener('click', function() {
   isUSD = !isUSD;
