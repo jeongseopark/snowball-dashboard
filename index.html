@@ -374,6 +374,78 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
         </div>
       </div>
 
+      <!-- 🚀 복구 완료된 초고도화 VR 로직 상세 흐름도 -->
+      <div class="section" style="margin-top:20px;">
+        <div class="section-title">VR (Value Rebalancing) 로직 세부 가이드</div>
+        <div class="flow-container">
+          
+          <div class="flow-box">
+            <div class="flow-header">
+              <div class="flow-icon">💰</div><div class="flow-title">초기 설정 (VR 세팅)</div>
+            </div>
+            <ul class="flow-list">
+              <li><span>▪️</span><span><b>자산 분배:</b> V값(목표 주식 자산, 67%) / Pool(예비 현금, 33%) 세팅</span></li>
+              <li><span>▪️</span><span><b>밴드 설정:</b> V값 기준 상단(+20%) 및 하단(-20%) 밴드 계산</span></li>
+            </ul>
+          </div>
+          <div class="flow-arrow">↓</div>
+
+          <div class="flow-box active-vr">
+            <div class="flow-header">
+              <div class="flow-icon">⏱️</div><div class="flow-title">일일 자동 점검 (오후 3:10)</div>
+            </div>
+            <div class="flow-badge-group">
+               <span class="flow-badge" style="background:rgba(124,77,255,0.15); color:var(--purple);">매일 장 마감 전</span>
+            </div>
+            <ul class="flow-list">
+              <li><span>▪️</span><span>현재 <b>계좌 평가금액</b>(보유수량 × 현재가) 산출</span></li>
+              <li><span>▪️</span><span>평가금액이 상/하단 밴드(Upper/Lower)를 벗어났는지 확인</span></li>
+            </ul>
+            <div class="flow-active-desc" style="color:var(--purple); background:rgba(124,77,255,0.1);">▶ 평가금액 밴드 이탈 모니터링 중</div>
+          </div>
+          <div class="flow-arrow">↓</div>
+
+          <div class="flow-branch">
+            <div class="flow-branch-col">
+              <div class="flow-branch-box" style="border-color:var(--cyan); background:rgba(0,229,255,0.05);">
+                <div style="font-size:18px; margin-bottom:4px;">📈</div>
+                <div class="flow-branch-title" style="color:var(--cyan);">상단 밴드 돌파</div>
+                <div class="flow-branch-cond">평가금액 > Upper</div>
+              </div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-box" style="width:100%; padding:10px; text-align:center;">
+                <div class="flow-title" style="font-size:12px; margin:0; color:var(--text);">초과분 <b>부분 매도</b><br><span style="font-size:10px; color:var(--text2); font-weight:normal;">(Pool 자금 추가 및 수익 실현)</span></div>
+              </div>
+            </div>
+
+            <div class="flow-branch-col">
+              <div class="flow-branch-box" style="border-color:var(--red); background:rgba(255,61,113,0.05);">
+                <div style="font-size:18px; margin-bottom:4px;">📉</div>
+                <div class="flow-branch-title" style="color:var(--red);">하단 밴드 이탈</div>
+                <div class="flow-branch-cond">평가금액 < Lower</div>
+              </div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-box" style="width:100%; padding:10px; text-align:center;">
+                <div class="flow-title" style="font-size:12px; margin:0; color:var(--text);">부족분 <b>추가 매수</b><br><span style="font-size:10px; color:var(--text2); font-weight:normal;">(Pool 자금으로 저가 매집)</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="flow-arrow" style="margin-left: 50%;">↓</div>
+
+          <div class="flow-box" style="border-style:dashed;">
+            <div class="flow-header" style="justify-content:center;">
+               <div class="flow-icon" style="font-size:16px;">🔄</div>
+               <div class="flow-title" style="color:var(--gold); margin:0;">2주 단위 정기 리밸런싱</div>
+            </div>
+            <ul class="flow-list" style="padding-left:10px; padding-right:10px;">
+              <li><span>▪️</span><span><b>자산 팽창:</b> 정해진 비율에 따라 V값 목표치를 상향 조정</span></li>
+              <li><span>▪️</span><span>새로운 V값에 맞춰 상/하단 밴드 폭 재계산 후 다음 사이클 대비</span></li>
+            </ul>
+          </div>
+          
+        </div>
+      </div>
+
       <div class="section" style="margin-top:20px;">
         <div class="section-title">최근 VR 매매 기록</div>
         <div class="trade-list" id="ui-vr-tradeList">
