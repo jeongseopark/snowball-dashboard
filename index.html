@@ -137,6 +137,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 #loader-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.3s; }
 .spinner { width: 40px; height: 40px; border: 4px solid var(--border); border-top-color: var(--cyan); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
 @keyframes spin { 100% { transform: rotate(360deg); } }
+
+/* 파이프라인 전용 수치 강조 */
+.pipe-val { font-family: var(--mono); font-weight: 700; color: var(--green); font-size: 16px; margin-top: 6px; }
+.pipe-sub { font-size: 10px; color: var(--text2); font-family: var(--body); }
 </style>
 </head>
 <body>
@@ -252,20 +256,24 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
         </div>
       </div>
 
+      <!-- 🚀 [복구됨] 통합 자산 파이프라인 (실제 데이터 연동) -->
       <div class="section" style="margin-top:20px;">
         <div class="section-title">통합 자산 파이프라인</div>
-        <div class="flow-box" style="border-color:var(--gold); text-align:center;">
-          <div class="flow-title">🏦 Total Capital (시드 머니)</div>
+        <div class="flow-box" style="border-color:var(--gold); text-align:center; padding:20px 10px;">
+          <div class="flow-title">🏦 Total Capital (초기 총알)</div>
+          <div class="pipe-val" style="color:var(--gold);" id="pipe-total-seed">₩0</div>
         </div>
         <div class="flow-arrow">↓</div>
         <div style="display:flex; gap:10px; padding:0 20px;">
-          <div class="flow-box" style="flex:1; border-color:var(--text3); text-align:center; padding:12px 10px; margin:0;">
-            <div class="flow-title">💵 USD 예수금</div>
-            <div style="font-size:10px; color:var(--text2); margin-top:4px;">무한매수 봇 연동</div>
+          <div class="flow-box" style="flex:1; border-color:var(--text3); text-align:center; padding:16px 10px; margin:0;">
+            <div class="flow-title">💵 무매 대기현금</div>
+            <div class="pipe-val" style="color:var(--text);" id="pipe-inf-pool">$0.00</div>
+            <div class="pipe-sub">TQQQ 봇 연동</div>
           </div>
-          <div class="flow-box" style="flex:1; border-color:var(--text3); text-align:center; padding:12px 10px; margin:0;">
-            <div class="flow-title">₩ KRW 예수금</div>
-            <div style="font-size:10px; color:var(--text2); margin-top:4px;">ISA VR 봇 연동</div>
+          <div class="flow-box" style="flex:1; border-color:var(--text3); text-align:center; padding:16px 10px; margin:0;">
+            <div class="flow-title">₩ VR 대기현금</div>
+            <div class="pipe-val" style="color:var(--text);" id="pipe-vr-pool">₩0</div>
+            <div class="pipe-sub">ISA VR 봇 연동</div>
           </div>
         </div>
       </div>
@@ -382,7 +390,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
             <span class="tag cyan"><span class="pulse">●</span> LIVE</span>
             <span style="font-family:var(--mono); font-size:12px; color:var(--text2);" id="vr1-total">총 자산 ₩0</span>
           </div>
-          <!-- 🚀 [복구됨] 누락되었던 VR 봇 상세 포지션 UI -->
           <div class="pos-row">
             <span class="pos-key">현재가 (종가)</span>
             <span class="pos-val" id="vr1-curr-price">₩0</span>
@@ -608,15 +615,13 @@ function renderAll(data) {
   const vrPool = parseFloat(vr.pool) || 0;
   const vrStatus = vr.status || "HOLD";
   
-  // 🚀 [복구됨] VR 봇 상세 수치 계산 로직
   const vrCurrentPrice = parseFloat(vr.currentPrice) || 0;
   const vrQty = parseInt(vr.qty) || 0;
   const vrEvalAmount = parseFloat(vr.evalAmount) || 0;
   
-  // VR 평단가 및 투자 원금 역산
-  const vrInvested = vrAsset - vrPool; // 현재 투자된 돈 (평가금액)
-  const vrAvgPrice = vrQty > 0 ? (vrInvested - vrEvalAmount) / vrQty : 0; // 평단가 = (투자평가금액 - 평가손익) / 수량
-  const vrInvestedPrincipal = vrQty * vrAvgPrice; // 매수 원금
+  const vrInvested = vrAsset - vrPool; 
+  const vrAvgPrice = vrQty > 0 ? (vrInvested - vrEvalAmount) / vrQty : 0; 
+  const vrInvestedPrincipal = vrQty * vrAvgPrice; 
   const vrEvalRate = vrInvestedPrincipal > 0 ? (vrEvalAmount / vrInvestedPrincipal) * 100 : 0;
 
   // 역산 로직
@@ -680,6 +685,12 @@ function renderAll(data) {
   document.getElementById('tot-krw-eval').innerText = `${formatSignKRW(totalUsdEval * EXCHANGE_RATE)} (${infEvalRate.toFixed(2)}%)`;
   document.getElementById('tot-krw-eval').style.color = evalColor;
 
+  // 🚀 [추가됨] 파이프라인 수치 업데이트
+  const initialTotalSeedKrw = (INITIAL_SEED_TQQQ_USD * EXCHANGE_RATE) + INITIAL_SEED_VR_KRW;
+  document.getElementById('pipe-total-seed').innerText = formatKRW(initialTotalSeedKrw);
+  document.getElementById('pipe-inf-pool').innerText = formatUSD(tqqqCashUsd);
+  document.getElementById('pipe-vr-pool').innerText = formatKRW(vrPool);
+
   // ------------------------------------------------
   // VR 탭 렌더링
   // ------------------------------------------------
@@ -688,7 +699,6 @@ function renderAll(data) {
 
   document.getElementById('vr1-total').innerText = `총 자산 ${formatKRW(vrAsset)}`;
   
-  // 🚀 [복구됨] VR 봇 상세 수치 업데이트 적용
   document.getElementById('vr1-curr-price').innerText = formatKRW(vrCurrentPrice);
   document.getElementById('vr1-avg-qty').innerText = `${formatKRW(vrAvgPrice)} / ${vrQty}주`;
   document.getElementById('vr1-invested').innerText = formatKRW(vrInvestedPrincipal);
