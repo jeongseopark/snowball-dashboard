@@ -71,20 +71,18 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .total-detail-key { font-size:12px; color:var(--text2); font-family:var(--body); }
 .total-detail-val { font-family:var(--mono); font-weight:700; font-size:14px; }
 
-/* 🚀 실시간 동적 흐름도 전용 CSS */
+/* 🚀 실시간 동적 흐름도 CSS */
 .flow-container { display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 10px; }
 .flow-box { 
   background: var(--surface2); border: 1.5px solid var(--border); border-radius: 12px; 
   padding: 16px 14px; width: 100%; position: relative; 
-  opacity: 0.45; /* 비활성 상태 기본 투명도 */
+  opacity: 0.45; filter: grayscale(0.5);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  filter: grayscale(0.5);
 }
 
-/* ✅ 진행 중인 단계 하이라이트 클래스 */
-.flow-box.active-step {
-  opacity: 1; filter: grayscale(0);
-}
+.flow-box.active-step { opacity: 1; filter: grayscale(0); }
+
+/* 기본 뱃지 (현재 진행 단계) */
 .flow-box.active-step::before {
   content: '✅ 현재 진행 단계';
   position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
@@ -93,21 +91,23 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
   box-shadow: 0 4px 6px rgba(0,0,0,0.3);
   animation: popIn 0.4s ease-out forwards;
 }
+
+/* 🚀 뱃지 텍스트 커스텀 (data-badge 속성이 있으면 그 텍스트로 덮어씌움!) */
+.flow-box.active-step[data-badge]::before {
+  content: attr(data-badge);
+}
+
 @keyframes popIn { 0% { transform: translate(-50%, 10px) scale(0.8); opacity: 0; } 100% { transform: translate(-50%, 0) scale(1); opacity: 1; } }
 
 /* 테마별 진행 상태 효과 */
 .flow-box.theme-gray.active-step { border-color: #8FA8CC; box-shadow: 0 0 15px rgba(143, 168, 204, 0.15); background: rgba(143, 168, 204, 0.03); }
 .flow-box.theme-gray.active-step::before { background: #8FA8CC; color: #000; }
-
 .flow-box.theme-cyan.active-step { border-color: var(--cyan); box-shadow: 0 0 15px rgba(0, 229, 255, 0.15); background: rgba(0, 229, 255, 0.03); }
 .flow-box.theme-cyan.active-step::before { background: var(--cyan); color: #000; }
-
 .flow-box.theme-gold.active-step { border-color: var(--gold); box-shadow: 0 0 15px rgba(255, 215, 64, 0.15); background: rgba(255, 215, 64, 0.03); }
 .flow-box.theme-gold.active-step::before { background: var(--gold); color: #000; }
-
 .flow-box.theme-red.active-step { border-color: var(--red); box-shadow: 0 0 15px rgba(255, 61, 113, 0.2); background: rgba(255, 61, 113, 0.05); }
 .flow-box.theme-red.active-step::before { background: var(--red); color: #fff; }
-
 .flow-box.theme-purple.active-step { border-color: var(--purple); box-shadow: 0 0 15px rgba(124, 77, 255, 0.2); background: rgba(124, 77, 255, 0.05); }
 .flow-box.theme-purple.active-step::before { background: var(--purple); color: #fff; }
 
@@ -274,20 +274,21 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
         </div>
       </div>
 
+      <!-- 🚀 커스텀 텍스트가 들어간 파이프라인 박스들 -->
       <div class="section" style="margin-top:20px;">
         <div class="section-title">통합 자산 파이프라인</div>
-        <div class="flow-box theme-gold active-step" style="text-align:center; padding:20px 10px;">
+        <div class="flow-box theme-gold active-step" data-badge="👑 GRAND TOTAL" style="text-align:center; padding:20px 10px;">
           <div class="flow-title">🏦 Total Capital (초기 총알)</div>
           <div class="pipe-val" style="color:var(--gold);" id="pipe-total-seed">₩0</div>
         </div>
         <div class="flow-arrow">↓</div>
         <div style="display:flex; gap:10px; padding:0 20px;">
-          <div class="flow-box theme-cyan active-step" style="flex:1; text-align:center; padding:16px 10px; margin:0;">
+          <div class="flow-box theme-cyan active-step" data-badge="🇺🇸 가동 자산" style="flex:1; text-align:center; padding:16px 10px; margin:0;">
             <div class="flow-title">💳 무매 예수금</div>
             <div class="pipe-val" style="color:var(--text);" id="pipe-inf-pool">₩0</div>
             <div class="pipe-sub">TQQQ 봇 연동</div>
           </div>
-          <div class="flow-box theme-purple active-step" style="flex:1; text-align:center; padding:16px 10px; margin:0;">
+          <div class="flow-box theme-purple active-step" data-badge="🇰🇷 대기 자산" style="flex:1; text-align:center; padding:16px 10px; margin:0;">
             <div class="flow-title">₩ VR 대기현금</div>
             <div class="pipe-val" style="color:var(--text);" id="pipe-vr-pool">₩0</div>
             <div class="pipe-sub">ISA VR 봇 연동</div>
@@ -332,7 +333,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
         </div>
       </div>
 
-      <!-- 🚀 무한매수 실시간 동적 흐름도 -->
       <div class="section" style="margin-top:20px;">
         <div class="section-title">무한매수법 V4.0 하이브리드 흐름도</div>
         <div class="flow-container">
@@ -478,7 +478,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
         </div>
       </div>
 
-      <!-- 🚀 VR 로직 실시간 동적 흐름도 -->
       <div class="section" style="margin-top:20px;">
         <div class="section-title">VR (Value Rebalancing) 상세 흐름도</div>
         <div class="flow-container">
@@ -609,14 +608,12 @@ async function loadLiveData() {
 }
 
 function renderAll(data) {
-  // 🚀 환율
   const EXCHANGE_RATE = parseFloat(data.exchangeRate) || 1350.00;
   document.getElementById('display-exchange-rate').innerText = '적용 환율: ₩' + EXCHANGE_RATE.toLocaleString('ko-KR', {minimumFractionDigits:2}) + ' / $1';
 
   const inf = data.infinite || {};
   const vr = data.vr || {};
 
-  // 데이터 파싱
   const INITIAL_SEED_TQQQ_USD = parseFloat(inf.initialSeed) || 10000;
   const INITIAL_SEED_VR_KRW   = parseFloat(vr.initialSeed) || 1000000;
   const infRealCashKrw = parseFloat(inf.realCashKrw) || 0;
@@ -674,23 +671,22 @@ function renderAll(data) {
   document.getElementById('inf-goal-rate').innerText = `${infEvalRate.toFixed(2)}% / 15.00%`;
   document.getElementById('inf-goal-rate').style.color = infEvalRate >= 15 ? 'var(--green)' : 'var(--gold)';
 
-  // 🚀 [핵심] 무한매수 동적 흐름도 로직
+  // 무한매수 동적 흐름도 로직
   ['inf-step-1', 'inf-step-2', 'inf-step-3', 'inf-step-4'].forEach(id => document.getElementById(id).classList.remove('active-step'));
   ['inf-branch-1', 'inf-branch-2'].forEach(id => document.getElementById(id).classList.remove('active-branch'));
   
-  let infActiveId = 'inf-step-2'; // 기본 진행
-  if (infQty === 0 && infInstall === 0) infActiveId = 'inf-step-1'; // 1. 초기대기
-  else if (infEvalRate >= 15) infActiveId = 'inf-step-3';           // 3. 수익실현 대기
-  else if (infInstall >= 40) infActiveId = 'inf-step-4';            // 4. 리버스모드
+  let infActiveId = 'inf-step-2';
+  if (infQty === 0 && infInstall === 0) infActiveId = 'inf-step-1';
+  else if (infEvalRate >= 15) infActiveId = 'inf-step-3';           
+  else if (infInstall >= 40) infActiveId = 'inf-step-4';            
 
   document.getElementById(infActiveId).classList.add('active-step');
 
-  // 2단계 진행 중일 때 분기점 및 텍스트 하이라이트
   if (infActiveId === 'inf-step-2') {
     if (infInstall <= 1 || infQty === 0) {
-        document.getElementById('inf-branch-1').classList.add('active-branch'); // 100% 매수
+        document.getElementById('inf-branch-1').classList.add('active-branch');
     } else {
-        document.getElementById('inf-branch-2').classList.add('active-branch'); // 스플릿 분할
+        document.getElementById('inf-branch-2').classList.add('active-branch');
     }
     const flowActive = document.getElementById('inf-flow-active');
     flowActive.style.display = 'block';
@@ -698,7 +694,6 @@ function renderAll(data) {
   } else {
     document.getElementById('inf-flow-active').style.display = 'none';
   }
-
 
   // TOTAL UI
   document.getElementById('tot-usd-asset').innerText = formatUSD(totalFullAssetUsd);
@@ -739,11 +734,11 @@ function renderAll(data) {
   document.getElementById('vr1-pool').innerText = `${formatKRW(vrPool)} (${poolRatio}%)`;
   document.getElementById('vr1-status').innerText = vrStatus;
 
-  // 🚀 [핵심] VR 실시간 동적 흐름도 로직
+  // VR 실시간 동적 흐름도 로직
   ['vr-step-1', 'vr-step-2', 'vr-step-3', 'vr-step-4'].forEach(id => document.getElementById(id).classList.remove('active-step'));
   
-  let vrActiveId = 'vr-step-3'; // 기본 데일리 밴드 체크 상태
-  if (vrQty === 0 && vrAsset <= INITIAL_SEED_VR_KRW) vrActiveId = 'vr-step-1'; // 1. 최초 매수 전
+  let vrActiveId = 'vr-step-3';
+  if (vrQty === 0 && vrAsset <= INITIAL_SEED_VR_KRW) vrActiveId = 'vr-step-1';
   
   document.getElementById(vrActiveId).classList.add('active-step');
 
@@ -755,7 +750,7 @@ function renderAll(data) {
       document.getElementById('vr-flow-active').style.display = 'none';
   }
 
-  // 영수증 기록 렌더링 (무매/VR 동일)
+  // 영수증 기록 렌더링
   const tradeList = document.getElementById('ui-tradeList');
   let validInfLogs = (inf.logs || []).filter(log => log && log[0]);
   if (validInfLogs.length > 0) {
@@ -783,7 +778,9 @@ function renderAll(data) {
   } else { vrTradeList.innerHTML = `<div class="empty-state">기록이 없습니다.</div>`; }
 }
 
-const SECRET_PIN = "0000"; // 원하는 비밀번호로 변경하세요.
+// ⚠️ 여기에 원하시는 4자리 비밀번호를 입력하세요! (입력이 귀찮으시면 아래 함수 안의 내용들을 지우고 loadLiveData(); 만 남겨두시면 됩니다.)
+const SECRET_PIN = "0000"; 
+
 function checkPinAndLoad() {
   const userInput = prompt("🔒 VIP 관제탑 접근을 위해 PIN 번호를 입력하세요:");
   if (userInput === SECRET_PIN) { loadLiveData(); } 
