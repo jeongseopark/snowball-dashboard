@@ -534,7 +534,11 @@ function switchMainTab(tabId, btnElement) {
 // 환율 및 글로벌 포맷팅
 // ==========================================
 let isUSD = true;
-const EXCHANGE_RATE = 1350.00;
+function renderAll(data) {
+  // 👉 동적 환율 적용
+  const EXCHANGE_RATE = parseFloat(data.exchangeRate) || 1350.00;
+  
+  const inf = data.infinite || {};
 
 document.getElementById('currency-toggle').addEventListener('click', function() {
   isUSD = !isUSD;
