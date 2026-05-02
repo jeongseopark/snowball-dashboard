@@ -70,6 +70,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .total-detail-row:last-child { border-bottom: none; padding-bottom: 0; }
 .total-detail-key { font-size:12px; color:var(--text2); font-family:var(--body); }
 .total-detail-val { font-family:var(--mono); font-weight:700; font-size:14px; }
+
+/* ── 흐름도 관련 CSS ── */
 .flow-container { display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 10px; }
 .flow-box { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 12px; padding: 16px 14px; width: 100%; position: relative; }
 .flow-box.active { border-color: var(--cyan); box-shadow: 0 0 15px rgba(0, 229, 255, 0.2); background: rgba(0, 229, 255, 0.05); }
@@ -88,6 +90,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .flow-list li { margin-bottom: 6px; display: flex; gap: 6px; align-items: flex-start; text-align:left; }
 .flow-list li b { color: var(--text); }
 .flow-active-desc { background: rgba(0,229,255,0.1); padding: 8px; border-radius: 6px; color: var(--cyan); text-align: center; margin-top: 12px; font-size: 12px; font-weight: 700; font-family: var(--mono); }
+
+/* 🚀 숨겨져 있던 스플릿 매수 분기점 CSS (flow-branch) */
+.flow-branch { display: flex; width: 100%; gap: 12px; justify-content: center; }
+.flow-branch-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.flow-branch-box { background: rgba(255,255,255,0.02); border: 1.5px dashed var(--border2); border-radius: 10px; padding: 14px 10px; width: 100%; text-align: center; }
+.flow-branch-title { font-family: var(--body); font-weight: 700; font-size: 12px; color: var(--text); margin-bottom: 4px; margin-top:4px; }
+.flow-branch-cond { font-size: 10px; color: var(--text3); font-family: var(--mono); background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 4px; display: inline-block; }
+
+/* ── 매매 영수증 관련 CSS ── */
 .trade-list{display:flex;flex-direction:column;gap:8px;}
 .trade-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:12px 14px;display:flex;align-items:center;gap:12px; margin-bottom:2px;}
 .trade-type-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
@@ -106,11 +117,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .trade-type-label.sell{color:var(--green);}
 .trade-meta{font-size:10px;color:var(--text3);font-family:var(--mono);}
 .empty-state { text-align:center; padding:30px 20px; font-size:12px; color:var(--text3); border:1px dashed var(--border); border-radius:12px; background:rgba(255,255,255,0.02); }
+
 .pulse { animation: pulse 1.5s infinite; display: inline-block; margin-right: 3px; }
 @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
 #loader-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.3s; }
 .spinner { width: 40px; height: 40px; border: 4px solid var(--border); border-top-color: var(--cyan); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
 @keyframes spin { 100% { transform: rotate(360deg); } }
+
 .pipe-val { font-family: var(--mono); font-weight: 700; color: var(--green); font-size: 16px; margin-top: 6px; }
 .pipe-sub { font-size: 10px; color: var(--text2); font-family: var(--body); }
 </style>
@@ -281,12 +294,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
         </div>
       </div>
 
-      <!-- 🚀 무한매수 상세 흐름도 (리버스 모드 복구 완료!) -->
+      <!-- 🚀 무한매수 상세 흐름도 (스플릿 매수 디테일 완전 복구) -->
       <div class="section" style="margin-top:20px;">
         <div class="section-title">무한매수법 V4.0 하이브리드 흐름도</div>
         <div class="flow-container">
           
-          <!-- 1단계 -->
+          <!-- 1단계: 초기 설정 -->
           <div class="flow-box">
             <div class="flow-header">
               <div class="flow-icon">💰</div><div class="flow-title">초기 설정 및 대기</div>
@@ -298,24 +311,57 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
           </div>
           <div class="flow-arrow">↓</div>
           
-          <!-- 2단계 -->
+          <!-- 2단계: 일반 모드 및 스플릿 매수 분기 -->
           <div class="flow-box active">
             <div class="flow-header">
               <div class="flow-icon">📈</div><div class="flow-title">일반 모드 진행 (Hybrid)</div>
             </div>
             <div class="flow-badge-group">
                <span class="flow-badge cyan">스플릿 매수</span>
-               <span class="flow-badge gold">+15% 전량익절</span>
+               <span class="flow-badge gold">목표가 전량익절</span>
             </div>
-            <ul class="flow-list">
-              <li><span>👉</span><span><b>매수:</b> 일일 예산을 평단/시장가로 분산 진입</span></li>
-              <li><span>🛡️</span><span><b>방어:</b> 별지점(+5%) 상한가로 고점 추격 원천 차단</span></li>
+            
+            <ul class="flow-list" style="margin-bottom:12px;">
+              <li><span>👉</span><span><b>매수:</b> 일일 예산을 평단/시장가로 분산 진입 (LOC 활용)</span></li>
+              <li><span>🛡️</span><span><b>방어:</b> 별지점(+5%) 상한가 설정으로 고점 추격 원천 차단</span></li>
             </ul>
+
+            <!-- 🌿 스플릿 매수 상세 분기 (flow-branch) -->
+            <div class="flow-branch">
+              <div class="flow-branch-col">
+                <span class="flow-branch-cond">1회차 (또는 미보유)</span>
+                <div class="flow-branch-box">
+                  <div class="flow-branch-title" style="color:var(--cyan);">🚀 100% 매수</div>
+                  <div style="font-size:10px; color:var(--text2); font-family:var(--body); line-height:1.4;">현재가 +10% 지정가(LOC)로<br>확실하게 물량 확보</div>
+                </div>
+              </div>
+              <div class="flow-branch-col">
+                <span class="flow-branch-cond">2회차 이상</span>
+                <div class="flow-branch-box">
+                  <div class="flow-branch-title" style="color:var(--cyan);">⚖️ 스플릿 분할</div>
+                  <div style="font-size:10px; color:var(--text2); font-family:var(--body); line-height:1.4;">절반은 내 평단가(LOC),<br>절반은 시장가 방어(LOC)</div>
+                </div>
+              </div>
+            </div>
+
             <div class="flow-active-desc" id="inf-flow-active">▶ 현재 대기 중</div>
           </div>
           <div class="flow-arrow">↓</div>
+
+          <!-- 3단계: 수익 실현 -->
+          <div class="flow-box" style="border-style:dashed; border-color:var(--gold);">
+            <div class="flow-header" style="justify-content:center; margin-bottom:8px;">
+               <div class="flow-icon" style="font-size:16px;">🏆</div>
+               <div class="flow-title" style="color:var(--gold); margin:0;">수익 실현 및 복리 팽창</div>
+            </div>
+            <ul class="flow-list" style="text-align:center; display:inline-block; margin:0 auto;">
+              <li style="justify-content:center; margin-bottom:6px;"><span>▪️</span><span>목표 수익률(예: +10%) 도달 시 <b>전량 지정가 익절</b></span></li>
+              <li style="justify-content:center; margin-bottom:0;"><span>▪️</span><span>불어난 시드머니를 바탕으로 <b>다음 사이클 새롭게 시작</b></span></li>
+            </ul>
+          </div>
+          <div class="flow-arrow">↓</div>
           
-          <!-- 3단계 (복구된 리버스 모드) -->
+          <!-- 4단계: 리버스 모드 -->
           <div class="flow-box reverse">
             <div class="flow-header">
               <div class="flow-icon">🚨</div><div class="flow-title" style="color:var(--red);">리버스 모드 가동</div>
@@ -401,12 +447,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
         </div>
       </div>
 
-      <!-- 🚀 VR 로직 상세 흐름도 (복구 완료!) -->
+      <!-- 🚀 VR 로직 상세 흐름도 (복구 완료) -->
       <div class="section" style="margin-top:20px;">
         <div class="section-title">VR (Value Rebalancing) 상세 흐름도</div>
         <div class="flow-container">
           
-          <!-- 1단계 -->
           <div class="flow-box">
             <div class="flow-header">
               <div class="flow-icon">💰</div><div class="flow-title">초기 설정 및 최초 매수</div>
@@ -418,7 +463,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
           </div>
           <div class="flow-arrow">↓</div>
           
-          <!-- 2단계 -->
           <div class="flow-box">
             <div class="flow-header">
               <div class="flow-icon">🎯</div><div class="flow-title">방어선(Band) 세팅</div>
@@ -433,7 +477,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
           </div>
           <div class="flow-arrow">↓</div>
 
-          <!-- 3단계 -->
           <div class="flow-box active-vr">
             <div class="flow-header">
               <div class="flow-icon">📊</div><div class="flow-title">오후 3:10 밴드 이탈 체크</div>
@@ -452,7 +495,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
           </div>
           <div class="flow-arrow">↓</div>
           
-          <!-- 4단계 -->
           <div class="flow-box" style="border-style:dashed;">
             <div class="flow-header" style="justify-content:center; margin-bottom:12px;">
                <div class="flow-icon" style="font-size:16px;">🔄</div>
