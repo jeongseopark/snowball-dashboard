@@ -779,17 +779,20 @@ function renderAll(data) {
 }
 
 // ⚠️ 여기에 원하시는 4자리 비밀번호를 입력하세요! (입력이 귀찮으시면 아래 함수 안의 내용들을 지우고 loadLiveData(); 만 남겨두시면 됩니다.)
-const SECRET_PIN = "0000"; 
+//const SECRET_PIN = "7564"; 
 
-function checkPinAndLoad() {
-  const userInput = prompt("🔒 VIP 관제탑 접근을 위해 PIN 번호를 입력하세요:");
-  if (userInput === SECRET_PIN) { loadLiveData(); } 
-  else {
-    document.body.innerHTML = `<div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; background:#080C14; color:#FF3D71;"><h1 style="font-family:var(--head);">ACCESS DENIED</h1><p style="font-family:var(--mono); margin-top:10px;">새로고침하여 다시 시도하세요.</p></div>`;
-    document.getElementById('loader-overlay').style.display = 'none';
-  }
-}
-checkPinAndLoad();
+//function checkPinAndLoad() {
+//  const userInput = prompt("🔒 VIP 관제탑 접근을 위해 PIN 번호를 입력하세요:");
+//  if (userInput === SECRET_PIN) { loadLiveData(); } 
+//  else {
+//    document.body.innerHTML = `<div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; background:#080C14; color:#FF3D71;"><h1 style="font-family:var(--head);">ACCESS DENIED</h1><p style="font-family:var(--mono); margin-top:10px;">새로고침하여 다시 시도하세요.</p></div>`;
+//    document.getElementById('loader-overlay').style.display = 'none';
+//  }
+//}
+//checkPinAndLoad();
+
+loadLiveData(); // ⚠️ 비밀번호를 사용하고 싶으면 이 항목을 제외(삭제) 하고 위 항목을 실행 시키면 됨 (// 이거 삭제)
+  
 </script>
 </body>
 </html>
