@@ -71,7 +71,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .total-detail-key { font-size:12px; color:var(--text2); font-family:var(--body); }
 .total-detail-val { font-family:var(--mono); font-weight:700; font-size:14px; }
 
-/* 🚀 실시간 동적 흐름도 CSS */
 .flow-container { display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 10px; }
 .flow-box { 
   background: var(--surface2); border: 1.5px solid var(--border); border-radius: 12px; 
@@ -82,7 +81,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 
 .flow-box.active-step { opacity: 1; filter: grayscale(0); }
 
-/* 기본 뱃지 (현재 진행 단계) */
 .flow-box.active-step::before {
   content: '✅ 현재 진행 단계';
   position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
@@ -92,14 +90,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
   animation: popIn 0.4s ease-out forwards;
 }
 
-/* 🚀 뱃지 텍스트 커스텀 (data-badge 속성이 있으면 그 텍스트로 덮어씌움!) */
 .flow-box.active-step[data-badge]::before {
   content: attr(data-badge);
 }
 
 @keyframes popIn { 0% { transform: translate(-50%, 10px) scale(0.8); opacity: 0; } 100% { transform: translate(-50%, 0) scale(1); opacity: 1; } }
 
-/* 테마별 진행 상태 효과 */
 .flow-box.theme-gray.active-step { border-color: #8FA8CC; box-shadow: 0 0 15px rgba(143, 168, 204, 0.15); background: rgba(143, 168, 204, 0.03); }
 .flow-box.theme-gray.active-step::before { background: #8FA8CC; color: #000; }
 .flow-box.theme-cyan.active-step { border-color: var(--cyan); box-shadow: 0 0 15px rgba(0, 229, 255, 0.15); background: rgba(0, 229, 255, 0.03); }
@@ -127,7 +123,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .flow-box.active-step .flow-list li b { color: var(--text); }
 .flow-active-desc { background: rgba(0,229,255,0.1); padding: 8px; border-radius: 6px; color: var(--cyan); text-align: center; margin-top: 12px; font-size: 12px; font-weight: 700; font-family: var(--mono); }
 
-/* 스플릿 매수 분기점 CSS */
 .flow-branch { display: flex; width: 100%; gap: 12px; justify-content: center; }
 .flow-branch-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .flow-branch-box { background: rgba(255,255,255,0.02); border: 1.5px dashed var(--border2); border-radius: 10px; padding: 14px 10px; width: 100%; text-align: center; opacity: 0.3; transition: all 0.3s; }
@@ -136,7 +131,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .flow-branch-box.active-branch .flow-branch-title { color: var(--cyan); }
 .flow-branch-cond { font-size: 10px; color: var(--text3); font-family: var(--mono); background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 4px; display: inline-block; }
 
-/* ── 매매 영수증 관련 CSS ── */
 .trade-list{display:flex;flex-direction:column;gap:8px;}
 .trade-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:12px 14px;display:flex;align-items:center;gap:12px; margin-bottom:2px;}
 .trade-type-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
@@ -189,15 +183,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     <div class="floating-nav">
       <button class="float-btn active" onclick="switchMainTab('total', this)">🌐 TOTAL</button>
       <button class="float-btn" onclick="switchMainTab('infinite', this)">🇺🇸 무한매수</button>
-      <button class="float-btn" onclick="switchMainTab('vr', this)">🇰🇷 VR 봇</button>
+      <button class="float-btn" onclick="switchMainTab('vr', this)">🇰🇷 Value Rebalancing</button>
     </div>
   </div>
 
   <div class="scroll-area" id="scrollArea">
     
-    <!-- ==========================================
-         [ 탭 1 ] TOTAL (통합 관제탑 및 세팅) 
-         ========================================== -->
+    <!-- TOTAL 탭 -->
     <div class="tab-content active" id="tab-total">
       <div class="section">
         <div class="hero-card" style="background:linear-gradient(135deg, #1A1423 0%, #2D1B4E 100%); border-color:var(--purple); padding-bottom:16px;">
@@ -274,7 +266,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
         </div>
       </div>
 
-      <!-- 🚀 커스텀 텍스트가 들어간 파이프라인 박스들 -->
       <div class="section" style="margin-top:20px;">
         <div class="section-title">통합 자산 파이프라인</div>
         <div class="flow-box theme-gold active-step" data-badge="👑 GRAND TOTAL" style="text-align:center; padding:20px 10px;">
@@ -299,9 +290,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     </div>
 
 
-    <!-- ==========================================
-         [ 탭 2 ] 미국 주식 무한매수 (TQQQ) 
-         ========================================== -->
+    <!-- 무한매수 탭 -->
     <div class="tab-content" id="tab-infinite">
       <div class="section">
         <div class="hero-card">
@@ -420,9 +409,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     </div>
 
 
-    <!-- ==========================================
-         [ 탭 3 ] 한국 주식 VR (부부 듀얼 모드) 
-         ========================================== -->
+    <!-- VR 탭 -->
     <div class="tab-content" id="tab-vr">
       <div class="section">
         <div class="hero-card" style="border-color:var(--cyan); background:linear-gradient(135deg, var(--bg3) 0%, rgba(0,229,255,0.05) 100%); padding-bottom:20px;">
@@ -488,7 +475,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
             </div>
             <ul class="flow-list">
               <li><span>▪️</span><span><b>자산 분배:</b> 총 시드머니를 V값(초기 목표금)과 Pool(예비 현금)로 분할 (예: 67% vs 33%)</span></li>
-              <li><span>▪️</span><span><b>최초 진입:</b> 초기 V값(67만 원)만큼 레버리지 ETF를 매수하여 포지션 구축</span></li>
+              <li><span>▪️</span><span><b>최초 진입:</b> 초기 V값(67%)만큼 레버리지 ETF를 <b>봇이 알아서 전량 자동 매수</b>하여 포지션 구축</span></li>
             </ul>
           </div>
           <div class="flow-arrow">↓</div>
@@ -653,7 +640,7 @@ function renderAll(data) {
   const totalFullAssetKrw = tqqqTotalAssetKrw + vrTotalAssetKrw;
   const totalFullAssetUsd = totalFullAssetKrw / EXCHANGE_RATE;
 
-  // 무매 UI 텍스트 업데이트
+  // 무매 UI
   document.getElementById('inf-ticker-title').innerText = `${infTicker} REALIZED PnL`;
   document.getElementById('inf-cycle-badge').innerText = `🏆 ${infCycle-1 >= 0 ? infCycle-1 : 0}회 완료`;
   document.getElementById('inf-realized-pnl').innerText = formatSignUSD(infTotalProfit);
@@ -671,7 +658,7 @@ function renderAll(data) {
   document.getElementById('inf-goal-rate').innerText = `${infEvalRate.toFixed(2)}% / 15.00%`;
   document.getElementById('inf-goal-rate').style.color = infEvalRate >= 15 ? 'var(--green)' : 'var(--gold)';
 
-  // 무한매수 동적 흐름도 로직
+  // 무매 흐름도
   ['inf-step-1', 'inf-step-2', 'inf-step-3', 'inf-step-4'].forEach(id => document.getElementById(id).classList.remove('active-step'));
   ['inf-branch-1', 'inf-branch-2'].forEach(id => document.getElementById(id).classList.remove('active-branch'));
   
@@ -683,17 +670,12 @@ function renderAll(data) {
   document.getElementById(infActiveId).classList.add('active-step');
 
   if (infActiveId === 'inf-step-2') {
-    if (infInstall <= 1 || infQty === 0) {
-        document.getElementById('inf-branch-1').classList.add('active-branch');
-    } else {
-        document.getElementById('inf-branch-2').classList.add('active-branch');
-    }
+    if (infInstall <= 1 || infQty === 0) { document.getElementById('inf-branch-1').classList.add('active-branch'); } 
+    else { document.getElementById('inf-branch-2').classList.add('active-branch'); }
     const flowActive = document.getElementById('inf-flow-active');
     flowActive.style.display = 'block';
     flowActive.innerText = `▶ 현재 ${infInstall.toFixed(1)}회차 진행 중`;
-  } else {
-    document.getElementById('inf-flow-active').style.display = 'none';
-  }
+  } else { document.getElementById('inf-flow-active').style.display = 'none'; }
 
   // TOTAL UI
   document.getElementById('tot-usd-asset').innerText = formatUSD(totalFullAssetUsd);
@@ -713,7 +695,7 @@ function renderAll(data) {
   document.getElementById('pipe-inf-pool').innerText = formatKRW(infRealCashKrw);
   document.getElementById('pipe-vr-pool').innerText = formatKRW(vrPool);
 
-  // VR UI 텍스트 업데이트
+  // VR UI
   document.getElementById('vr-integrated-asset').innerText = formatKRW(vrAsset);
   document.getElementById('vr-integrated-pool').innerText = formatKRW(vrPool);
   document.getElementById('vr1-total').innerText = `총 자산 ${formatKRW(vrAsset)}`;
@@ -734,7 +716,7 @@ function renderAll(data) {
   document.getElementById('vr1-pool').innerText = `${formatKRW(vrPool)} (${poolRatio}%)`;
   document.getElementById('vr1-status').innerText = vrStatus;
 
-  // VR 실시간 동적 흐름도 로직
+  // VR 흐름도
   ['vr-step-1', 'vr-step-2', 'vr-step-3', 'vr-step-4'].forEach(id => document.getElementById(id).classList.remove('active-step'));
   
   let vrActiveId = 'vr-step-3';
@@ -746,11 +728,9 @@ function renderAll(data) {
       const vrFlowActive = document.getElementById('vr-flow-active');
       vrFlowActive.style.display = 'block';
       vrFlowActive.innerText = `▶ 현재 밴드 상태: ${vrStatus}`;
-  } else {
-      document.getElementById('vr-flow-active').style.display = 'none';
-  }
+  } else { document.getElementById('vr-flow-active').style.display = 'none'; }
 
-  // 영수증 기록 렌더링
+  // 영수증
   const tradeList = document.getElementById('ui-tradeList');
   let validInfLogs = (inf.logs || []).filter(log => log && log[0]);
   if (validInfLogs.length > 0) {
@@ -778,21 +758,20 @@ function renderAll(data) {
   } else { vrTradeList.innerHTML = `<div class="empty-state">기록이 없습니다.</div>`; }
 }
 
-// ⚠️ 여기에 원하시는 4자리 비밀번호를 입력하세요! (입력이 귀찮으시면 아래 함수 안의 내용들을 지우고 loadLiveData(); 만 남겨두시면 됩니다.)
-//const SECRET_PIN = "7564"; 
+const SECRET_PIN = "0000"; 
+function checkPinAndLoad() {
+  const userInput = prompt("🔒 VIP 관제탑 접근을 위해 PIN 번호를 입력하세요:");
+  if (userInput === SECRET_PIN) { loadLiveData(); } 
+  else {
+    document.body.innerHTML = `<div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; background:#080C14; color:#FF3D71;"><h1 style="font-family:var(--head);">ACCESS DENIED</h1><p style="font-family:var(--mono); margin-top:10px;">새로고침하여 다시 시도하세요.</p></div>`;
+    document.getElementById('loader-overlay').style.display = 'none';
+  }
+}
+// 비밀번호 검사 실행
+// checkPinAndLoad();
 
-//function checkPinAndLoad() {
-//  const userInput = prompt("🔒 VIP 관제탑 접근을 위해 PIN 번호를 입력하세요:");
-//  if (userInput === SECRET_PIN) { loadLiveData(); } 
-//  else {
-//    document.body.innerHTML = `<div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; background:#080C14; color:#FF3D71;"><h1 style="font-family:var(--head);">ACCESS DENIED</h1><p style="font-family:var(--mono); margin-top:10px;">새로고침하여 다시 시도하세요.</p></div>`;
-//    document.getElementById('loader-overlay').style.display = 'none';
-//  }
-//}
-//checkPinAndLoad();
-
-loadLiveData(); // ⚠️ 비밀번호를 사용하고 싶으면 이 항목을 제외(삭제) 하고 위 항목을 실행 시키면 됨 (// 이거 삭제)
-  
+// 비밀번호 검사 생략 시 아래 주석을 해제
+loadLiveData();
 </script>
 </body>
 </html>
