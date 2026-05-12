@@ -192,9 +192,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 
   <div class="scroll-area" id="scrollArea">
     
-    <!-- ==========================================
-         [ 탭 1 ] OVERVIEW 
-         ========================================== -->
     <div class="tab-content active" id="tab-total">
       <div class="section">
         <div class="hero-card" style="background:linear-gradient(135deg, #1A1423 0%, #2D1B4E 100%); border-color:var(--purple); padding-bottom:16px;">
@@ -295,9 +292,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     </div>
 
 
-    <!-- ==========================================
-         [ 탭 2 ] TQQQ SNOWBALL 
-         ========================================== -->
     <div class="tab-content" id="tab-infinite">
       <div class="section">
         <div class="hero-card">
@@ -409,16 +403,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       <div class="section" style="margin-top:20px;">
         <div class="section-title">RECENT TRADES (TQQQ)</div>
         <div class="trade-list" id="ui-tradeList">
-          <!-- JS 렌더링 -->
-        </div>
+          </div>
       </div>
       <div style="height:30px;"></div>
     </div>
 
 
-    <!-- ==========================================
-         [ 탭 3 ] ISA VR 
-         ========================================== -->
     <div class="tab-content" id="tab-vr">
       <div class="section">
         <div class="hero-card" style="border-color:var(--cyan); background:linear-gradient(135deg, var(--bg3) 0%, rgba(0,229,255,0.05) 100%); padding-bottom:20px;">
@@ -539,8 +529,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       <div class="section" style="margin-top:20px;">
         <div class="section-title">RECENT TRADES (VR)</div>
         <div class="trade-list" id="vr-tradeList">
-          <!-- JS 렌더링 -->
-        </div>
+          </div>
       </div>
       <div style="height:30px;"></div>
     </div>
@@ -586,7 +575,7 @@ function formatKRW(val) { return '₩' + Math.round(val).toLocaleString('ko-KR')
 function formatSignUSD(val) { return (val >= 0 ? '+' : '') + formatUSD(val); }
 function formatSignKRW(val) { return (val >= 0 ? '+' : '') + formatKRW(val); }
 
-// ⚠️ 사장님의 Apps Script 배포 URL로 변경하세요!
+// ⚠️ 사장님의 Apps Script 배포 URL
 const API_URL = "https://script.google.com/macros/s/AKfycbz4jm7V3za7zjbxXn4wmXWJKVR0ZvhMxqMAxuVY1onafu0QBmCubqk0rL2uj7GjH1X_zA/exec";
 
 async function loadLiveData() {
@@ -630,15 +619,40 @@ function renderAll(data) {
   const vrLower = parseFloat(vr.lower) || 0;
   const vrPool = parseFloat(vr.pool) || 0;
   const vrStatus = vr.mode || vr.status || "HOLD";
-  
   const vrCurrentPrice = parseFloat(vr.currentPrice) || 0;
   const vrQty = parseInt(vr.qty) || 0;
-  const vrEvalAmount = parseFloat(vr.evalAmount) || 0;
+
+  // 🚀 [수정된 핵심 로직] VR_매매기록 로그를 역추적하여 정확한 평단가와 원금 계산
+  let calcTotalQty = 0;
+  let calcTotalCost = 0;
+  let validVrLogsForCalc = (vr.logs || []).filter(log => log && log[0]);
   
-  const vrInvested = vrAsset - vrPool; 
-  const vrAvgPrice = vrQty > 0 ? (vrInvested - vrEvalAmount) / vrQty : 0; 
-  const vrInvestedPrincipal = vrQty * vrAvgPrice; 
-  const vrEvalRate = vrInvestedPrincipal > 0 ? (vrEvalAmount / vrInvestedPrincipal) * 100 : 0;
+  // 오래된 날짜부터 순서대로 재생(Replay)
+  let replayLogs = [...validVrLogsForCalc].sort((a, b) => new Date(a[0]) - new Date(b[0]));
+  
+  for (let log of replayLogs) {
+      let type = String(log[1] || ''); 
+      let qty = parseInt(log[3] || 0); 
+      let amt = parseFloat(log[4] || 0); 
+      
+      if (type.includes('매수') || type.includes('진입')) {
+          calcTotalQty += qty;
+          calcTotalCost += amt;
+      } else if (type.includes('매도')) {
+          if (calcTotalQty > 0) {
+              let avg = calcTotalCost / calcTotalQty;
+              calcTotalQty -= qty;
+              calcTotalCost -= (avg * qty); // 판 수량만큼 원금 차감
+          }
+      }
+  }
+
+  // 이제 정확한 평단가와 투입금이 완성되었습니다!
+  const vrAvgPrice = vrQty > 0 && calcTotalQty > 0 ? (calcTotalCost / calcTotalQty) : 0;
+  const vrInvestedPrincipal = vrQty > 0 ? calcTotalCost : 0; 
+  const vrCurrentEvalAmount = vrCurrentPrice * vrQty; 
+  const vrPnLAmount = vrCurrentEvalAmount - vrInvestedPrincipal;
+  const vrEvalRate = vrInvestedPrincipal > 0 ? (vrPnLAmount / vrInvestedPrincipal) * 100 : 0;
 
   const tqqqTotalAssetKrw = infRealCashKrw + (infInvested * EXCHANGE_RATE) + (infEvalVal * EXCHANGE_RATE);
   const tqqqTotalAssetUsd = tqqqTotalAssetKrw / EXCHANGE_RATE;
@@ -709,11 +723,13 @@ function renderAll(data) {
   document.getElementById('vr-integrated-pool').innerText = formatKRW(vrPool);
   document.getElementById('vr1-total').innerText = `총 자산 ${formatKRW(vrAsset)}`;
   document.getElementById('vr1-curr-price').innerText = formatKRW(vrCurrentPrice);
+  
+  // 🚀 정확히 계산된 평단가, 수량, 원금, 수익률 바인딩!
   document.getElementById('vr1-avg-qty').innerText = `${formatKRW(vrAvgPrice)} / ${vrQty}주`;
   document.getElementById('vr1-invested').innerText = formatKRW(vrInvestedPrincipal);
   
-  const vrEvalColor = vrEvalAmount >= 0 ? 'var(--green)' : 'var(--red)';
-  document.getElementById('vr1-eval-pnl').innerText = `${formatSignKRW(vrEvalAmount)} (${(vrEvalRate>0?'+':'')}${vrEvalRate.toFixed(2)}%)`;
+  const vrEvalColor = vrPnLAmount >= 0 ? 'var(--green)' : 'var(--red)';
+  document.getElementById('vr1-eval-pnl').innerText = `${formatSignKRW(vrPnLAmount)} (${(vrEvalRate>0?'+':'')}${vrEvalRate.toFixed(2)}%)`;
   document.getElementById('vr1-eval-pnl').style.color = vrEvalColor;
 
   const vMan = (vrV / 10000).toFixed(1);
@@ -743,7 +759,7 @@ function renderAll(data) {
   const tradeList = document.getElementById('ui-tradeList');
   let validInfLogs = (inf.logs || []).filter(log => log && log[0]);
   if (validInfLogs.length > 0) {
-    validInfLogs.sort((a, b) => new Date(b[0]) - new Date(a[0]));
+    validInfLogs.sort((a, b) => new Date(b[0]) - new Date(a[0])); // 최신순 정렬
     tradeList.innerHTML = validInfLogs.slice(0, 30).map(log => {
       const dateRaw = new Date(log[0]);
       const dateStr = !isNaN(dateRaw) ? `${String(dateRaw.getMonth()+1).padStart(2,'0')}/${String(dateRaw.getDate()).padStart(2,'0')}` : String(log[0]).substring(5,10);
@@ -756,31 +772,19 @@ function renderAll(data) {
   const vrTradeList = document.getElementById('vr-tradeList');
   let validVrLogs = (vr.logs || []).filter(log => log && log[0]);
   if (validVrLogs.length > 0) {
-    validVrLogs.sort((a, b) => new Date(b[0]) - new Date(a[0]));
+    validVrLogs.sort((a, b) => new Date(b[0]) - new Date(a[0])); // 최신순 정렬
     vrTradeList.innerHTML = validVrLogs.slice(0, 15).map(log => {
       const dateRaw = new Date(log[0]);
       const dateStr = !isNaN(dateRaw) ? `${String(dateRaw.getMonth()+1).padStart(2,'0')}/${String(dateRaw.getDate()).padStart(2,'0')}` : String(log[0]).substring(5,10);
-      const isBuy = String(log[5]).includes('매수');
-      const pnlClass = parseFloat(log[10]) > 0 ? 'pos' : (parseFloat(log[10]) < 0 ? 'neg' : 'neu');
-      return `<div class="trade-item"><div class="trade-type-dot ${isBuy?'buy':'sell'}"></div><div class="trade-info"><div class="trade-top"><span class="trade-ticker">${log[1] || 'VR'}</span><span class="trade-pnl ${pnlClass}">${parseFloat(log[10]) !== 0 ? formatSignKRW(log[10]) : `-${formatKRW(log[8])}`}</span></div><div class="trade-bottom"><span class="trade-type-label ${isBuy?'buy':'sell'}">${log[5]}</span><span class="trade-meta">${dateStr} · ₩${parseFloat(log[6] || 0).toLocaleString()} × ${log[7] || 0}주</span></div></div></div>`;
+      const isBuy = String(log[1]).includes('진입') || String(log[1]).includes('매수');
+      // VR 시트는 거래금액이 E열(log[4])에 있습니다.
+      const tradeAmt = parseFloat(log[4]) || 0;
+      return `<div class="trade-item"><div class="trade-type-dot ${isBuy?'buy':'sell'}"></div><div class="trade-info"><div class="trade-top"><span class="trade-ticker">VR TIGER레버리지</span><span class="trade-pnl ${isBuy?'neu':'pos'}">${isBuy ? `-${formatKRW(tradeAmt)}` : `+${formatKRW(tradeAmt)}`}</span></div><div class="trade-bottom"><span class="trade-type-label ${isBuy?'buy':'sell'}">${log[1]}</span><span class="trade-meta">${dateStr} · ₩${parseFloat(log[2] || 0).toLocaleString()} × ${log[3] || 0}주</span></div></div></div>`;
     }).join('');
   } else { vrTradeList.innerHTML = `<div class="empty-state">기록이 없습니다.</div>`; }
 }
 
-// ⚠️ 여기에 원하시는 4자리 비밀번호를 입력하세요! (입력이 귀찮으시면 아래 함수 안의 내용들을 지우고 loadLiveData(); 만 남겨두시면 됩니다.)
-//const SECRET_PIN = "7564"; 
-
-//function checkPinAndLoad() {
-//  const userInput = prompt("🔒 VIP TRADING DESK 접근을 위해 PIN 번호를 입력하세요:");
-//  if (userInput === SECRET_PIN) { loadLiveData(); } 
-//  else {
-//    document.body.innerHTML = `<div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; background:#080C14; color:#FF3D71;"><h1 style="font-family:var(--head);">ACCESS DENIED</h1><p style="font-family:var(--mono); margin-top:10px;">새로고침하여 다시 시도하세요.</p></div>`;
-//    document.getElementById('loader-overlay').style.display = 'none';
-//  }
-//}
-//checkPinAndLoad();
-
-loadLiveData(); // ⚠️ 비밀번호를 사용하고 싶으면 이 항목을 주석(//) 처리하고, 위 함수들의 주석을 해제하세요.
+loadLiveData();
   
 </script>
 </body>
