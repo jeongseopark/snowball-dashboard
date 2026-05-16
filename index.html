@@ -22,41 +22,34 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--body);overflow:hidden;}
 .app{display:flex;flex-direction:column;height:100svh;max-width:430px;margin:0 auto;position:relative;overflow:hidden;background:var(--bg);}
-
-/* Top Bar */
 .top-bar{position:relative;z-index:100;background:var(--bg);padding:env(safe-area-inset-top,12px) 20px 12px;display:flex;align-items:center;justify-content:space-between;}
+.top-bar-left{display:flex;align-items:center;gap:10px;}
 .bot-avatar{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--cyan),var(--purple));display:flex;align-items:center;justify-content:center;font-size:18px;}
 .bot-name{font-family:var(--head);font-weight:800;font-size:17px;letter-spacing:0.5px;}
 .bot-sub{font-size:11px;color:var(--text3);font-family:var(--mono);}
 .dual-clock {display:flex; flex-direction:column; align-items:flex-end; gap:3px;}
 .clock-row {display:flex; align-items:center; gap:5px; font-family:var(--mono); font-size:10px; background:var(--surface); padding:2px 6px; border-radius:6px; border:1px solid var(--border);}
 .clock-time {color:var(--text2); font-weight:700;}
-
-/* Navigation */
 .floating-nav-wrap { position: sticky; top: 0; z-index: 90; padding: 10px 16px; background: rgba(8, 12, 20, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
 .floating-nav { display: flex; background: var(--surface2); border-radius: 30px; padding: 4px; border: 1px solid var(--border); }
-.float-btn { flex: 1; padding: 10px 0; border: none; background: transparent; color: var(--text3); font-family: var(--head); font-size: 11px; font-weight: 700; border-radius: 26px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
-.float-btn.active { background: var(--cyan); color: #000; font-weight: 800; box-shadow: 0 4px 12px rgba(0,229,255,0.3); }
-
-.scroll-area{flex:1;overflow-y:auto;padding:0 0 40px;scroll-behavior:smooth;}
+.float-btn { flex: 1; padding: 10px 0; border: none; background: transparent; color: var(--text3); font-family: var(--head); font-size: 12px; font-weight: 700; border-radius: 26px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
+.float-btn.active { background: var(--cyan); color: #000; box-shadow: 0 4px 12px rgba(0,229,255,0.3); }
+.scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;padding:0 0 40px;scroll-behavior:smooth;}
 .scroll-area::-webkit-scrollbar{display:none;}
-.tab-content{display:none;}
-.tab-content.active{display:block; animation:fadeIn 0.4s;}
-@keyframes fadeIn { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
-
-/* Cards & Sections */
+.tab-content{display:none; animation: fadeIn 0.4s;}
+.tab-content.active{display:block;}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 .section{padding:16px 16px 0;}
 .section-title{font-family:var(--head);font-size:11px;font-weight:700;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
 .section-title::after{content:'';flex:1;height:1px;background:var(--border);}
-.hero-card{background:linear-gradient(135deg,var(--bg3) 0%,var(--surface2) 100%);border:1px solid var(--border2);border-radius:var(--r);padding:20px;margin-bottom:10px;position:relative;}
-.hero-label{font-size:10px;color:var(--text3);font-family:var(--mono);margin-bottom:6px;letter-spacing:1px;}
-.hero-value{font-family:var(--mono);font-size:32px;font-weight:700;color:var(--green);line-height:1;}
-
-.kpi-grid-3 { display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-bottom:12px; }
-.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:12px; position:relative; overflow:hidden;}
-.kpi-label{font-size:9px;color:var(--text3);font-family:var(--mono);margin-bottom:6px; white-space:nowrap;}
-.kpi-value{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--cyan);}
-
+.hero-card{background:linear-gradient(135deg,var(--bg3) 0%,var(--surface2) 100%);border:1px solid var(--border2);border-radius:var(--r);padding:24px 20px;margin-bottom:10px; position:relative;}
+.hero-label{font-size:11px;color:var(--text3);font-family:var(--mono);letter-spacing:1px;margin-bottom:6px;}
+.hero-value{font-family:var(--mono);font-size:38px;font-weight:700;color:var(--green);line-height:1;}
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.kpi-grid-3 { display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-bottom:10px; }
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:14px;}
+.kpi-label{font-size:10px;color:var(--text3);font-family:var(--mono);margin-bottom:8px; white-space:nowrap;}
+.kpi-value{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--cyan);}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
 .card-header{padding:14px 16px;background:var(--surface2);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
 .pos-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px dashed rgba(255,255,255,0.05);}
@@ -67,48 +60,46 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .tag.cyan{background:rgba(0,229,255,0.1);color:var(--cyan);border:1px solid rgba(0,229,255,0.25);}
 .tag.gold{background:rgba(255,215,64,0.1);color:var(--gold);border:1px solid rgba(255,215,64,0.25);}
 .tag.red{background:rgba(255,61,113,0.1);color:var(--red);border:1px solid rgba(255,61,113,0.25);}
+.currency-btn { background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; border-radius:8px; padding:6px 12px; font-size:11px; font-family:var(--mono); font-weight:700; cursor:pointer; transition:0.2s;}
+.currency-btn:active { transform:scale(0.95); }
+.total-detail-row { display:flex; justify-content:space-between; align-items:center; padding: 10px 0; border-bottom:1px solid rgba(255,255,255,0.06); }
+.total-detail-row:last-child { border-bottom: none; padding-bottom: 0; }
+.total-detail-key { font-size:12px; color:var(--text2); font-family:var(--body); }
+.total-detail-val { font-family:var(--mono); font-weight:700; font-size:14px; }
 
-/* Dynamic Flow Components */
+/* 실시간 동적 흐름도 CSS */
 .flow-container { display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 10px; }
-.flow-box { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 12px; padding: 16px; width: 100%; position: relative; opacity: 0.5; filter: grayscale(0.8); transition: 0.4s; }
-.flow-box.active-step { opacity: 1; filter: grayscale(0); border-color: var(--cyan); box-shadow: 0 0 15px rgba(0,229,255,0.1); }
-.flow-box.active-step::before { content:'✅ 현재 진행 단계'; position:absolute; top:-10px; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:9px; background:var(--cyan); color:#000; padding:2px 8px; border-radius:10px; font-weight:800; }
+.flow-box { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 12px; padding: 16px 14px; width: 100%; position: relative; opacity: 0.45; filter: grayscale(0.5); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+.flow-box.active-step { opacity: 1; filter: grayscale(0); }
+.flow-box.active-step::before { content: '✅ 현재 진행 단계'; position: absolute; top: -11px; left: 50%; transform: translateX(-50%); font-family: var(--mono); font-weight: 800; font-size: 10px; padding: 3px 10px; border-radius: 12px; z-index: 10; box-shadow: 0 4px 6px rgba(0,0,0,0.3); animation: popIn 0.4s ease-out forwards; }
+.flow-box.active-step[data-badge]::before { content: attr(data-badge); }
+@keyframes popIn { 0% { transform: translate(-50%, 10px) scale(0.8); opacity: 0; } 100% { transform: translate(-50%, 0) scale(1); opacity: 1; } }
+
+.flow-box.theme-gray.active-step { border-color: #8FA8CC; box-shadow: 0 0 15px rgba(143, 168, 204, 0.15); background: rgba(143, 168, 204, 0.03); }
+.flow-box.theme-gray.active-step::before { background: #8FA8CC; color: #000; }
+.flow-box.theme-cyan.active-step { border-color: var(--cyan); box-shadow: 0 0 15px rgba(0, 229, 255, 0.15); background: rgba(0, 229, 255, 0.03); }
+.flow-box.theme-cyan.active-step::before { background: var(--cyan); color: #000; }
 .flow-box.theme-gold.active-step { border-color: var(--gold); box-shadow: 0 0 15px rgba(255, 215, 64, 0.15); background: rgba(255, 215, 64, 0.03); }
 .flow-box.theme-gold.active-step::before { background: var(--gold); color: #000; }
-.flow-box.theme-purple.active-step { border-color: var(--purple); box-shadow: 0 0 15px rgba(124, 77, 255, 0.2); background: rgba(124, 77, 255, 0.05); }
-.flow-box.theme-purple.active-step::before { background: var(--purple); color: #fff; }
 .flow-box.theme-red.active-step { border-color: var(--red); box-shadow: 0 0 15px rgba(255, 61, 113, 0.2); background: rgba(255, 61, 113, 0.05); }
 .flow-box.theme-red.active-step::before { background: var(--red); color: #fff; }
+.flow-box.theme-purple.active-step { border-color: var(--purple); box-shadow: 0 0 15px rgba(124, 77, 255, 0.2); background: rgba(124, 77, 255, 0.05); }
+.flow-box.theme-purple.active-step::before { background: var(--purple); color: #fff; }
 
-.flow-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-.flow-title { font-family: var(--body); font-weight: 700; font-size: 14px; color: var(--text); }
-.flow-list { list-style:none; font-size: 11px; color: var(--text2); line-height: 1.5; padding-left:0; margin:0;}
-.flow-list li { margin-bottom: 6px; display: flex; gap: 6px; }
-.flow-list li b { color:var(--text); }
-.flow-arrow { color: var(--border2); text-align: center; margin: -5px 0; font-size: 16px; }
+.flow-arrow { color: var(--border2); font-size: 18px; text-align: center; width: 100%; margin: -4px 0; }
+.flow-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.flow-icon { font-size: 20px; }
+.flow-title { font-family: var(--body); font-weight: 700; font-size: 14px; color: var(--text); transition: color 0.3s; }
+.flow-box:not(.active-step) .flow-title { color: var(--text2); }
 .flow-badge-group { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
 .flow-badge { font-size: 9px; font-family: var(--mono); font-weight: 700; padding: 4px 8px; border-radius: 4px; }
 .flow-badge.cyan { background: rgba(0,229,255,0.15); color: var(--cyan); }
 .flow-badge.gold { background: rgba(255,215,64,0.15); color: var(--gold); }
 .flow-badge.red { background: rgba(255,61,113,0.15); color: var(--red); }
+.flow-list { margin: 0; padding-left: 0; list-style:none; font-size: 11px; color: var(--text2); font-family: var(--body); line-height: 1.6; }
+.flow-list li { margin-bottom: 6px; display: flex; gap: 6px; align-items: flex-start; text-align:left; }
+.flow-box.active-step .flow-list li b { color: var(--text); }
 
-/* Visual Gauges */
-.gauge-wrap { margin-top: 12px; padding-top: 12px; border-top: 1px dashed rgba(255,255,255,0.1); }
-.gauge-label { display: flex; justify-content: space-between; font-size: 10px; font-family: var(--mono); color: var(--text3); margin-bottom: 8px; font-weight:700;}
-.gauge-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.4); border-radius: 3px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);}
-.gauge-fill { height: 100%; width: 0%; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 3px;}
-.gauge-fill.cyan { background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
-.gauge-fill.green { background: var(--green); box-shadow: 0 0 8px var(--green); }
-.gauge-fill.purple { background: var(--purple); box-shadow: 0 0 8px var(--purple); }
-
-/* Band Visualizer (VR) */
-.band-track { width: 100%; height: 12px; background: rgba(0,0,0,0.5); border-radius: 6px; position: relative; margin: 12px 0 8px; border: 1px solid var(--border); box-shadow: inset 0 1px 3px rgba(0,0,0,0.5); }
-.band-zone { position: absolute; top: 0; height: 100%; background: rgba(0,229,255,0.15); border-left: 1px dashed var(--cyan); border-right: 1px dashed var(--cyan); }
-.band-marker { position: absolute; top: -4px; width: 4px; height: 20px; background: var(--gold); box-shadow: 0 0 8px var(--gold); border-radius: 2px; transition: left 1s cubic-bezier(0.4, 0, 0.2, 1); z-index: 5; transform: translateX(-50%); }
-.band-marker::after { content: 'ME'; position: absolute; bottom: -14px; left: 50%; transform: translateX(-50%); font-size: 8px; color: var(--gold); font-family: var(--mono); font-weight: 800; }
-.band-labels { display: flex; justify-content: space-between; font-size: 9px; font-family: var(--mono); color: var(--text2); font-weight:700; }
-
-/* Branch layout */
 .flow-branch { display: flex; width: 100%; gap: 12px; justify-content: center; margin-top: 10px; }
 .flow-branch-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .flow-branch-box { background: rgba(255,255,255,0.02); border: 1.5px dashed var(--border2); border-radius: 10px; padding: 14px 10px; width: 100%; text-align: center; opacity: 0.3; transition: all 0.3s; }
@@ -117,14 +108,25 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .flow-branch-box.active-branch .flow-branch-title { color: var(--cyan); }
 .flow-branch-cond { font-size: 10px; color: var(--text3); font-family: var(--mono); background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 4px; display: inline-block; }
 
-/* Overview Pipeline */
-.pipeline-box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; }
-.pipeline-val { font-family: var(--mono); font-size: 16px; font-weight: 700; color: var(--text); margin: 6px 0 0; }
-.pipeline-label { font-size: 10px; color: var(--text3); font-family: var(--mono); text-transform: uppercase; }
+/* 🚀 게이지 및 프로그레스 바 CSS */
+.gauge-wrap { margin-top: 16px; padding-top: 12px; border-top: 1px dashed rgba(255,255,255,0.1); }
+.gauge-label { display: flex; justify-content: space-between; font-size: 10px; font-family: var(--mono); color: var(--text3); margin-bottom: 8px; font-weight:700;}
+.gauge-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.4); border-radius: 4px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.5); }
+.gauge-fill { height: 100%; border-radius: 4px; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); width: 0%; }
+.gauge-fill.cyan { background: var(--cyan); box-shadow: 0 0 8px rgba(0,229,255,0.6); }
+.gauge-fill.green { background: var(--green); box-shadow: 0 0 8px rgba(0,230,118,0.6); }
+.gauge-fill.purple { background: var(--purple); box-shadow: 0 0 8px rgba(124,77,255,0.6); }
 
-/* Trade Receipts */
+/* 🚀 Band Visualizer (VR) CSS */
+.band-track { width: 100%; height: 12px; background: rgba(0,0,0,0.5); border-radius: 6px; position: relative; margin: 12px 0 8px; border: 1px solid var(--border); box-shadow: inset 0 1px 3px rgba(0,0,0,0.5); }
+.band-zone { position: absolute; top: 0; height: 100%; background: rgba(0,229,255,0.15); border-left: 1px dashed var(--cyan); border-right: 1px dashed var(--cyan); }
+.band-marker { position: absolute; top: -4px; width: 4px; height: 20px; background: var(--gold); box-shadow: 0 0 8px var(--gold); border-radius: 2px; transition: left 1s cubic-bezier(0.4, 0, 0.2, 1); z-index: 5; transform: translateX(-50%); }
+.band-marker::after { content: 'ME'; position: absolute; bottom: -14px; left: 50%; transform: translateX(-50%); font-size: 8px; color: var(--gold); font-family: var(--mono); font-weight: 800; }
+.band-labels { display: flex; justify-content: space-between; font-size: 9px; font-family: var(--mono); color: var(--text2); font-weight:700; }
+
+/* ── 매매 영수증 관련 CSS ── */
 .trade-list{display:flex;flex-direction:column;gap:8px;}
-.trade-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:12px 14px;display:flex;align-items:center;gap:12px;}
+.trade-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:12px 14px;display:flex;align-items:center;gap:12px; margin-bottom:2px;}
 .trade-type-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .trade-type-dot.buy{background:var(--cyan);}
 .trade-type-dot.sell{background:var(--green);}
@@ -142,18 +144,21 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .trade-meta{font-size:10px;color:var(--text3);font-family:var(--mono);}
 .empty-state { text-align:center; padding:30px 20px; font-size:12px; color:var(--text3); border:1px dashed var(--border); border-radius:12px; background:rgba(255,255,255,0.02); }
 
-#loader-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-.spinner { width: 40px; height: 40px; border: 4px solid var(--border); border-top-color: var(--cyan); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
-@keyframes spin { 100% { transform: rotate(360deg); } }
 .pulse { animation: pulse 1.5s infinite; display: inline-block; margin-right: 3px; }
 @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
+#loader-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.3s; }
+.spinner { width: 40px; height: 40px; border: 4px solid var(--border); border-top-color: var(--cyan); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+.pipe-val { font-family: var(--mono); font-weight: 700; color: var(--green); font-size: 16px; margin-top: 6px; }
+.pipe-sub { font-size: 10px; color: var(--text2); font-family: var(--body); }
 </style>
 </head>
 <body>
 
 <div id="loader-overlay">
   <div class="spinner"></div>
-  <div style="font-family:var(--mono); color:var(--cyan); font-size:12px; font-weight:700;">SYNCING LIVE DATA...</div>
+  <div style="font-family:var(--mono); color:var(--cyan); font-size:12px; font-weight:700; letter-spacing:1px;">SYNCING LIVE DATA...</div>
 </div>
 
 <div class="app">
@@ -163,16 +168,16 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       <div><div class="bot-name">VIP TRADING DESK</div><div class="bot-sub">QUANT AUTOMATION</div></div>
     </div>
     <div class="dual-clock">
-      <div class="clock-row">🇺🇸 <span id="clock-ny" style="color:var(--cyan); font-family:var(--mono); font-weight:700;">--:--</span></div>
-      <div class="clock-row">🇰🇷 <span id="clock-kr" style="color:var(--text2); font-family:var(--mono); font-weight:700;">--:--</span></div>
+      <div class="clock-row">🇺🇸 <span class="clock-time" id="clock-ny">--:--:--</span></div>
+      <div class="clock-row">🇰🇷 <span class="clock-time" id="clock-kr">--:--:--</span></div>
     </div>
   </div>
 
   <div class="floating-nav-wrap">
     <div class="floating-nav">
-      <button class="float-btn active" onclick="switchTab('total', this)">🌐 OVERVIEW</button>
-      <button class="float-btn" onclick="switchTab('infinite', this)">🇺🇸 USA UBM</button>
-      <button class="float-btn" onclick="switchTab('vr', this)">🇰🇷 ISA VR</button>
+      <button class="float-btn active" onclick="switchMainTab('total', this)">🌐 OVERVIEW</button>
+      <button class="float-btn" onclick="switchMainTab('infinite', this)">🇺🇸 USA UBM</button>
+      <button class="float-btn" onclick="switchMainTab('vr', this)">🇰🇷 ISA VR</button>
     </div>
   </div>
 
@@ -180,33 +185,59 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     
     <div class="tab-content active" id="tab-total">
       <div class="section">
-        <div class="hero-card" style="background: linear-gradient(135deg, #1A1423 0%, #2D1B4E 100%); border-color: var(--purple);">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-            <div class="hero-label" style="color:#B39DDB; margin:0;">TOTAL PORTFOLIO (USD)</div>
-            <button id="currency-toggle" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; border-radius:6px; padding:4px 10px; font-size:10px; font-family:var(--mono); cursor:pointer;">₩ KRW 보기</button>
+        <div class="hero-card" style="background:linear-gradient(135deg, #1A1423 0%, #2D1B4E 100%); border-color:var(--purple); padding-bottom:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;">
+            <div class="hero-label" style="margin:0; color:#B39DDB;">TOTAL PORTFOLIO</div>
+            <button id="currency-toggle" class="currency-btn">🇰🇷 KRW 보기</button>
           </div>
-          <div class="hero-value" id="tot-asset" style="color:#fff;">$0.00</div>
-          <div style="margin-top:15px; border-top:1px dashed rgba(255,255,255,0.15); padding-top:12px; display:flex; flex-direction:column; gap:8px;">
-             <div style="display:flex; justify-content:space-between; font-size:11px;">
-                <span style="color:var(--text3);">현재 매수 투입금</span>
-                <span id="tot-invest" style="color:var(--text); font-family:var(--mono); font-weight:700;">$0.00</span>
-             </div>
-             <div style="display:flex; justify-content:space-between; font-size:11px;">
-                <span style="color:var(--text3);">누적 실현 수익</span>
-                <span id="tot-realized" style="color:var(--green); font-family:var(--mono); font-weight:700;">+$0.00</span>
-             </div>
-             <div style="display:flex; justify-content:space-between; font-size:11px;">
-                <span style="color:var(--text3);">현재 평가 수익</span>
-                <span id="tot-eval" style="color:var(--green); font-family:var(--mono); font-weight:700;">+$0.00 (0.00%)</span>
-             </div>
+          
+          <div id="view-usd">
+            <div style="font-size:11px; color:var(--text2); margin-bottom:4px;">현재 계좌 총 금액 (현금+주식 합산)</div>
+            <div class="hero-value" style="color:#fff;" id="tot-usd-asset">$0.00</div>
+            <div style="margin-top:20px; border-top:1px dashed rgba(255,255,255,0.15); padding-top:12px;">
+              <div class="total-detail-row">
+                <span class="total-detail-key">현재 매수 금액 (투입금)</span>
+                <span class="total-detail-val" id="tot-usd-invest">$0.00</span>
+              </div>
+              <div class="total-detail-row">
+                <span class="total-detail-key">누적 실현 수익</span>
+                <span class="total-detail-val" style="color:var(--green);" id="tot-usd-realized">+$0.00</span>
+              </div>
+              <div class="total-detail-row">
+                <span class="total-detail-key">현재 평가 수익</span>
+                <span class="total-detail-val" style="color:var(--green);" id="tot-usd-eval">+$0.00 (0.00%)</span>
+              </div>
+            </div>
           </div>
-          <div id="display-exchange-rate" style="font-size:9px; color:var(--text3); font-family:var(--mono); margin-top:12px; text-align:right;">환율: 로딩중...</div>
+
+          <div id="view-krw" style="display:none;">
+            <div style="font-size:11px; color:var(--text2); margin-bottom:4px;">현재 계좌 총 금액 (현금+주식 합산)</div>
+            <div class="hero-value" style="color:#fff;" id="tot-krw-asset">₩0</div>
+            <div style="margin-top:20px; border-top:1px dashed rgba(255,255,255,0.15); padding-top:12px;">
+              <div class="total-detail-row">
+                <span class="total-detail-key">현재 매수 금액 (투입금)</span>
+                <span class="total-detail-val" id="tot-krw-invest">₩0</span>
+              </div>
+              <div class="total-detail-row">
+                <span class="total-detail-key">누적 실현 수익</span>
+                <span class="total-detail-val" style="color:var(--green);" id="tot-krw-realized">+₩0</span>
+              </div>
+              <div class="total-detail-row">
+                <span class="total-detail-key">현재 평가 수익</span>
+                <span class="total-detail-val" style="color:var(--green);" id="tot-krw-eval">+₩0 (0.00%)</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="display-exchange-rate" style="font-size:10px; color:var(--text3); font-family:var(--mono); margin-top:16px; text-align:right;">
+            적용 환율: 로딩중...
+          </div>
         </div>
       </div>
 
       <div class="section">
         <div class="section-title">ACTIVE ENGINES</div>
-        <div class="card">
+        <div class="card" style="margin-bottom:16px;">
           <div class="pos-row"><span class="pos-key">🇺🇸 USA UBM (Unlimited Buying)</span><span class="tag cyan">1대 가동중</span></div>
           <div class="pos-row"><span class="pos-key">🇰🇷 ISA VR (Value Rebalancing)</span><span class="tag cyan">2대 연동됨</span></div>
         </div>
@@ -214,22 +245,22 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 
       <div class="section" style="margin-top:10px;">
         <div class="section-title">ASSET PIPELINE</div>
-        <div class="pipeline-box" style="border-color:var(--gold); margin-bottom:10px; background:rgba(255,215,64,0.03);">
-           <div class="pipeline-label" style="color:var(--gold);">🏦 INITIAL CAPITAL (초기 시드)</div>
-           <div class="pipeline-val" id="pipe-total-seed" style="color:var(--gold);">₩0</div>
+        <div class="flow-box theme-gold active-step" data-badge="👑 TOTAL ASSETS" style="text-align:center; padding:20px 10px;">
+          <div class="flow-title">🏦 INITIAL CAPITAL (초기 시드)</div>
+          <div class="pipe-val" style="color:var(--gold);" id="pipe-total-seed">₩0</div>
         </div>
-        <div class="flow-arrow" style="margin-bottom:10px;">↓</div>
-        <div style="display:flex; gap:10px;">
-           <div class="pipeline-box" style="flex:1; border-color:var(--cyan); background:rgba(0,229,255,0.03);">
-              <div class="pipeline-label" style="color:var(--cyan);">🇺🇸 USA UBM POOL</div>
-              <div class="pipeline-val" id="pipe-ubm-pool">₩0</div>
-              <div style="font-size:9px; color:var(--text3); margin-top:4px;">USA UBM 연동</div>
-           </div>
-           <div class="pipeline-box" style="flex:1; border-color:var(--purple); background:rgba(124,77,255,0.03);">
-              <div class="pipeline-label" style="color:var(--purple);">🇰🇷 VR POOL</div>
-              <div class="pipeline-val" id="pipe-vr-pool">₩0</div>
-              <div style="font-size:9px; color:var(--text3); margin-top:4px;">ISA VR 연동</div>
-           </div>
+        <div class="flow-arrow">↓</div>
+        <div style="display:flex; gap:10px; padding:0 20px;">
+          <div class="flow-box theme-cyan active-step" data-badge="🇺🇸 UBM POOL" style="flex:1; text-align:center; padding:16px 10px; margin:0;">
+            <div class="flow-title">💳 UBM CASH</div>
+            <div class="pipe-val" style="color:var(--text);" id="pipe-ubm-pool">₩0</div>
+            <div class="pipe-sub">USA UBM 연동</div>
+          </div>
+          <div class="flow-box theme-purple active-step" data-badge="🇰🇷 VR POOL" style="flex:1; text-align:center; padding:16px 10px; margin:0;">
+            <div class="flow-title">₩ VR CASH</div>
+            <div class="pipe-val" style="color:var(--text);" id="pipe-vr-pool">₩0</div>
+            <div class="pipe-sub">ISA VR 연동</div>
+          </div>
         </div>
       </div>
       <div style="height:30px;"></div>
@@ -239,16 +270,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     <div class="tab-content" id="tab-infinite">
       <div class="section">
         <div class="hero-card">
-           <div style="display:flex; justify-content:space-between; align-items:center;">
-             <div class="hero-label" style="margin:0;">USA UBM REALIZED PnL</div>
-             <div class="tag" style="background:rgba(255,255,255,0.05); color:var(--text2);" id="ubm-cycle-badge">🏆 0회 완료</div>
-           </div>
-           <div class="hero-value" style="margin-top:6px;" id="ubm-realized-pnl">+$0.00</div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="hero-label" style="margin:0;" id="ubm-ticker-title">USA UBM REALIZED PnL</div>
+            <div class="tag" style="background:rgba(255,255,255,0.05); color:var(--text2);" id="ubm-cycle-badge">🏆 0회 완료</div>
+          </div>
+          <div class="hero-value" style="margin-top:6px;" id="ubm-realized-pnl">+$0.00</div>
         </div>
-        <div class="kpi-grid-3">
-          <div class="kpi-card"><div class="kpi-label">진행 사이클</div><div class="kpi-value" id="ubm-cycle">#0</div></div>
-          <div class="kpi-card"><div class="kpi-label">진행 회차</div><div class="kpi-value" style="color:var(--gold);" id="ubm-install">0.0 / 40</div></div>
-          <div class="kpi-card"><div class="kpi-label">목표 수익률</div><div class="kpi-value" id="ubm-target">0.0%</div></div>
+        <div class="kpi-grid">
+          <div class="kpi-card"><div class="kpi-label">진행 사이클</div><div class="kpi-value" id="ubm-cycle-num">#0</div></div>
+          <div class="kpi-card"><div class="kpi-label">진행 회차</div><div class="kpi-value" style="color:var(--gold);" id="ubm-install-num">0.0 / 40</div></div>
         </div>
       </div>
 
@@ -264,7 +294,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
           <div class="pos-row"><span class="pos-key">보유 수량</span><span class="pos-val" id="ubm-qty">0주</span></div>
           <div class="pos-row"><span class="pos-key">누적 투입금</span><span class="pos-val" id="ubm-invested">$0.00</span></div>
           <div class="pos-row"><span class="pos-key">평가 손익</span><span class="pos-val" style="color:var(--green);" id="ubm-eval-pnl">+$0.00 (0.00%)</span></div>
-          <div class="pos-row"><span class="pos-key">목표 달성률</span><span class="pos-val" style="color:var(--gold);" id="ubm-goal-rate">0.00% / 0.00%</span></div>
+          <div class="pos-row"><span class="pos-key">목표 달성률</span><span class="pos-val" style="color:var(--gold);" id="ubm-goal-rate">0.00% / 10.00%</span></div>
         </div>
       </div>
 
@@ -272,81 +302,92 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
         <div class="section-title">USA UBM V4.0 FLOW</div>
         <div class="flow-container">
           
-          <div class="flow-box theme-gray" id="ubm-flow-step1">
-            <div class="flow-header">💰 <span class="flow-title">초기 설정 및 대기</span></div>
+          <div id="ubm-flow-step1" class="flow-box theme-gray">
+            <div class="flow-header">
+              <div class="flow-icon">💰</div><div class="flow-title">초기 설정 및 대기</div>
+            </div>
             <ul class="flow-list">
               <li><span>▪️</span><span><b>예산 분배:</b> 보유 원금 ÷ 분할수(40)</span></li>
-              <li><span>▪️</span><span><b>목표:</b> 매일 정해진 예산만큼 UBM 굴리기</span></li>
+              <li><span>▪️</span><span><b>목표:</b> 매일 정해진 예산만큼 스노우볼 굴리기</span></li>
             </ul>
           </div>
           <div class="flow-arrow">↓</div>
           
-          <div class="flow-box theme-cyan active-step" id="ubm-flow-step2">
-            <div class="flow-header">📈 <span class="flow-title">일반 모드 진행 (Hybrid)</span></div>
+          <div id="ubm-flow-step2" class="flow-box theme-cyan">
+            <div class="flow-header">
+              <div class="flow-icon">📈</div><div class="flow-title">일반 모드 진행 (Hybrid)</div>
+            </div>
             <div class="flow-badge-group">
                <span class="flow-badge cyan">스플릿 매수</span>
                <span class="flow-badge gold">목표가 전량익절</span>
             </div>
             <ul class="flow-list" style="margin-bottom:12px;">
-              <li><span>👉</span><span><b>매수:</b> 일일 예산을 평단/시장가로 분산 진입 (LOC)</span></li>
-              <li><span>🛡️</span><span><b>방어:</b> 별지점(+5%) 상한가 설정으로 고점 추격 차단</span></li>
+              <li><span>👉</span><span><b>매수:</b> 일일 예산을 평단/시장가로 분산 진입 (LOC 활용)</span></li>
+              <li><span>🛡️</span><span><b>방어:</b> 별지점(+5%) 상한가 설정으로 고점 추격 원천 차단</span></li>
             </ul>
+
             <div class="flow-branch">
               <div class="flow-branch-col">
                 <span class="flow-branch-cond">1회차 (또는 미보유)</span>
-                <div class="flow-branch-box" id="ubm-branch-1">
+                <div id="ubm-branch-1" class="flow-branch-box">
                   <div class="flow-branch-title">🚀 100% 매수</div>
-                  <div style="font-size:10px; color:var(--text2); line-height:1.4;">현재가 +10% 지정가(LOC)로<br>확실하게 물량 확보</div>
+                  <div style="font-size:10px; color:var(--text2); font-family:var(--body); line-height:1.4;">현재가 +10% 지정가(LOC)로<br>확실하게 물량 확보</div>
                 </div>
               </div>
               <div class="flow-branch-col">
                 <span class="flow-branch-cond">2회차 이상</span>
-                <div class="flow-branch-box" id="ubm-branch-2">
+                <div id="ubm-branch-2" class="flow-branch-box">
                   <div class="flow-branch-title">⚖️ 스플릿 분할</div>
-                  <div style="font-size:10px; color:var(--text2); line-height:1.4;">절반은 내 평단가(LOC),<br>절반은 시장가 방어(LOC)</div>
+                  <div style="font-size:10px; color:var(--text2); font-family:var(--body); line-height:1.4;">절반은 내 평단가(LOC),<br>절반은 시장가 방어(LOC)</div>
                 </div>
               </div>
             </div>
-            <div class="gauge-wrap" id="ubm-install-gauge-wrap">
+            
+            <div class="gauge-wrap" style="display:none;" id="ubm-install-gauge-wrap">
                <div class="gauge-label"><span>매수 예산 소진율 (40분할)</span><span id="ubm-gauge-text">0회차</span></div>
                <div class="gauge-bar"><div class="gauge-fill cyan" id="ubm-gauge-fill"></div></div>
             </div>
           </div>
           <div class="flow-arrow">↓</div>
 
-          <div class="flow-box theme-gold" id="ubm-flow-step3" style="border-style:dashed;">
+          <div id="ubm-flow-step3" class="flow-box theme-gold" style="border-style:dashed;">
             <div class="flow-header" style="justify-content:center; margin-bottom:8px;">
-               <div style="font-size:16px;">🏆</div>
+               <div class="flow-icon" style="font-size:16px;">🏆</div>
                <div class="flow-title" style="color:var(--gold); margin:0;">수익 실현 및 복리 팽창</div>
             </div>
             <ul class="flow-list" style="text-align:center; display:inline-block; margin:0 auto;">
-              <li style="justify-content:center; margin-bottom:6px;"><span>▪️</span><span>목표 수익률(<b style="color:var(--gold);"><span id="ubm-target-text-flow">+0.0%</span></b>) 도달 시 <b>전량 지정가 익절</b></span></li>
+              <li style="justify-content:center; margin-bottom:6px;"><span>▪️</span><span>목표 수익률(<b style="color:var(--gold);"><span id="ubm-target-text-flow">+10.0%</span></b>) 도달 시 <b>전량 지정가 익절</b></span></li>
               <li style="justify-content:center; margin-bottom:0;"><span>▪️</span><span>불어난 시드머니를 바탕으로 <b>다음 사이클 새롭게 시작</b></span></li>
             </ul>
-            <div class="gauge-wrap" id="ubm-pnl-gauge-wrap" style="text-align:left;">
-               <div class="gauge-label"><span>목표 달성도 (Target <span id="ubm-target-label">0</span>%)</span><span id="ubm-pnl-text">0.0%</span></div>
+            
+            <div class="gauge-wrap" style="display:none; text-align:left;" id="ubm-pnl-gauge-wrap">
+               <div class="gauge-label"><span>목표 달성도 (Target <span id="ubm-target-label">10</span>%)</span><span id="ubm-pnl-text">0.0%</span></div>
                <div class="gauge-bar"><div class="gauge-fill green" id="ubm-pnl-fill"></div></div>
             </div>
           </div>
           <div class="flow-arrow">↓</div>
           
-          <div class="flow-box theme-red" id="ubm-flow-step4">
-            <div class="flow-header">🚨 <span class="flow-title" style="color:var(--red);">리버스 모드 가동</span></div>
+          <div id="ubm-flow-step4" class="flow-box theme-red">
+            <div class="flow-header">
+              <div class="flow-icon">🚨</div><div class="flow-title" style="color:var(--red);">리버스 모드 가동</div>
+            </div>
             <div class="flow-badge-group">
                <span class="flow-badge red">목표 회차 소진</span>
             </div>
             <ul class="flow-list">
               <li><span>▪️</span><span><b>조건:</b> 정해진 분할 횟수(40회) 예산 전액 소진 시 강제 전환</span></li>
-              <li><span>▪️</span><span><b>대응:</b> 보유 수량 절반 매도 후 5일선 기준 재매수(평단 낮추기)</span></li>
-              <li><span>▪️</span><span><b>탈출:</b> 종가가 평단 대비 목표 회복률(-20%) 도달 시 복귀</span></li>
+              <li><span>▪️</span><span><b>대응:</b> 보유 수량 절반 매도 후 5일선(별지점) 기준 재매수하며 평단가 낮추기</span></li>
+              <li><span>▪️</span><span><b>탈출:</b> 종가가 평단 대비 목표 회복률(<b style="color:var(--red);"><span id="ubm-escape-text">-20%</span></b>) 도달 시 일반 모드로 복귀</span></li>
             </ul>
           </div>
+
         </div>
       </div>
 
       <div class="section" style="margin-top:20px;">
         <div class="section-title">RECENT TRADES (USA UBM)</div>
-        <div class="trade-list" id="ui-tradeList"></div>
+        <div class="trade-list" id="ubm-trade-list">
+          </div>
       </div>
       <div style="height:30px;"></div>
     </div>
@@ -362,9 +403,18 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
           <div class="hero-value" style="margin-top:6px; color:var(--green);" id="vr-total-realized">+₩0</div>
         </div>
         <div class="kpi-grid-3">
-          <div class="kpi-card"><div class="kpi-label">리밸런싱 횟수</div><div class="kpi-value" id="vr-rebalance-count">0회</div></div>
-          <div class="kpi-card"><div class="kpi-label">총 매매 횟수</div><div class="kpi-value" style="color:var(--gold);" id="vr-trade-count">0회</div></div>
-          <div class="kpi-card"><div class="kpi-label">Pool 잔액</div><div class="kpi-value" style="color:var(--text);" id="vr-current-pool">₩0</div></div>
+          <div class="kpi-card">
+            <div class="kpi-label">리밸런싱 횟수</div>
+            <div class="kpi-value" id="vr-rebalance-count">0회</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">총 매매 횟수</div>
+            <div class="kpi-value" style="color:var(--gold);" id="vr-trade-count">0회</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Pool 잔액</div>
+            <div class="kpi-value" style="color:var(--text);" id="vr-current-pool">₩0</div>
+          </div>
         </div>
       </div>
 
@@ -387,73 +437,94 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
         </div>
       </div>
 
+      <div class="section">
+        <div class="section-title">👩🏻 혜진님 ISA (NASDAQ 100 LEV)</div>
+        <div class="card">
+          <div class="card-header" style="background:rgba(255,215,64,0.05);">
+            <span class="tag gold"><span class="pulse">●</span> LIVE</span>
+            <span style="font-family:var(--mono); font-size:12px; color:var(--text2);">연동 예정</span>
+          </div>
+          <div class="pos-row"><span class="pos-key">현재가 / 보유수량</span><span class="pos-val">₩0 / 0주</span></div>
+          <div class="pos-row"><span class="pos-key">V목표 / 밴드 (상~하)</span><span class="pos-val" style="color:var(--gold); font-size:12px;">0만 / (0만 ~ 0만)</span></div>
+          <div class="pos-row"><span class="pos-key">Pool (현금) / 비율</span><span class="pos-val">₩0 (0.0%)</span></div>
+          <div class="pos-row"><span class="pos-key">상태 및 리밸런싱</span><span class="pos-val" style="color:var(--text3);">대기중</span></div>
+        </div>
+      </div>
+
       <div class="section" style="margin-top:20px;">
         <div class="section-title">ISA VR FLOW (VALUE REBALANCING)</div>
         <div class="flow-container">
           
-          <div class="flow-box theme-gray" id="vr-flow-step1">
-            <div class="flow-header">💰 <span class="flow-title">초기 설정 및 최초 매수</span></div>
+          <div id="vr-flow-step1" class="flow-box theme-gray">
+            <div class="flow-header">
+              <div class="flow-icon">💰</div><div class="flow-title">초기 설정 및 최초 매수</div>
+            </div>
             <ul class="flow-list">
-              <li><span>▪️</span><span><b>자산 분배:</b> 총 시드머니를 V값(초기 목표금)과 Pool(현금)로 분할 (<b style="color:var(--text);"><span id="vr-split-text">67% vs 33%</span></b>)</span></li>
-              <li><span>▪️</span><span><b>최초 진입:</b> 초기 V값(<b style="color:var(--text);"><span id="vr-v-ratio-text">67%</span></b>)만큼 ETF를 <b>봇이 전량 자동 매수</b>하여 포지션 구축</span></li>
+              <li><span>▪️</span><span><b>자산 분배:</b> 총 시드머니를 V값(초기 목표금)과 Pool(예비 현금)로 분할 (<b style="color:var(--text);"><span id="vr-split-text">67% vs 33%</span></b>)</span></li>
+              <li><span>▪️</span><span><b>최초 진입:</b> 초기 V값(<b style="color:var(--text);"><span id="vr-v-ratio-text">67%</span></b>)만큼 레버리지 ETF를 <b>봇이 알아서 전량 자동 매수</b>하여 포지션 구축</span></li>
             </ul>
           </div>
           <div class="flow-arrow">↓</div>
           
-          <div class="flow-box theme-gray" id="vr-flow-step2">
-            <div class="flow-header">🎯 <span class="flow-title">방어선(Band) 세팅</span></div>
+          <div id="vr-flow-step2" class="flow-box theme-gray">
+            <div class="flow-header">
+              <div class="flow-icon">🎯</div><div class="flow-title">방어선(Band) 세팅</div>
+            </div>
             <div class="flow-badge-group">
                <span class="flow-badge" style="background:rgba(255,255,255,0.1); color:var(--text2);">상단 밴드 = V값 + <span class="vr-band-rate-text">20%</span></span>
                <span class="flow-badge" style="background:rgba(255,255,255,0.1); color:var(--text2);">하단 밴드 = V값 - <span class="vr-band-rate-text">20%</span></span>
             </div>
             <ul class="flow-list">
-              <li><span>▪️</span><span><b>원칙:</b> 주가가 요동치더라도 이 상/하단 밴드(±<b style="color:var(--text);"><span class="vr-band-rate-text">20%</span></b>) 안에서 움직일 때는 매매 없이 관망함</span></li>
+              <li><span>▪️</span><span><b>원칙:</b> 주가가 요동치더라도 이 상/하단 밴드(±<b style="color:var(--text);"><span class="vr-band-rate-text">20%</span></b>) 안에서 움직일 때는 매매하지 않고 관망함</span></li>
             </ul>
           </div>
           <div class="flow-arrow">↓</div>
 
-          <div class="flow-box theme-purple" id="vr-flow-step3">
-            <div class="flow-header">📊 <span class="flow-title">오후 3:10 밴드 이탈 체크</span></div>
+          <div id="vr-flow-step3" class="flow-box theme-purple">
+            <div class="flow-header">
+              <div class="flow-icon">📊</div><div class="flow-title">오후 3:10 밴드 이탈 체크</div>
+            </div>
             <div class="flow-badge-group">
                <span class="flow-badge" style="background:rgba(124,77,255,0.15); color:var(--purple);">매일 장 마감 직전</span>
             </div>
             <ul class="flow-list">
-              <li><span style="color:var(--red);">🔻</span><span><b>하단 이탈 시 (폭락):</b> 평가금이 하단선보다 낮아지면, Pool 현금으로 <b>추가 매수</b>하여 하단선까지 끌어올림 (싸게 매집)</span></li>
+              <li><span style="color:var(--red);">🔻</span><span><b>하단 이탈 시 (폭락):</b> 평가금이 하단선보다 낮아지면, Pool 현금으로 <b>추가 매수</b>하여 하단선까지 강제로 끌어올림 (싸게 매집)</span></li>
               <li><span style="color:var(--green);">🔺</span><span><b>상단 돌파 시 (급등):</b> 평가금이 상단선보다 높아지면, 초과분을 <b>부분 매도</b>하여 상단선에 맞추고 Pool을 채움 (비싸게 익절)</span></li>
               <li><span>➖</span><span><b>밴드 내 위치 시:</b> 평가금이 밴드 사이에 있다면 매매 없이 관망 (Hold)</span></li>
             </ul>
             
-            <div class="gauge-wrap" id="vr-band-gauge-wrap">
+            <div class="gauge-wrap" style="display:none;" id="vr-band-gauge-wrap">
                <div class="gauge-label">
                  <span>현재 평가금 위치 추적</span>
-                 <span id="vr-band-status-text" style="color:var(--purple); font-weight:800;">HOLD</span>
+                 <span id="vr-band-status-text" style="color:var(--purple);">AGGRESSIVE</span>
                </div>
+               
                <div class="band-track">
-                  <div class="band-zone" id="vr-band-zone" style="left:0%; width:100%;"></div>
+                  <div class="band-zone" style="left:0%; width:100%;"></div>
                   <div class="band-marker" id="vr-band-marker" style="left:50%;"></div>
                </div>
                <div class="band-labels">
                   <span id="vr-lower-val">0만 (하단)</span>
-                  <span style="color:rgba(255,255,255,0.3);">V목표</span>
+                  <span style="color:rgba(255,255,255,0.3);">목표 V</span>
                   <span id="vr-upper-val">(상단) 0만</span>
                </div>
             </div>
           </div>
           <div class="flow-arrow">↓</div>
           
-          <div class="flow-box theme-gold" id="vr-flow-step4" style="border-style:dashed;">
+          <div id="vr-flow-step4" class="flow-box theme-gold" style="border-style:dashed;">
             <div class="flow-header" style="justify-content:center; margin-bottom:12px;">
-               <div style="font-size:16px;">🔄</div>
+               <div class="flow-icon" style="font-size:16px;">🔄</div>
                <div class="flow-title" style="color:var(--gold); margin:0;">14일 간격 리밸런싱 (자산 팽창)</div>
             </div>
             <ul class="flow-list" style="text-align:center; display:inline-block; margin:0 auto;">
               <li style="justify-content:center; margin-bottom:6px;"><span>▪️</span><span><b>주기:</b> 매 2주(14일) 경과 시점</span></li>
               <li style="justify-content:center; margin-bottom:6px;"><span>▪️</span><span><b>목표 상향:</b> 남은 Pool의 일부(<b style="color:var(--gold);"><span id="vr-m-rate-text">10%</span></b>)를 V목표에 더함</span></li>
-              <li style="justify-content:center; margin-bottom:0;"><span>▪️</span><span><b>효과:</b> 밴드가 위로 올라가며 강제로 자산 덩치를 키우는 효과</span></li>
+              <li style="justify-content:center; margin-bottom:0;"><span>▪️</span><span><b>효과:</b> 밴드가 위로 올라가며 강제로 자산 덩치를 키우는 스노우볼링</span></li>
             </ul>
 
-            <div class="gauge-wrap" id="vr-dday-gauge-wrap" style="text-align:left;">
-               <div class="gauge-label"><span>다음 리밸런싱까지 진행률</span><span id="vr-dday-text">D-0</span></div>
+            <div class="gauge-wrap" style="display:none; text-align:left;" id="vr-dday-gauge-wrap">
+               <div class="gauge-label"><span>다음 리밸런싱까지</span><span id="vr-dday-text">D-0</span></div>
                <div class="gauge-bar"><div class="gauge-fill purple" id="vr-dday-fill"></div></div>
             </div>
           </div>
@@ -463,7 +534,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 
       <div class="section" style="margin-top:20px;">
         <div class="section-title">RECENT TRADES (VR)</div>
-        <div class="trade-list" id="vr-tradeList"></div>
+        <div class="trade-list" id="vr-trade-list">
+          </div>
       </div>
       <div style="height:30px;"></div>
     </div>
@@ -479,7 +551,7 @@ function updateClocks() {
 }
 setInterval(updateClocks, 1000); updateClocks(); 
 
-function switchTab(tabId, btnElement) {
+function switchMainTab(tabId, btnElement) {
   document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.float-btn').forEach(el => el.classList.remove('active'));
   document.getElementById('tab-' + tabId).classList.add('active');
@@ -502,7 +574,6 @@ document.getElementById('currency-toggle').addEventListener('click', function() 
     this.style.background = "rgba(0,229,255,0.2)"; this.style.borderColor = "var(--cyan)";
     viewUsd.style.display = "none"; viewKrw.style.display = "block";
   }
-  if(liveDataCache) renderAll(liveDataCache);
 });
 
 function formatUSD(val) { return '$' + parseFloat(val).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}); }
@@ -510,22 +581,20 @@ function formatKRW(val) { return '₩' + Math.round(val).toLocaleString('ko-KR')
 function formatSignUSD(val) { return (val >= 0 ? '+' : '') + formatUSD(val); }
 function formatSignKRW(val) { return (val >= 0 ? '+' : '') + formatKRW(val); }
 
+// ⚠️ 사장님의 Apps Script 배포 URL
 const API_URL = "https://script.google.com/macros/s/AKfycbz4jm7V3za7zjbxXn4wmXWJKVR0ZvhMxqMAxuVY1onafu0QBmCubqk0rL2uj7GjH1X_zA/exec";
-let liveDataCache = null;
 
 async function loadLiveData() {
   try {
     const response = await fetch(API_URL);
     const data = await response.json();
-    if(data && data.success) { 
-        liveDataCache = data;
-        renderAll(data); 
-    } 
+    if(data && data.success) { renderAll(data); } 
   } catch (error) {
     console.error("Fetch failed:", error);
   } finally {
-    document.getElementById('loader-overlay').style.opacity = '0';
-    setTimeout(() => document.getElementById('loader-overlay').style.display = 'none', 300);
+    const loader = document.getElementById('loader-overlay');
+    loader.style.opacity = '0';
+    setTimeout(() => loader.style.display = 'none', 300);
   }
 }
 
@@ -536,9 +605,10 @@ function renderAll(data) {
   const inf = data.infinite || {};
   const vr = data.vr || {};
 
-  // 1. DATA EXTRACTION
+  // 데이터 추출 (안전하게 fallback 설정)
   const INITIAL_SEED_UBM_USD = parseFloat(inf.initialSeed) || 10000;
   const ubmTargetRate = parseFloat(inf.targetRate) || 10.0;
+  const ubmEscapeRate = parseFloat(inf.escapeRate) || -20.0;
   const infRealCashKrw = parseFloat(inf.realCashKrw) || 0;
   const infTotalProfit = parseFloat(inf.totalProfit) || 0;
   const infCycle = parseInt(inf.cycle) || 0;
@@ -551,7 +621,7 @@ function renderAll(data) {
   const infEvalVal = (infClose - infAvg) * infQty;
   const infEvalRate = infAvg > 0 ? ((infClose - infAvg) / infAvg) * 100 : 0;
   
-  const INITIAL_SEED_VR_KRW = parseFloat(vr.initialSeed) || 1000000;
+  const INITIAL_SEED_VR_KRW   = parseFloat(vr.initialSeed) || 1000000;
   const vrAsset = parseFloat(vr.totalAsset) || parseFloat(vr.asset) || 0; 
   const vrV = parseFloat(vr.vTarget) || parseFloat(vr.v) || 0;
   const vrUpper = parseFloat(vr.upper) || 0;
@@ -560,13 +630,12 @@ function renderAll(data) {
   const vrStatus = vr.mode || vr.status || "HOLD";
   const vrCurrentPrice = parseFloat(vr.currentPrice) || 0;
   const vrQty = parseInt(vr.qty) || 0;
-  const vrMRate = vr.mRate || 10;
 
-  // 🚀 동적 셋팅값 추출 (VR)
-  const vrInitialVRate = 67; // 기본 67% (필요시 데이터에서 추출)
+  // 🚀 동적 셋팅값 설정 (VR)
+  const vrInitialVRate = parseFloat(vr.initialVRate) || 67; 
   const vrBandRate = vrV > 0 ? Math.round(((vrUpper - vrV) / vrV) * 100) : 20;
+  const vrMRate = parseFloat(vr.mRate) || 10;
 
-  // VR 매매기록 역산
   let calcTotalQty = 0, calcTotalCost = 0, realizedProfit = 0, buyCount = 0, sellCount = 0, rebalanceCount = 0;
   let validVrLogsForCalc = (vr.logs || []).filter(log => log && log[0]);
   let replayLogs = [...validVrLogsForCalc].sort((a, b) => new Date(a[0]) - new Date(b[0]));
@@ -575,17 +644,23 @@ function renderAll(data) {
       let type = String(log[1] || ''); 
       let qty = parseInt(log[3] || 0); 
       let amt = parseFloat(log[4] || 0); 
+      
       if (type.includes('매수') || type.includes('진입')) {
-          calcTotalQty += qty; calcTotalCost += amt; buyCount++;
+          calcTotalQty += qty;
+          calcTotalCost += amt;
+          buyCount++;
       } else if (type.includes('매도')) {
           if (calcTotalQty > 0) {
               let currentAvg = calcTotalCost / calcTotalQty;
               realizedProfit += (amt - (currentAvg * qty));
-              calcTotalQty -= qty; calcTotalCost -= (currentAvg * qty); 
+              calcTotalQty -= qty;
+              calcTotalCost -= (currentAvg * qty); 
               sellCount++;
           }
       } 
-      if (type.includes('정기_리밸런싱')) { rebalanceCount++; }
+      if (type.includes('정기_리밸런싱')) {
+          rebalanceCount++;
+      }
   }
 
   const vrAvgPrice = vrQty > 0 && calcTotalQty > 0 ? (calcTotalCost / calcTotalQty) : 0;
@@ -597,21 +672,24 @@ function renderAll(data) {
   const ubmTotalAssetKrw = infRealCashKrw + (infInvested * EXCHANGE_RATE) + (infEvalVal * EXCHANGE_RATE);
   const ubmTotalAssetUsd = ubmTotalAssetKrw / EXCHANGE_RATE;
   const vrTotalAssetKrw = vrAsset > 0 ? vrAsset : INITIAL_SEED_VR_KRW;
+  const totalUsdInvested = infInvested;
+  const totalUsdEval = infEvalVal;
+  const totalUsdRealized = infTotalProfit;
   const totalFullAssetKrw = ubmTotalAssetKrw + vrTotalAssetKrw;
   const totalFullAssetUsd = totalFullAssetKrw / EXCHANGE_RATE;
-  const evalColor = infEvalVal >= 0 ? 'var(--green)' : 'var(--red)';
 
-  // 2. OVERVIEW UI
+  // OVERVIEW 
   document.getElementById('tot-usd-asset').innerText = formatUSD(totalFullAssetUsd);
-  document.getElementById('tot-usd-invest').innerText = formatUSD(infInvested);
-  document.getElementById('tot-usd-realized').innerText = formatSignUSD(infTotalProfit);
-  document.getElementById('tot-usd-eval').innerText = `${formatSignUSD(infEvalVal)} (${infEvalRate.toFixed(2)}%)`;
+  document.getElementById('tot-usd-invest').innerText = formatUSD(totalUsdInvested);
+  document.getElementById('tot-usd-realized').innerText = formatSignUSD(totalUsdRealized);
+  const evalColor = infEvalVal >= 0 ? 'var(--green)' : 'var(--red)';
+  document.getElementById('tot-usd-eval').innerText = `${formatSignUSD(totalUsdEval)} (${infEvalRate.toFixed(2)}%)`;
   document.getElementById('tot-usd-eval').style.color = evalColor;
 
   document.getElementById('tot-krw-asset').innerText = formatKRW(totalFullAssetKrw);
-  document.getElementById('tot-krw-invest').innerText = formatKRW(infInvested * EXCHANGE_RATE);
-  document.getElementById('tot-krw-realized').innerText = formatSignKRW(infTotalProfit * EXCHANGE_RATE);
-  document.getElementById('tot-krw-eval').innerText = `${formatSignKRW(infEvalVal * EXCHANGE_RATE)} (${infEvalRate.toFixed(2)}%)`;
+  document.getElementById('tot-krw-invest').innerText = formatKRW(totalUsdInvested * EXCHANGE_RATE);
+  document.getElementById('tot-krw-realized').innerText = formatSignKRW(totalUsdRealized * EXCHANGE_RATE);
+  document.getElementById('tot-krw-eval').innerText = `${formatSignKRW(totalUsdEval * EXCHANGE_RATE)} (${infEvalRate.toFixed(2)}%)`;
   document.getElementById('tot-krw-eval').style.color = evalColor;
 
   const initialTotalSeedKrw = (INITIAL_SEED_UBM_USD * EXCHANGE_RATE) + INITIAL_SEED_VR_KRW;
@@ -619,27 +697,27 @@ function renderAll(data) {
   document.getElementById('pipe-ubm-pool').innerText = formatKRW(infRealCashKrw);
   document.getElementById('pipe-vr-pool').innerText = formatKRW(vrPool);
 
-  // 3. USA UBM UI
+  // USA UBM
+  document.getElementById('ubm-ticker-title').innerText = `USA UBM REALIZED PnL`;
   document.getElementById('ubm-cycle-badge').innerText = `🏆 ${infCycle-1 >= 0 ? infCycle-1 : 0}회 완료`;
   document.getElementById('ubm-realized-pnl').innerText = formatSignUSD(infTotalProfit);
-  document.getElementById('ubm-cycle').innerText = `#${infCycle}`;
-  document.getElementById('ubm-install').innerText = `${infInstall.toFixed(1)} / 40`; 
-  document.getElementById('ubm-target').innerText = ubmTargetRate.toFixed(1) + '%'; 
-  
+  document.getElementById('ubm-cycle-num').innerText = `#${infCycle}`;
+  document.getElementById('ubm-install-num').innerText = `${infInstall.toFixed(1)} / 40`; 
   document.getElementById('ubm-pos-ticker').innerText = infTicker;
   document.getElementById('ubm-avg-price').innerText = formatUSD(infAvg);
   document.getElementById('ubm-curr-price').innerText = formatUSD(infClose);
   document.getElementById('ubm-qty').innerText = `${infQty}주`;
   document.getElementById('ubm-invested').innerText = formatUSD(infInvested);
+  
   document.getElementById('ubm-eval-pnl').innerText = `${formatSignUSD(infEvalVal)} (${(infEvalRate>0?'+':'')}${infEvalRate.toFixed(2)}%)`;
   document.getElementById('ubm-eval-pnl').style.color = evalColor;
-  
   document.getElementById('ubm-goal-rate').innerText = `${infEvalRate.toFixed(2)}% / ${ubmTargetRate.toFixed(2)}%`;
   document.getElementById('ubm-goal-rate').style.color = infEvalRate >= ubmTargetRate ? 'var(--green)' : 'var(--gold)';
 
-  // USA UBM Flow Logic & Dynamic Text
+  // USA UBM Flow
   document.getElementById('ubm-target-text-flow').innerText = '+' + ubmTargetRate.toFixed(1) + '%';
   document.getElementById('ubm-target-label').innerText = ubmTargetRate.toFixed(0);
+  document.getElementById('ubm-escape-text').innerText = ubmEscapeRate + '%'; // 동적 탈출율 매핑
 
   ['ubm-flow-step1', 'ubm-flow-step2', 'ubm-flow-step3', 'ubm-flow-step4'].forEach(id => document.getElementById(id).classList.remove('active-step'));
   ['ubm-branch-1', 'ubm-branch-2'].forEach(id => document.getElementById(id).classList.remove('active-branch'));
@@ -654,8 +732,8 @@ function renderAll(data) {
   document.getElementById(ubmActiveId).classList.add('active-step');
 
   if (ubmActiveId === 'ubm-flow-step2') {
-    if (infInstall <= 1 || infQty === 0) document.getElementById('ubm-branch-1').classList.add('active-branch');
-    else document.getElementById('ubm-branch-2').classList.add('active-branch');
+    if (infInstall <= 1 || infQty === 0) { document.getElementById('ubm-branch-1').classList.add('active-branch'); } 
+    else { document.getElementById('ubm-branch-2').classList.add('active-branch'); }
     
     document.getElementById('ubm-install-gauge-wrap').style.display = 'block';
     const installPer = (infInstall / 40) * 100;
@@ -668,7 +746,7 @@ function renderAll(data) {
     document.getElementById('ubm-pnl-text').innerText = `${infEvalRate.toFixed(2)}% / ${ubmTargetRate.toFixed(1)}%`;
   }
 
-  // 4. ISA VR UI
+  // ISA VR
   document.getElementById('vr-total-realized').innerText = formatSignKRW(realizedProfit);
   document.getElementById('vr-rebalance-count').innerText = rebalanceCount + '회';
   document.getElementById('vr-trade-count').innerText = (buyCount + sellCount) + '회';
@@ -689,7 +767,7 @@ function renderAll(data) {
   document.getElementById('vr1-band').innerText = `${vMan}만 / (${upperMan}만 ~ ${lowerMan}만)`;
   document.getElementById('vr1-status').innerText = vrStatus;
 
-  // VR Flow Logic & Dynamic Text
+  // VR Flow
   document.getElementById('vr-split-text').innerText = vrInitialVRate + '% vs ' + (100 - vrInitialVRate) + '%';
   document.getElementById('vr-v-ratio-text').innerText = vrInitialVRate + '%';
   document.querySelectorAll('.vr-band-rate-text').forEach(el => el.innerText = vrBandRate + '%');
@@ -701,6 +779,7 @@ function renderAll(data) {
   
   let vrActiveId = 'vr-flow-step3';
   if (vrQty === 0 && vrAsset <= INITIAL_SEED_VR_KRW) vrActiveId = 'vr-flow-step1';
+  
   document.getElementById(vrActiveId).classList.add('active-step');
 
   if (vrActiveId === 'vr-flow-step3') {
@@ -713,16 +792,19 @@ function renderAll(data) {
       const bandRange = vrUpper - vrLower;
       let posPer = 50;
       if (bandRange > 0) { posPer = ((vrCurrentEvalAmount - vrLower) / bandRange) * 100; }
+      
       setTimeout(() => { document.getElementById('vr-band-marker').style.left = Math.min(100, Math.max(0, posPer)) + '%'; }, 300);
       
       // VR D-Day
       document.getElementById('vr-dday-gauge-wrap').style.display = 'block';
-      let nextRebalDateStr = vr.nextRebalanceDate || vr.rebalanceDate;
+      let nextRebalDateStr = vr.nextRebalanceDate || vr.rebalanceDate || vr.rebalance_date;
       let diffDays = 14; 
+      
       if(nextRebalDateStr) {
          const d = new Date(nextRebalDateStr);
          if(!isNaN(d.getTime())) {
-            const diffTime = d.getTime() - new Date().getTime();
+            const today = new Date();
+            const diffTime = d.getTime() - today.getTime();
             diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
          }
       }
@@ -733,21 +815,21 @@ function renderAll(data) {
       setTimeout(() => { document.getElementById('vr-dday-fill').style.width = ddayPer + '%'; }, 300);
   }
 
-  // 5. TRADES RENDER
-  const tradeList = document.getElementById('ui-tradeList');
+  // 매매 기록 렌더링
+  const ubmTradeList = document.getElementById('ubm-trade-list');
   let validInfLogs = (inf.logs || []).filter(log => log && log[0]);
   if (validInfLogs.length > 0) {
     validInfLogs.sort((a, b) => new Date(b[0]) - new Date(a[0])); 
-    tradeList.innerHTML = validInfLogs.slice(0, 30).map(log => {
+    ubmTradeList.innerHTML = validInfLogs.slice(0, 30).map(log => {
       const dateRaw = new Date(log[0]);
       const dateStr = !isNaN(dateRaw) ? `${String(dateRaw.getMonth()+1).padStart(2,'0')}/${String(dateRaw.getDate()).padStart(2,'0')}` : String(log[0]).substring(5,10);
       const isBuy = String(log[5]).includes('매수');
       const pnlClass = parseFloat(log[10]) > 0 ? 'pos' : (parseFloat(log[10]) < 0 ? 'neg' : 'neu');
       return `<div class="trade-item"><div class="trade-type-dot ${isBuy?'buy':'sell'}"></div><div class="trade-info"><div class="trade-top"><span class="trade-ticker">${log[1]} (T${log[4]})</span><span class="trade-pnl ${pnlClass}">${parseFloat(log[10]) !== 0 ? formatSignUSD(log[10]) : `-${formatUSD(log[8])}`}</span></div><div class="trade-bottom"><span class="trade-type-label ${isBuy?'buy':'sell'}">${log[5]}</span><span class="trade-meta">${dateStr} · $${parseFloat(log[6]).toFixed(2)} × ${log[7]}주</span></div></div></div>`;
     }).join('');
-  } else { tradeList.innerHTML = `<div class="empty-state">기록이 없습니다.</div>`; }
+  } else { ubmTradeList.innerHTML = `<div class="empty-state">기록이 없습니다.</div>`; }
 
-  const vrTradeList = document.getElementById('vr-tradeList');
+  const vrTradeList = document.getElementById('vr-trade-list');
   let validVrLogs = (vr.logs || []).filter(log => log && log[0] && !String(log[1]).includes('정기_리밸런싱')); 
   if (validVrLogs.length > 0) {
     validVrLogs.sort((a, b) => new Date(b[0]) - new Date(a[0])); 
@@ -762,6 +844,7 @@ function renderAll(data) {
 }
 
 loadLiveData();
+  
 </script>
 </body>
 </html>
