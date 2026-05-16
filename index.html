@@ -46,9 +46,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .hero-label{font-size:11px;color:var(--text3);font-family:var(--mono);letter-spacing:1px;margin-bottom:6px;}
 .hero-value{font-family:var(--mono);font-size:38px;font-weight:700;color:var(--green);line-height:1;}
 .kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
+/* 🚀 새로 추가된 3단 KPI 그리드 */
+.kpi-grid-3 { display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-bottom:10px; }
+
 .kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:14px;}
-.kpi-label{font-size:10px;color:var(--text3);font-family:var(--mono);margin-bottom:8px;}
-.kpi-value{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--cyan);}
+.kpi-label{font-size:10px;color:var(--text3);font-family:var(--mono);margin-bottom:8px; white-space:nowrap;}
+.kpi-value{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--cyan);}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
 .card-header{padding:14px 16px;background:var(--surface2);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
 .pos-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);}
@@ -71,7 +75,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .total-detail-key { font-size:12px; color:var(--text2); font-family:var(--body); }
 .total-detail-val { font-family:var(--mono); font-weight:700; font-size:14px; }
 
-/* 🚀 실시간 동적 흐름도 CSS */
+/* 실시간 동적 흐름도 CSS */
 .flow-container { display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 10px; }
 .flow-box { 
   background: var(--surface2); border: 1.5px solid var(--border); border-radius: 12px; 
@@ -79,9 +83,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
   opacity: 0.45; filter: grayscale(0.5);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
 .flow-box.active-step { opacity: 1; filter: grayscale(0); }
-
 .flow-box.active-step::before {
   content: '✅ 현재 진행 단계';
   position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
@@ -90,14 +92,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
   box-shadow: 0 4px 6px rgba(0,0,0,0.3);
   animation: popIn 0.4s ease-out forwards;
 }
-
-.flow-box.active-step[data-badge]::before {
-  content: attr(data-badge);
-}
-
+.flow-box.active-step[data-badge]::before { content: attr(data-badge); }
 @keyframes popIn { 0% { transform: translate(-50%, 10px) scale(0.8); opacity: 0; } 100% { transform: translate(-50%, 0) scale(1); opacity: 1; } }
 
-/* 테마별 진행 상태 효과 */
 .flow-box.theme-gray.active-step { border-color: #8FA8CC; box-shadow: 0 0 15px rgba(143, 168, 204, 0.15); background: rgba(143, 168, 204, 0.03); }
 .flow-box.theme-gray.active-step::before { background: #8FA8CC; color: #000; }
 .flow-box.theme-cyan.active-step { border-color: var(--cyan); box-shadow: 0 0 15px rgba(0, 229, 255, 0.15); background: rgba(0, 229, 255, 0.03); }
@@ -114,7 +111,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .flow-icon { font-size: 20px; }
 .flow-title { font-family: var(--body); font-weight: 700; font-size: 14px; color: var(--text); transition: color 0.3s; }
 .flow-box:not(.active-step) .flow-title { color: var(--text2); }
-
 .flow-badge-group { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
 .flow-badge { font-size: 9px; font-family: var(--mono); font-weight: 700; padding: 4px 8px; border-radius: 4px; }
 .flow-badge.cyan { background: rgba(0,229,255,0.15); color: var(--cyan); }
@@ -291,7 +287,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       <div style="height:30px;"></div>
     </div>
 
-
     <div class="tab-content" id="tab-infinite">
       <div class="section">
         <div class="hero-card">
@@ -411,21 +406,23 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 
     <div class="tab-content" id="tab-vr">
       <div class="section">
-        <div class="hero-card" style="border-color:var(--cyan); background:linear-gradient(135deg, var(--bg3) 0%, rgba(0,229,255,0.05) 100%); padding-bottom:20px;">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div class="hero-label" style="margin:0; color:var(--cyan);">VR INTEGRATED ASSETS</div>
-            <div class="tag" style="background:rgba(0,229,255,0.1); color:var(--cyan);">🇰🇷 부부 합산 예정</div>
-          </div>
-          <div class="hero-value" style="margin-top:6px; color:var(--cyan);" id="vr-integrated-asset">₩0</div>
+        <div class="hero-card" style="border-color:var(--cyan); background:linear-gradient(135deg, var(--bg3) 0%, rgba(0,229,255,0.05) 100%);">
+          <div class="hero-label" style="color:var(--cyan);">VR REALIZED PROFIT (익절금)</div>
+          <div class="hero-value" style="color:var(--green);" id="vr-total-realized">+₩0</div>
         </div>
-        <div class="kpi-grid">
+        
+        <div class="kpi-grid-3">
           <div class="kpi-card">
-            <div class="kpi-label">통합 보유 현금 (Pool)</div>
-            <div class="kpi-value" style="color:var(--text);" id="vr-integrated-pool">₩0</div>
+            <div class="kpi-label">리밸런싱 횟수</div>
+            <div class="kpi-value" id="vr-rebalance-count">0회</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-label">가동 중인 계좌</div>
-            <div class="kpi-value" style="color:var(--gold);">1 / 2 대</div>
+            <div class="kpi-label">총 매매 횟수</div>
+            <div class="kpi-value" style="color:var(--gold);" id="vr-trade-count">0회</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Pool 잔액</div>
+            <div class="kpi-value" style="color:var(--text);" id="vr-current-pool">₩0</div>
           </div>
         </div>
       </div>
@@ -445,7 +442,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
             <span class="pos-key">V목표 / 밴드 (상~하)</span>
             <span class="pos-val" style="color:var(--cyan); font-size:12px;" id="vr1-band">0만 / (0만 ~ 0만)</span>
           </div>
-          <div class="pos-row"><span class="pos-key">Pool (예비 현금)</span><span class="pos-val" id="vr1-pool">₩0 (0.0%)</span></div>
           <div class="pos-row"><span class="pos-key">상태 및 리밸런싱</span><span class="pos-val" style="color:var(--text3);" id="vr1-status">HOLD</span></div>
         </div>
       </div>
@@ -622,9 +618,14 @@ function renderAll(data) {
   const vrCurrentPrice = parseFloat(vr.currentPrice) || 0;
   const vrQty = parseInt(vr.qty) || 0;
 
-  // 🚀 [수정된 핵심 로직] VR_매매기록 로그를 역추적하여 정확한 평단가와 원금 계산
+  // 🚀 [수정된 핵심 로직] VR_매매기록 로그를 역추적하여 새로운 KPI(실현수익 등) 계산
   let calcTotalQty = 0;
   let calcTotalCost = 0;
+  let realizedProfit = 0;
+  let buyCount = 0;
+  let sellCount = 0;
+  let rebalanceCount = 0;
+
   let validVrLogsForCalc = (vr.logs || []).filter(log => log && log[0]);
   
   // 오래된 날짜부터 순서대로 재생(Replay)
@@ -638,12 +639,18 @@ function renderAll(data) {
       if (type.includes('매수') || type.includes('진입')) {
           calcTotalQty += qty;
           calcTotalCost += amt;
+          buyCount++;
       } else if (type.includes('매도')) {
           if (calcTotalQty > 0) {
-              let avg = calcTotalCost / calcTotalQty;
+              let currentAvg = calcTotalCost / calcTotalQty;
+              realizedProfit += (amt - (currentAvg * qty));
+              
               calcTotalQty -= qty;
-              calcTotalCost -= (avg * qty); // 판 수량만큼 원금 차감
+              calcTotalCost -= (currentAvg * qty); // 판 수량만큼 원금 차감
+              sellCount++;
           }
+      } else if (type.includes('리밸런싱')) {
+          rebalanceCount++;
       }
   }
 
@@ -663,7 +670,7 @@ function renderAll(data) {
   const totalFullAssetKrw = tqqqTotalAssetKrw + vrTotalAssetKrw;
   const totalFullAssetUsd = totalFullAssetKrw / EXCHANGE_RATE;
 
-  // 무매 UI
+  // 무매 UI (유지)
   document.getElementById('inf-ticker-title').innerText = `${infTicker} REALIZED PnL`;
   document.getElementById('inf-cycle-badge').innerText = `🏆 ${infCycle-1 >= 0 ? infCycle-1 : 0}회 완료`;
   document.getElementById('inf-realized-pnl').innerText = formatSignUSD(infTotalProfit);
@@ -681,7 +688,7 @@ function renderAll(data) {
   document.getElementById('inf-goal-rate').innerText = `${infEvalRate.toFixed(2)}% / 15.00%`;
   document.getElementById('inf-goal-rate').style.color = infEvalRate >= 15 ? 'var(--green)' : 'var(--gold)';
 
-  // 무매 흐름도
+  // 무매 흐름도 (유지)
   ['inf-step-1', 'inf-step-2', 'inf-step-3', 'inf-step-4'].forEach(id => document.getElementById(id).classList.remove('active-step'));
   ['inf-branch-1', 'inf-branch-2'].forEach(id => document.getElementById(id).classList.remove('active-branch'));
   
@@ -700,7 +707,7 @@ function renderAll(data) {
     flowActive.innerText = `▶ 현재 ${infInstall.toFixed(1)}회차 진행 중`;
   } else { document.getElementById('inf-flow-active').style.display = 'none'; }
 
-  // TOTAL UI
+  // TOTAL UI (유지)
   document.getElementById('tot-usd-asset').innerText = formatUSD(totalFullAssetUsd);
   document.getElementById('tot-usd-invest').innerText = formatUSD(totalUsdInvested);
   document.getElementById('tot-usd-realized').innerText = formatSignUSD(totalUsdRealized);
@@ -718,13 +725,14 @@ function renderAll(data) {
   document.getElementById('pipe-inf-pool').innerText = formatKRW(infRealCashKrw);
   document.getElementById('pipe-vr-pool').innerText = formatKRW(vrPool);
 
-  // VR UI
-  document.getElementById('vr-integrated-asset').innerText = formatKRW(vrAsset);
-  document.getElementById('vr-integrated-pool').innerText = formatKRW(vrPool);
+  // 🚀 VR UI 업데이트 (새로운 KPI 바인딩)
+  document.getElementById('vr-total-realized').innerText = formatSignKRW(realizedProfit);
+  document.getElementById('vr-rebalance-count').innerText = rebalanceCount + '회';
+  document.getElementById('vr-trade-count').innerText = (buyCount + sellCount) + '회';
+  document.getElementById('vr-current-pool').innerText = formatKRW(vrPool);
+
   document.getElementById('vr1-total').innerText = `총 자산 ${formatKRW(vrAsset)}`;
   document.getElementById('vr1-curr-price').innerText = formatKRW(vrCurrentPrice);
-  
-  // 🚀 정확히 계산된 평단가, 수량, 원금, 수익률 바인딩!
   document.getElementById('vr1-avg-qty').innerText = `${formatKRW(vrAvgPrice)} / ${vrQty}주`;
   document.getElementById('vr1-invested').innerText = formatKRW(vrInvestedPrincipal);
   
@@ -738,7 +746,7 @@ function renderAll(data) {
   document.getElementById('vr1-band').innerText = `${vMan}만 / (${upperMan}만 ~ ${lowerMan}만)`;
   
   const poolRatio = vrAsset > 0 ? ((vrPool / vrAsset) * 100).toFixed(1) : 0;
-  document.getElementById('vr1-pool').innerText = `${formatKRW(vrPool)} (${poolRatio}%)`;
+  // 하단 카드에 있던 Pool을 지우고 윗쪽 KPI로 올렸지만, 기존 칸은 유지
   document.getElementById('vr1-status').innerText = vrStatus;
 
   // VR 흐름도
@@ -770,14 +778,13 @@ function renderAll(data) {
   } else { tradeList.innerHTML = `<div class="empty-state">기록이 없습니다.</div>`; }
 
   const vrTradeList = document.getElementById('vr-tradeList');
-  let validVrLogs = (vr.logs || []).filter(log => log && log[0]);
+  let validVrLogs = (vr.logs || []).filter(log => log && log[0] && !String(log[1]).includes('리밸런싱')); // 리밸런싱 시스템 메시지는 목록에서 숨김
   if (validVrLogs.length > 0) {
     validVrLogs.sort((a, b) => new Date(b[0]) - new Date(a[0])); // 최신순 정렬
     vrTradeList.innerHTML = validVrLogs.slice(0, 15).map(log => {
       const dateRaw = new Date(log[0]);
       const dateStr = !isNaN(dateRaw) ? `${String(dateRaw.getMonth()+1).padStart(2,'0')}/${String(dateRaw.getDate()).padStart(2,'0')}` : String(log[0]).substring(5,10);
       const isBuy = String(log[1]).includes('진입') || String(log[1]).includes('매수');
-      // VR 시트는 거래금액이 E열(log[4])에 있습니다.
       const tradeAmt = parseFloat(log[4]) || 0;
       return `<div class="trade-item"><div class="trade-type-dot ${isBuy?'buy':'sell'}"></div><div class="trade-info"><div class="trade-top"><span class="trade-ticker">VR TIGER레버리지</span><span class="trade-pnl ${isBuy?'neu':'pos'}">${isBuy ? `-${formatKRW(tradeAmt)}` : `+${formatKRW(tradeAmt)}`}</span></div><div class="trade-bottom"><span class="trade-type-label ${isBuy?'buy':'sell'}">${log[1]}</span><span class="trade-meta">${dateStr} · ₩${parseFloat(log[2] || 0).toLocaleString()} × ${log[3] || 0}주</span></div></div></div>`;
     }).join('');
