@@ -22,6 +22,8 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--body);overflow:hidden;}
 .app{display:flex;flex-direction:column;height:100svh;max-width:430px;margin:0 auto;position:relative;overflow:hidden;background:var(--bg);}
+
+/* Top Bar */
 .top-bar{position:relative;z-index:100;background:var(--bg);padding:env(safe-area-inset-top,12px) 20px 12px;display:flex;align-items:center;justify-content:space-between;}
 .top-bar-left{display:flex;align-items:center;gap:10px;}
 .bot-avatar{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--cyan),var(--purple));display:flex;align-items:center;justify-content:center;font-size:18px;}
@@ -30,26 +32,32 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .dual-clock {display:flex; flex-direction:column; align-items:flex-end; gap:3px;}
 .clock-row {display:flex; align-items:center; gap:5px; font-family:var(--mono); font-size:10px; background:var(--surface); padding:2px 6px; border-radius:6px; border:1px solid var(--border);}
 .clock-time {color:var(--text2); font-weight:700;}
+
+/* Navigation */
 .floating-nav-wrap { position: sticky; top: 0; z-index: 90; padding: 10px 16px; background: rgba(8, 12, 20, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
 .floating-nav { display: flex; background: var(--surface2); border-radius: 30px; padding: 4px; border: 1px solid var(--border); }
-.float-btn { flex: 1; padding: 10px 0; border: none; background: transparent; color: var(--text3); font-family: var(--head); font-size: 12px; font-weight: 700; border-radius: 26px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
-.float-btn.active { background: var(--cyan); color: #000; box-shadow: 0 4px 12px rgba(0,229,255,0.3); }
-.scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;padding:0 0 40px;scroll-behavior:smooth;}
+.float-btn { flex: 1; padding: 10px 0; border: none; background: transparent; color: var(--text3); font-family: var(--head); font-size: 11px; font-weight: 700; border-radius: 26px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
+.float-btn.active { background: var(--cyan); color: #000; font-weight: 800; box-shadow: 0 4px 12px rgba(0,229,255,0.3); }
+
+.scroll-area{flex:1;overflow-y:auto;padding:0 0 40px;scroll-behavior:smooth;}
 .scroll-area::-webkit-scrollbar{display:none;}
-.tab-content{display:none; animation: fadeIn 0.4s;}
-.tab-content.active{display:block;}
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.tab-content{display:none;}
+.tab-content.active{display:block; animation:fadeIn 0.4s;}
+@keyframes fadeIn { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+
+/* Cards & Sections */
 .section{padding:16px 16px 0;}
 .section-title{font-family:var(--head);font-size:11px;font-weight:700;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
 .section-title::after{content:'';flex:1;height:1px;background:var(--border);}
-.hero-card{background:linear-gradient(135deg,var(--bg3) 0%,var(--surface2) 100%);border:1px solid var(--border2);border-radius:var(--r);padding:24px 20px;margin-bottom:10px; position:relative;}
-.hero-label{font-size:11px;color:var(--text3);font-family:var(--mono);letter-spacing:1px;margin-bottom:6px;}
-.hero-value{font-family:var(--mono);font-size:38px;font-weight:700;color:var(--green);line-height:1;}
-.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.kpi-grid-3 { display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-bottom:10px; }
-.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:14px;}
-.kpi-label{font-size:10px;color:var(--text3);font-family:var(--mono);margin-bottom:8px; white-space:nowrap;}
-.kpi-value{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--cyan);}
+.hero-card{background:linear-gradient(135deg,var(--bg3) 0%,var(--surface2) 100%);border:1px solid var(--border2);border-radius:var(--r);padding:20px;margin-bottom:10px;position:relative;}
+.hero-label{font-size:10px;color:var(--text3);font-family:var(--mono);margin-bottom:6px;letter-spacing:1px;}
+.hero-value{font-family:var(--mono);font-size:32px;font-weight:700;color:var(--green);line-height:1;}
+
+.kpi-grid-3 { display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-bottom:12px; }
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:12px; position:relative; overflow:hidden;}
+.kpi-label{font-size:9px;color:var(--text3);font-family:var(--mono);margin-bottom:6px; white-space:nowrap;}
+.kpi-value{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--cyan);}
+
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
 .card-header{padding:14px 16px;background:var(--surface2);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
 .pos-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px dashed rgba(255,255,255,0.05);}
@@ -67,7 +75,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .total-detail-key { font-size:12px; color:var(--text2); font-family:var(--body); }
 .total-detail-val { font-family:var(--mono); font-weight:700; font-size:14px; }
 
-/* 실시간 동적 흐름도 CSS */
+/* Dynamic Flow Components */
 .flow-container { display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 10px; }
 .flow-box { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 12px; padding: 16px 14px; width: 100%; position: relative; opacity: 0.45; filter: grayscale(0.5); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
 .flow-box.active-step { opacity: 1; filter: grayscale(0); }
@@ -276,9 +284,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
           </div>
           <div class="hero-value" style="margin-top:6px;" id="ubm-realized-pnl">+$0.00</div>
         </div>
-        <div class="kpi-grid">
+        
+        <div class="kpi-grid-3">
           <div class="kpi-card"><div class="kpi-label">진행 사이클</div><div class="kpi-value" id="ubm-cycle-num">#0</div></div>
           <div class="kpi-card"><div class="kpi-label">진행 회차</div><div class="kpi-value" style="color:var(--gold);" id="ubm-install-num">0.0 / 40</div></div>
+          <div class="kpi-card"><div class="kpi-label">목표 수익률</div><div class="kpi-value" id="ubm-target">15.0%</div></div>
         </div>
       </div>
 
@@ -294,7 +304,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
           <div class="pos-row"><span class="pos-key">보유 수량</span><span class="pos-val" id="ubm-qty">0주</span></div>
           <div class="pos-row"><span class="pos-key">누적 투입금</span><span class="pos-val" id="ubm-invested">$0.00</span></div>
           <div class="pos-row"><span class="pos-key">평가 손익</span><span class="pos-val" style="color:var(--green);" id="ubm-eval-pnl">+$0.00 (0.00%)</span></div>
-          <div class="pos-row"><span class="pos-key">목표 달성률</span><span class="pos-val" style="color:var(--gold);" id="ubm-goal-rate">0.00% / 10.00%</span></div>
+          <div class="pos-row"><span class="pos-key">목표 달성률</span><span class="pos-val" style="color:var(--gold);" id="ubm-goal-rate">0.00% / 15.00%</span></div>
         </div>
       </div>
 
@@ -351,17 +361,17 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
           <div class="flow-arrow">↓</div>
 
           <div id="ubm-flow-step3" class="flow-box theme-gold" style="border-style:dashed;">
-            <div class="flow-header" style="justify-content:center; margin-bottom:8px;">
-               <div class="flow-icon" style="font-size:16px;">🏆</div>
-               <div class="flow-title" style="color:var(--gold); margin:0;">수익 실현 및 복리 팽창</div>
+            <div class="flow-header">
+               <div class="flow-icon">🏆</div>
+               <div class="flow-title" style="color:var(--gold);">수익 실현 및 복리 팽창</div>
             </div>
-            <ul class="flow-list" style="text-align:center; display:inline-block; margin:0 auto;">
-              <li style="justify-content:center; margin-bottom:6px;"><span>▪️</span><span>목표 수익률(<b style="color:var(--gold);"><span id="ubm-target-text-flow">+10.0%</span></b>) 도달 시 <b>전량 지정가 익절</b></span></li>
-              <li style="justify-content:center; margin-bottom:0;"><span>▪️</span><span>불어난 시드머니를 바탕으로 <b>다음 사이클 새롭게 시작</b></span></li>
+            <ul class="flow-list">
+              <li><span>▪️</span><span>목표 수익률(<b style="color:var(--gold);"><span id="ubm-target-text-flow">+15.0%</span></b>) 도달 시 <b>전량 지정가 익절</b></span></li>
+              <li><span>▪️</span><span>불어난 시드머니를 바탕으로 <b>다음 사이클 새롭게 시작</b></span></li>
             </ul>
             
-            <div class="gauge-wrap" style="display:none; text-align:left;" id="ubm-pnl-gauge-wrap">
-               <div class="gauge-label"><span>목표 달성도 (Target <span id="ubm-target-label">10</span>%)</span><span id="ubm-pnl-text">0.0%</span></div>
+            <div class="gauge-wrap" style="display:none;" id="ubm-pnl-gauge-wrap">
+               <div class="gauge-label"><span>목표 달성도 (Target <span id="ubm-target-label">15</span>%)</span><span id="ubm-pnl-text">0.0%</span></div>
                <div class="gauge-bar"><div class="gauge-fill green" id="ubm-pnl-fill"></div></div>
             </div>
           </div>
@@ -513,17 +523,17 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
           <div class="flow-arrow">↓</div>
           
           <div id="vr-flow-step4" class="flow-box theme-gold" style="border-style:dashed;">
-            <div class="flow-header" style="justify-content:center; margin-bottom:12px;">
-               <div class="flow-icon" style="font-size:16px;">🔄</div>
-               <div class="flow-title" style="color:var(--gold); margin:0;">14일 간격 리밸런싱 (자산 팽창)</div>
+            <div class="flow-header">
+               <div class="flow-icon">🔄</div>
+               <div class="flow-title" style="color:var(--gold);">14일 간격 리밸런싱 (자산 팽창)</div>
             </div>
-            <ul class="flow-list" style="text-align:center; display:inline-block; margin:0 auto;">
-              <li style="justify-content:center; margin-bottom:6px;"><span>▪️</span><span><b>주기:</b> 매 2주(14일) 경과 시점</span></li>
-              <li style="justify-content:center; margin-bottom:6px;"><span>▪️</span><span><b>목표 상향:</b> 남은 Pool의 일부(<b style="color:var(--gold);"><span id="vr-m-rate-text">10%</span></b>)를 V목표에 더함</span></li>
-              <li style="justify-content:center; margin-bottom:0;"><span>▪️</span><span><b>효과:</b> 밴드가 위로 올라가며 강제로 자산 덩치를 키우는 스노우볼링</span></li>
+            <ul class="flow-list">
+              <li><span>▪️</span><span><b>주기:</b> 매 2주(14일) 경과 시점</span></li>
+              <li><span>▪️</span><span><b>목표 상향:</b> 남은 Pool의 일부(<b style="color:var(--gold);"><span id="vr-m-rate-text">10%</span></b>)를 V목표에 더함</span></li>
+              <li><span>▪️</span><span><b>효과:</b> 밴드가 위로 올라가며 강제로 자산 덩치를 키우는 스노우볼링</span></li>
             </ul>
 
-            <div class="gauge-wrap" style="display:none; text-align:left;" id="vr-dday-gauge-wrap">
+            <div class="gauge-wrap" style="display:none;" id="vr-dday-gauge-wrap">
                <div class="gauge-label"><span>다음 리밸런싱까지</span><span id="vr-dday-text">D-0</span></div>
                <div class="gauge-bar"><div class="gauge-fill purple" id="vr-dday-fill"></div></div>
             </div>
@@ -560,6 +570,8 @@ function switchMainTab(tabId, btnElement) {
 }
 
 let isUSD = true;
+let liveDataCache = null;
+
 document.getElementById('currency-toggle').addEventListener('click', function() {
   isUSD = !isUSD;
   const viewUsd = document.getElementById('view-usd');
@@ -574,6 +586,8 @@ document.getElementById('currency-toggle').addEventListener('click', function() 
     this.style.background = "rgba(0,229,255,0.2)"; this.style.borderColor = "var(--cyan)";
     viewUsd.style.display = "none"; viewKrw.style.display = "block";
   }
+  
+  if(liveDataCache) { renderAll(liveDataCache); }
 });
 
 function formatUSD(val) { return '$' + parseFloat(val).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}); }
@@ -588,7 +602,10 @@ async function loadLiveData() {
   try {
     const response = await fetch(API_URL);
     const data = await response.json();
-    if(data && data.success) { renderAll(data); } 
+    if(data && data.success) { 
+        liveDataCache = data;
+        renderAll(data); 
+    } 
   } catch (error) {
     console.error("Fetch failed:", error);
   } finally {
@@ -607,8 +624,11 @@ function renderAll(data) {
 
   // 데이터 추출 (안전하게 fallback 설정)
   const INITIAL_SEED_UBM_USD = parseFloat(inf.initialSeed) || 10000;
-  const ubmTargetRate = parseFloat(inf.targetRate) || 10.0;
+  
+  // 🚀 동적 셋팅값 설정 (UBM) : 기본값 15%로 상향
+  const ubmTargetRate = parseFloat(inf.targetRate) || 15.0;
   const ubmEscapeRate = parseFloat(inf.escapeRate) || -20.0;
+  
   const infRealCashKrw = parseFloat(inf.realCashKrw) || 0;
   const infTotalProfit = parseFloat(inf.totalProfit) || 0;
   const infCycle = parseInt(inf.cycle) || 0;
@@ -703,6 +723,10 @@ function renderAll(data) {
   document.getElementById('ubm-realized-pnl').innerText = formatSignUSD(infTotalProfit);
   document.getElementById('ubm-cycle-num').innerText = `#${infCycle}`;
   document.getElementById('ubm-install-num').innerText = `${infInstall.toFixed(1)} / 40`; 
+  
+  // ubm-target HTML ID 렌더링
+  document.getElementById('ubm-target').innerText = ubmTargetRate.toFixed(1) + '%';
+  
   document.getElementById('ubm-pos-ticker').innerText = infTicker;
   document.getElementById('ubm-avg-price').innerText = formatUSD(infAvg);
   document.getElementById('ubm-curr-price').innerText = formatUSD(infClose);
@@ -717,7 +741,7 @@ function renderAll(data) {
   // USA UBM Flow
   document.getElementById('ubm-target-text-flow').innerText = '+' + ubmTargetRate.toFixed(1) + '%';
   document.getElementById('ubm-target-label').innerText = ubmTargetRate.toFixed(0);
-  document.getElementById('ubm-escape-text').innerText = ubmEscapeRate + '%'; // 동적 탈출율 매핑
+  document.getElementById('ubm-escape-text').innerText = ubmEscapeRate + '%';
 
   ['ubm-flow-step1', 'ubm-flow-step2', 'ubm-flow-step3', 'ubm-flow-step4'].forEach(id => document.getElementById(id).classList.remove('active-step'));
   ['ubm-branch-1', 'ubm-branch-2'].forEach(id => document.getElementById(id).classList.remove('active-branch'));
