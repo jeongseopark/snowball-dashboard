@@ -45,10 +45,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .hero-card{background:linear-gradient(135deg,var(--bg3) 0%,var(--surface2) 100%);border:1px solid var(--border2);border-radius:var(--r);padding:24px 20px;margin-bottom:10px; position:relative;}
 .hero-label{font-size:11px;color:var(--text3);font-family:var(--mono);letter-spacing:1px;margin-bottom:6px;}
 .hero-value{font-family:var(--mono);font-size:38px;font-weight:700;color:var(--green);line-height:1;}
-.kpi-grid-3 { display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-bottom:10px; }
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:14px;}
-.kpi-label{font-size:10px;color:var(--text3);font-family:var(--mono);margin-bottom:8px; white-space:nowrap;}
-.kpi-value{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--cyan);}
+.kpi-label{font-size:10px;color:var(--text3);font-family:var(--mono);margin-bottom:8px;}
+.kpi-value{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--cyan);}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
 .card-header{padding:14px 16px;background:var(--surface2);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
 .pos-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);}
@@ -57,10 +57,85 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .pos-val{font-family:var(--mono);font-size:13px;font-weight:700;}
 .tag{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-family:var(--mono);font-weight:700;}
 .tag.cyan{background:rgba(0,229,255,0.1);color:var(--cyan);border:1px solid rgba(0,229,255,0.25);}
+.tag.gold{background:rgba(255,215,64,0.1);color:var(--gold);border:1px solid rgba(255,215,64,0.25);}
+.tag.red{background:rgba(255,61,113,0.1);color:var(--red);border:1px solid rgba(255,61,113,0.25);}
+.toggle-row { display:flex; justify-content:space-between; align-items:center; padding: 14px 16px; border-bottom: 1px solid var(--border); background:var(--surface);}
+.toggle-switch { width:40px; height:22px; background:var(--border2); border-radius:11px; position:relative; cursor:pointer; transition:0.3s;}
+.toggle-switch::after { content:''; position:absolute; top:2px; left:2px; width:18px; height:18px; background:#fff; border-radius:50%; transition:0.3s;}
+.toggle-switch.on { background:var(--cyan); }
+.toggle-switch.on::after { transform:translateX(18px); }
+.currency-btn { background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; border-radius:8px; padding:6px 12px; font-size:11px; font-family:var(--mono); font-weight:700; cursor:pointer; transition:0.2s;}
+.currency-btn:active { transform:scale(0.95); }
+.total-detail-row { display:flex; justify-content:space-between; align-items:center; padding: 10px 0; border-bottom:1px solid rgba(255,255,255,0.06); }
+.total-detail-row:last-child { border-bottom: none; padding-bottom: 0; }
+.total-detail-key { font-size:12px; color:var(--text2); font-family:var(--body); }
+.total-detail-val { font-family:var(--mono); font-weight:700; font-size:14px; }
+
+/* 🚀 실시간 동적 흐름도 CSS */
+.flow-container { display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 10px; }
+.flow-box { 
+  background: var(--surface2); border: 1.5px solid var(--border); border-radius: 12px; 
+  padding: 16px 14px; width: 100%; position: relative; 
+  opacity: 0.45; filter: grayscale(0.5);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.flow-box.active-step { opacity: 1; filter: grayscale(0); }
+
+.flow-box.active-step::before {
+  content: '✅ 현재 진행 단계';
+  position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+  font-family: var(--mono); font-weight: 800; font-size: 10px;
+  padding: 3px 10px; border-radius: 12px; z-index: 10;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  animation: popIn 0.4s ease-out forwards;
+}
+
+.flow-box.active-step[data-badge]::before {
+  content: attr(data-badge);
+}
+
+@keyframes popIn { 0% { transform: translate(-50%, 10px) scale(0.8); opacity: 0; } 100% { transform: translate(-50%, 0) scale(1); opacity: 1; } }
+
+/* 테마별 진행 상태 효과 */
+.flow-box.theme-gray.active-step { border-color: #8FA8CC; box-shadow: 0 0 15px rgba(143, 168, 204, 0.15); background: rgba(143, 168, 204, 0.03); }
+.flow-box.theme-gray.active-step::before { background: #8FA8CC; color: #000; }
+.flow-box.theme-cyan.active-step { border-color: var(--cyan); box-shadow: 0 0 15px rgba(0, 229, 255, 0.15); background: rgba(0, 229, 255, 0.03); }
+.flow-box.theme-cyan.active-step::before { background: var(--cyan); color: #000; }
+.flow-box.theme-gold.active-step { border-color: var(--gold); box-shadow: 0 0 15px rgba(255, 215, 64, 0.15); background: rgba(255, 215, 64, 0.03); }
+.flow-box.theme-gold.active-step::before { background: var(--gold); color: #000; }
+.flow-box.theme-red.active-step { border-color: var(--red); box-shadow: 0 0 15px rgba(255, 61, 113, 0.2); background: rgba(255, 61, 113, 0.05); }
+.flow-box.theme-red.active-step::before { background: var(--red); color: #fff; }
+.flow-box.theme-purple.active-step { border-color: var(--purple); box-shadow: 0 0 15px rgba(124, 77, 255, 0.2); background: rgba(124, 77, 255, 0.05); }
+.flow-box.theme-purple.active-step::before { background: var(--purple); color: #fff; }
+
+.flow-arrow { color: var(--border2); font-size: 18px; text-align: center; width: 100%; margin: -4px 0; }
+.flow-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.flow-icon { font-size: 20px; }
+.flow-title { font-family: var(--body); font-weight: 700; font-size: 14px; color: var(--text); transition: color 0.3s; }
+.flow-box:not(.active-step) .flow-title { color: var(--text2); }
+
+.flow-badge-group { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+.flow-badge { font-size: 9px; font-family: var(--mono); font-weight: 700; padding: 4px 8px; border-radius: 4px; }
+.flow-badge.cyan { background: rgba(0,229,255,0.15); color: var(--cyan); }
+.flow-badge.gold { background: rgba(255,215,64,0.15); color: var(--gold); }
+.flow-badge.red { background: rgba(255,61,113,0.15); color: var(--red); }
+.flow-list { margin: 0; padding-left: 0; list-style:none; font-size: 11px; color: var(--text2); font-family: var(--body); line-height: 1.6; }
+.flow-list li { margin-bottom: 6px; display: flex; gap: 6px; align-items: flex-start; text-align:left; }
+.flow-box.active-step .flow-list li b { color: var(--text); }
+.flow-active-desc { background: rgba(0,229,255,0.1); padding: 8px; border-radius: 6px; color: var(--cyan); text-align: center; margin-top: 12px; font-size: 12px; font-weight: 700; font-family: var(--mono); }
+
+.flow-branch { display: flex; width: 100%; gap: 12px; justify-content: center; }
+.flow-branch-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.flow-branch-box { background: rgba(255,255,255,0.02); border: 1.5px dashed var(--border2); border-radius: 10px; padding: 14px 10px; width: 100%; text-align: center; opacity: 0.3; transition: all 0.3s; }
+.flow-branch-box.active-branch { opacity: 1; border: 1.5px solid var(--cyan); background: rgba(0,229,255,0.05); box-shadow: 0 0 10px rgba(0,229,255,0.1); }
+.flow-branch-title { font-family: var(--body); font-weight: 700; font-size: 12px; color: var(--text3); margin-bottom: 4px; margin-top:4px; transition: color 0.3s; }
+.flow-branch-box.active-branch .flow-branch-title { color: var(--cyan); }
+.flow-branch-cond { font-size: 10px; color: var(--text3); font-family: var(--mono); background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 4px; display: inline-block; }
 
 /* ── 매매 영수증 관련 CSS ── */
 .trade-list{display:flex;flex-direction:column;gap:8px;}
-.trade-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:12px 14px;display:flex;align-items:center;gap:12px;}
+.trade-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:12px 14px;display:flex;align-items:center;gap:12px; margin-bottom:2px;}
 .trade-type-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .trade-type-dot.buy{background:var(--cyan);}
 .trade-type-dot.sell{background:var(--green);}
@@ -70,17 +145,22 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .trade-pnl{font-family:var(--mono);font-size:13px;font-weight:700;}
 .trade-pnl.pos{color:var(--green);}
 .trade-pnl.neg{color:var(--red);}
+.trade-pnl.neu{color:var(--text3);}
 .trade-bottom{display:flex;align-items:center;justify-content:space-between;}
 .trade-type-label{font-size:11px;font-family:var(--mono); font-weight:700;}
 .trade-type-label.buy{color:var(--cyan);}
 .trade-type-label.sell{color:var(--green);}
 .trade-meta{font-size:10px;color:var(--text3);font-family:var(--mono);}
+.empty-state { text-align:center; padding:30px 20px; font-size:12px; color:var(--text3); border:1px dashed var(--border); border-radius:12px; background:rgba(255,255,255,0.02); }
 
 .pulse { animation: pulse 1.5s infinite; display: inline-block; margin-right: 3px; }
 @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
 #loader-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.3s; }
 .spinner { width: 40px; height: 40px; border: 4px solid var(--border); border-top-color: var(--cyan); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
 @keyframes spin { 100% { transform: rotate(360deg); } }
+
+.pipe-val { font-family: var(--mono); font-weight: 700; color: var(--green); font-size: 16px; margin-top: 6px; }
+.pipe-sub { font-size: 10px; color: var(--text2); font-family: var(--body); }
 </style>
 </head>
 <body>
@@ -104,71 +184,359 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 
   <div class="floating-nav-wrap">
     <div class="floating-nav">
-      <button class="float-btn active" onclick="switchMainTab('vr', this)">🇰🇷 ISA VR</button>
+      <button class="float-btn active" onclick="switchMainTab('total', this)">🌐 OVERVIEW</button>
       <button class="float-btn" onclick="switchMainTab('infinite', this)">🇺🇸 TQQQ SNOWBALL</button>
+      <button class="float-btn" onclick="switchMainTab('vr', this)">🇰🇷 ISA VR</button>
     </div>
   </div>
 
   <div class="scroll-area" id="scrollArea">
     
-    <div class="tab-content active" id="tab-vr">
+    <div class="tab-content active" id="tab-total">
       <div class="section">
-        <div class="hero-card" style="border-color:var(--cyan); background:linear-gradient(135deg, var(--bg3) 0%, rgba(0,229,255,0.05) 100%);">
-          <div class="hero-label" style="color:var(--cyan);">VR REALIZED PROFIT (익절금)</div>
-          <div class="hero-value" style="color:var(--green);" id="vr-total-realized">+₩0</div>
+        <div class="hero-card" style="background:linear-gradient(135deg, #1A1423 0%, #2D1B4E 100%); border-color:var(--purple); padding-bottom:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;">
+            <div class="hero-label" style="margin:0; color:#B39DDB;">TOTAL PORTFOLIO</div>
+            <button id="currency-toggle" class="currency-btn">🇰🇷 KRW 보기</button>
+          </div>
+          
+          <div id="view-usd">
+            <div style="font-size:11px; color:var(--text2); margin-bottom:4px;">현재 계좌 총 금액 (현금+주식 합산)</div>
+            <div class="hero-value" style="color:#fff;" id="tot-usd-asset">$0.00</div>
+            <div style="margin-top:20px; border-top:1px dashed rgba(255,255,255,0.15); padding-top:12px;">
+              <div class="total-detail-row">
+                <span class="total-detail-key">현재 매수 금액 (투입금)</span>
+                <span class="total-detail-val" id="tot-usd-invest">$0.00</span>
+              </div>
+              <div class="total-detail-row">
+                <span class="total-detail-key">누적 실현 수익</span>
+                <span class="total-detail-val" style="color:var(--green);" id="tot-usd-realized">+$0.00</span>
+              </div>
+              <div class="total-detail-row">
+                <span class="total-detail-key">현재 평가 수익</span>
+                <span class="total-detail-val" style="color:var(--green);" id="tot-usd-eval">+$0.00 (0.00%)</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="view-krw" style="display:none;">
+            <div style="font-size:11px; color:var(--text2); margin-bottom:4px;">현재 계좌 총 금액 (현금+주식 합산)</div>
+            <div class="hero-value" style="color:#fff;" id="tot-krw-asset">₩0</div>
+            <div style="margin-top:20px; border-top:1px dashed rgba(255,255,255,0.15); padding-top:12px;">
+              <div class="total-detail-row">
+                <span class="total-detail-key">현재 매수 금액 (투입금)</span>
+                <span class="total-detail-val" id="tot-krw-invest">₩0</span>
+              </div>
+              <div class="total-detail-row">
+                <span class="total-detail-key">누적 실현 수익</span>
+                <span class="total-detail-val" style="color:var(--green);" id="tot-krw-realized">+₩0</span>
+              </div>
+              <div class="total-detail-row">
+                <span class="total-detail-key">현재 평가 수익</span>
+                <span class="total-detail-val" style="color:var(--green);" id="tot-krw-eval">+₩0 (0.00%)</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="display-exchange-rate" style="font-size:10px; color:var(--text3); font-family:var(--mono); margin-top:16px; text-align:right;">
+            적용 환율: 로딩중...
+          </div>
         </div>
-        
-        <div class="kpi-grid-3">
-          <div class="kpi-card">
-            <div class="kpi-label">리밸런싱 횟수</div>
-            <div class="kpi-value" id="vr-rebalance-count">0회</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">ACTIVE ENGINES</div>
+        <div class="card" style="margin-bottom:16px;">
+          <div class="pos-row"><span class="pos-key">🇺🇸 TQQQ SNOWBALL</span><span class="tag cyan">1대 가동중</span></div>
+          <div class="pos-row"><span class="pos-key">🇰🇷 ISA VR (DUAL)</span><span class="tag cyan">2대 연동됨</span></div>
+        </div>
+
+        <div class="section-title">QUICK SETTINGS</div>
+        <div class="card">
+          <div class="toggle-row">
+            <span class="pos-key">전체 봇 일괄 가동/정지</span>
+            <div class="toggle-switch on" onclick="this.classList.toggle('on')"></div>
           </div>
-          <div class="kpi-card">
-            <div class="kpi-label">총 매매 횟수</div>
-            <div class="kpi-value" style="color:var(--gold);" id="vr-trade-count">0회</div>
+          <div class="toggle-row">
+            <span class="pos-key">텔레그램 수익 실현 알림</span>
+            <div class="toggle-switch on" onclick="this.classList.toggle('on')"></div>
           </div>
-          <div class="kpi-card">
-            <div class="kpi-label">Pool 잔액</div>
-            <div class="kpi-value" style="color:var(--text);" id="vr-current-pool">₩0</div>
+          <div class="toggle-row">
+            <span class="pos-key">주말/휴장일 백그라운드 체크</span>
+            <div class="toggle-switch" onclick="this.classList.toggle('on')"></div>
           </div>
+        </div>
+      </div>
+
+      <div class="section" style="margin-top:20px;">
+        <div class="section-title">ASSET PIPELINE</div>
+        <div class="flow-box theme-gold active-step" data-badge="👑 TOTAL ASSETS" style="text-align:center; padding:20px 10px;">
+          <div class="flow-title">🏦 INITIAL CAPITAL (초기 시드)</div>
+          <div class="pipe-val" style="color:var(--gold);" id="pipe-total-seed">₩0</div>
+        </div>
+        <div class="flow-arrow">↓</div>
+        <div style="display:flex; gap:10px; padding:0 20px;">
+          <div class="flow-box theme-cyan active-step" data-badge="🇺🇸 TQQQ POOL" style="flex:1; text-align:center; padding:16px 10px; margin:0;">
+            <div class="flow-title">💳 SNOWBALL CASH</div>
+            <div class="pipe-val" style="color:var(--text);" id="pipe-inf-pool">₩0</div>
+            <div class="pipe-sub">TQQQ SNOWBALL 연동</div>
+          </div>
+          <div class="flow-box theme-purple active-step" data-badge="🇰🇷 VR POOL" style="flex:1; text-align:center; padding:16px 10px; margin:0;">
+            <div class="flow-title">₩ VR CASH</div>
+            <div class="pipe-val" style="color:var(--text);" id="pipe-vr-pool">₩0</div>
+            <div class="pipe-sub">ISA VR 연동</div>
+          </div>
+        </div>
+      </div>
+      <div style="height:30px;"></div>
+    </div>
+
+
+    <div class="tab-content" id="tab-infinite">
+      <div class="section">
+        <div class="hero-card">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="hero-label" style="margin:0;" id="inf-ticker-title">TQQQ REALIZED PnL</div>
+            <div class="tag" style="background:rgba(255,255,255,0.05); color:var(--text2);" id="inf-cycle-badge">🏆 0회 완료</div>
+          </div>
+          <div class="hero-value" style="margin-top:6px;" id="inf-realized-pnl">+$0.00</div>
+        </div>
+        <div class="kpi-grid">
+          <div class="kpi-card"><div class="kpi-label">진행 사이클</div><div class="kpi-value" id="inf-cycle-num">#0</div></div>
+          <div class="kpi-card"><div class="kpi-label">진행 회차</div><div class="kpi-value" style="color:var(--gold);" id="inf-install-num">0.0 / 40</div></div>
         </div>
       </div>
 
       <div class="section">
         <div class="section-title">CURRENT POSITION</div>
         <div class="card">
-          <div class="card-header" style="background:rgba(0,229,255,0.05);">
-            <span class="tag cyan"><span class="pulse">●</span> LIVE</span>
-            <span style="font-family:var(--mono); font-size:12px; color:var(--text2);" id="vr-total-asset">총 자산 ₩0</span>
+          <div class="card-header">
+            <span class="tag cyan"><span class="pulse">●</span> 매수 진행중</span>
+            <span style="font-family:var(--mono); font-size:12px; color:var(--text2);" id="inf-pos-ticker">WAIT</span>
           </div>
-          <div class="pos-row"><span class="pos-key">현재가 (종가)</span><span class="pos-val" id="vr-curr-price">₩0</span></div>
-          <div class="pos-row"><span class="pos-key">평단가 / 수량</span><span class="pos-val" style="color:var(--cyan);" id="vr-avg-qty">₩0 / 0주</span></div>
-          <div class="pos-row"><span class="pos-key">매수 투입금</span><span class="pos-val" id="vr-invested">₩0</span></div>
-          <div class="pos-row"><span class="pos-key">현재 평가 손익</span><span class="pos-val" id="vr-eval-pnl" style="color:var(--text3);">+₩0 (0.00%)</span></div>
-          <div class="pos-row" style="border-top:1px dashed var(--border);">
-            <span class="pos-key">밴드 (상~하)</span>
-            <span class="pos-val" style="color:var(--cyan); font-size:12px;" id="vr-band-range">0만 ~ 0만</span>
-          </div>
-          <div class="pos-row"><span class="pos-key">상태 및 모드</span><span class="pos-val" style="color:var(--text3);" id="vr-mode-status">AGGRESSIVE / HOLD</span></div>
+          <div class="pos-row"><span class="pos-key">현재 평단가</span><span class="pos-val" style="color:var(--cyan);" id="inf-avg-price">$0.00</span></div>
+          <div class="pos-row"><span class="pos-key">현재가 (종가)</span><span class="pos-val" id="inf-curr-price">$0.00</span></div>
+          <div class="pos-row"><span class="pos-key">보유 수량</span><span class="pos-val" id="inf-qty">0주</span></div>
+          <div class="pos-row"><span class="pos-key">누적 투입금</span><span class="pos-val" id="inf-invested">$0.00</span></div>
+          <div class="pos-row"><span class="pos-key">평가 손익</span><span class="pos-val" style="color:var(--green);" id="inf-eval-pnl">+$0.00 (0.00%)</span></div>
+          <div class="pos-row"><span class="pos-key">목표 달성률</span><span class="pos-val" style="color:var(--gold);" id="inf-goal-rate">0.00% / 15.00%</span></div>
         </div>
       </div>
 
       <div class="section" style="margin-top:20px;">
-        <div class="section-title">RECENT TRADES (VR)</div>
-        <div class="trade-list" id="vr-trade-list">
+        <div class="section-title">TQQQ SNOWBALL V4.0 FLOW</div>
+        <div class="flow-container">
+          
+          <div id="inf-step-1" class="flow-box theme-gray">
+            <div class="flow-header">
+              <div class="flow-icon">💰</div><div class="flow-title">초기 설정 및 대기</div>
+            </div>
+            <ul class="flow-list">
+              <li><span>▪️</span><span><b>예산 분배:</b> 보유 원금 ÷ 분할수(40)</span></li>
+              <li><span>▪️</span><span><b>목표:</b> 매일 정해진 예산만큼 스노우볼 굴리기</span></li>
+            </ul>
+          </div>
+          <div class="flow-arrow">↓</div>
+          
+          <div id="inf-step-2" class="flow-box theme-cyan">
+            <div class="flow-header">
+              <div class="flow-icon">📈</div><div class="flow-title">일반 모드 진행 (Hybrid)</div>
+            </div>
+            <div class="flow-badge-group">
+               <span class="flow-badge cyan">스플릿 매수</span>
+               <span class="flow-badge gold">목표가 전량익절</span>
+            </div>
+            <ul class="flow-list" style="margin-bottom:12px;">
+              <li><span>👉</span><span><b>매수:</b> 일일 예산을 평단/시장가로 분산 진입 (LOC 활용)</span></li>
+              <li><span>🛡️</span><span><b>방어:</b> 별지점(+5%) 상한가 설정으로 고점 추격 원천 차단</span></li>
+            </ul>
+
+            <div class="flow-branch">
+              <div class="flow-branch-col">
+                <span class="flow-branch-cond">1회차 (또는 미보유)</span>
+                <div id="inf-branch-1" class="flow-branch-box">
+                  <div class="flow-branch-title">🚀 100% 매수</div>
+                  <div style="font-size:10px; color:var(--text2); font-family:var(--body); line-height:1.4;">현재가 +10% 지정가(LOC)로<br>확실하게 물량 확보</div>
+                </div>
+              </div>
+              <div class="flow-branch-col">
+                <span class="flow-branch-cond">2회차 이상</span>
+                <div id="inf-branch-2" class="flow-branch-box">
+                  <div class="flow-branch-title">⚖️ 스플릿 분할</div>
+                  <div style="font-size:10px; color:var(--text2); font-family:var(--body); line-height:1.4;">절반은 내 평단가(LOC),<br>절반은 시장가 방어(LOC)</div>
+                </div>
+              </div>
+            </div>
+            <div class="flow-active-desc" id="inf-flow-active" style="display:none;">▶ 현재 0.0회차 진행 중</div>
+          </div>
+          <div class="flow-arrow">↓</div>
+
+          <div id="inf-step-3" class="flow-box theme-gold" style="border-style:dashed;">
+            <div class="flow-header" style="justify-content:center; margin-bottom:8px;">
+               <div class="flow-icon" style="font-size:16px;">🏆</div>
+               <div class="flow-title" style="color:var(--gold); margin:0;">수익 실현 및 복리 팽창</div>
+            </div>
+            <ul class="flow-list" style="text-align:center; display:inline-block; margin:0 auto;">
+              <li style="justify-content:center; margin-bottom:6px;"><span>▪️</span><span>목표 수익률(예: +10%) 도달 시 <b>전량 지정가 익절</b></span></li>
+              <li style="justify-content:center; margin-bottom:0;"><span>▪️</span><span>불어난 시드머니를 바탕으로 <b>다음 사이클 새롭게 시작</b></span></li>
+            </ul>
+          </div>
+          <div class="flow-arrow">↓</div>
+          
+          <div id="inf-step-4" class="flow-box theme-red">
+            <div class="flow-header">
+              <div class="flow-icon">🚨</div><div class="flow-title" style="color:var(--red);">리버스 모드 가동</div>
+            </div>
+            <div class="flow-badge-group">
+               <span class="flow-badge red">목표 회차 소진</span>
+            </div>
+            <ul class="flow-list">
+              <li><span>▪️</span><span><b>조건:</b> 정해진 분할 횟수(40회) 예산 전액 소진 시 강제 전환</span></li>
+              <li><span>▪️</span><span><b>대응:</b> 보유 수량 절반 매도 후 5일선(별지점) 기준 재매수하며 평단가 낮추기</span></li>
+              <li><span>▪️</span><span><b>탈출:</b> 종가가 평단 대비 목표 회복률(-20%) 도달 시 일반 모드로 복귀</span></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="section" style="margin-top:20px;">
+        <div class="section-title">RECENT TRADES (TQQQ)</div>
+        <div class="trade-list" id="ui-tradeList">
           </div>
       </div>
       <div style="height:30px;"></div>
     </div>
 
-    <div class="tab-content" id="tab-infinite">
-        <div class="section" style="text-align:center; padding-top:50px; color:var(--text3);">TQQQ 데이터 로딩중...</div>
+
+    <div class="tab-content" id="tab-vr">
+      <div class="section">
+        <div class="hero-card" style="border-color:var(--cyan); background:linear-gradient(135deg, var(--bg3) 0%, rgba(0,229,255,0.05) 100%); padding-bottom:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="hero-label" style="margin:0; color:var(--cyan);">VR INTEGRATED ASSETS</div>
+            <div class="tag" style="background:rgba(0,229,255,0.1); color:var(--cyan);">🇰🇷 부부 합산 예정</div>
+          </div>
+          <div class="hero-value" style="margin-top:6px; color:var(--cyan);" id="vr-integrated-asset">₩0</div>
+        </div>
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">통합 보유 현금 (Pool)</div>
+            <div class="kpi-value" style="color:var(--text);" id="vr-integrated-pool">₩0</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">가동 중인 계좌</div>
+            <div class="kpi-value" style="color:var(--gold);">1 / 2 대</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">👨🏻 사장님 ISA (NASDAQ 100 LEV)</div>
+        <div class="card">
+          <div class="card-header" style="background:rgba(0,229,255,0.05);">
+            <span class="tag cyan"><span class="pulse">●</span> LIVE</span>
+            <span style="font-family:var(--mono); font-size:12px; color:var(--text2);" id="vr1-total">총 자산 ₩0</span>
+          </div>
+          <div class="pos-row"><span class="pos-key">현재가 (종가)</span><span class="pos-val" id="vr1-curr-price">₩0</span></div>
+          <div class="pos-row"><span class="pos-key">현재 평단가 / 수량</span><span class="pos-val" style="color:var(--cyan);" id="vr1-avg-qty">₩0 / 0주</span></div>
+          <div class="pos-row"><span class="pos-key">매수 투입금</span><span class="pos-val" id="vr1-invested">₩0</span></div>
+          <div class="pos-row"><span class="pos-key">현재 평가 손익</span><span class="pos-val" id="vr1-eval-pnl" style="color:var(--text3);">+₩0 (0.00%)</span></div>
+          <div class="pos-row" style="border-top:1px dashed var(--border);">
+            <span class="pos-key">V목표 / 밴드 (상~하)</span>
+            <span class="pos-val" style="color:var(--cyan); font-size:12px;" id="vr1-band">0만 / (0만 ~ 0만)</span>
+          </div>
+          <div class="pos-row"><span class="pos-key">Pool (예비 현금)</span><span class="pos-val" id="vr1-pool">₩0 (0.0%)</span></div>
+          <div class="pos-row"><span class="pos-key">상태 및 리밸런싱</span><span class="pos-val" style="color:var(--text3);" id="vr1-status">HOLD</span></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">👩🏻 혜진님 ISA (NASDAQ 100 LEV)</div>
+        <div class="card">
+          <div class="card-header" style="background:rgba(255,215,64,0.05);">
+            <span class="tag gold"><span class="pulse">●</span> LIVE</span>
+            <span style="font-family:var(--mono); font-size:12px; color:var(--text2);">연동 예정</span>
+          </div>
+          <div class="pos-row"><span class="pos-key">현재가 / 보유수량</span><span class="pos-val">₩0 / 0주</span></div>
+          <div class="pos-row"><span class="pos-key">V목표 / 밴드 (상~하)</span><span class="pos-val" style="color:var(--gold); font-size:12px;">0만 / (0만 ~ 0만)</span></div>
+          <div class="pos-row"><span class="pos-key">Pool (현금) / 비율</span><span class="pos-val">₩0 (0.0%)</span></div>
+          <div class="pos-row"><span class="pos-key">상태 및 리밸런싱</span><span class="pos-val" style="color:var(--text3);">대기중</span></div>
+        </div>
+      </div>
+
+      <div class="section" style="margin-top:20px;">
+        <div class="section-title">ISA VR FLOW (VALUE REBALANCING)</div>
+        <div class="flow-container">
+          
+          <div id="vr-step-1" class="flow-box theme-gray">
+            <div class="flow-header">
+              <div class="flow-icon">💰</div><div class="flow-title">초기 설정 및 최초 매수</div>
+            </div>
+            <ul class="flow-list">
+              <li><span>▪️</span><span><b>자산 분배:</b> 총 시드머니를 V값(초기 목표금)과 Pool(예비 현금)로 분할 (예: 67% vs 33%)</span></li>
+              <li><span>▪️</span><span><b>최초 진입:</b> 초기 V값(67%)만큼 레버리지 ETF를 <b>봇이 알아서 전량 자동 매수</b>하여 포지션 구축</span></li>
+            </ul>
+          </div>
+          <div class="flow-arrow">↓</div>
+          
+          <div id="vr-step-2" class="flow-box theme-gray">
+            <div class="flow-header">
+              <div class="flow-icon">🎯</div><div class="flow-title">방어선(Band) 세팅</div>
+            </div>
+            <div class="flow-badge-group">
+               <span class="flow-badge" style="background:rgba(255,255,255,0.1); color:var(--text2);">상단 밴드 = V값 + 20%</span>
+               <span class="flow-badge" style="background:rgba(255,255,255,0.1); color:var(--text2);">하단 밴드 = V값 - 20%</span>
+            </div>
+            <ul class="flow-list">
+              <li><span>▪️</span><span><b>원칙:</b> 주가가 요동치더라도 이 상/하단 밴드(±20%) 안에서 움직일 때는 매매하지 않고 관망함</span></li>
+            </ul>
+          </div>
+          <div class="flow-arrow">↓</div>
+
+          <div id="vr-step-3" class="flow-box theme-purple">
+            <div class="flow-header">
+              <div class="flow-icon">📊</div><div class="flow-title">오후 3:10 밴드 이탈 체크</div>
+            </div>
+            <div class="flow-badge-group">
+               <span class="flow-badge" style="background:rgba(124,77,255,0.15); color:var(--purple);">매일 장 마감 직전</span>
+            </div>
+            <ul class="flow-list">
+              <li><span style="color:var(--red);">🔻</span><span><b>하단 이탈 시 (폭락):</b> 평가금이 하단선보다 낮아지면, Pool 현금으로 <b>추가 매수</b>하여 하단선까지 강제로 끌어올림 (싸게 매집)</span></li>
+              <li><span style="color:var(--green);">🔺</span><span><b>상단 돌파 시 (급등):</b> 평가금이 상단선보다 높아지면, 초과분을 <b>부분 매도</b>하여 상단선에 맞추고 Pool을 채움 (비싸게 익절)</span></li>
+              <li><span>➖</span><span><b>밴드 내 위치 시:</b> 평가금이 밴드 사이에 있다면 매매 없이 관망 (Hold)</span></li>
+            </ul>
+            <div class="flow-active-desc" style="color:var(--purple); background:rgba(124,77,255,0.1); display:none;" id="vr-flow-active">
+              ▶ 현재 밴드 상태 계산 중...
+            </div>
+          </div>
+          <div class="flow-arrow">↓</div>
+          
+          <div id="vr-step-4" class="flow-box theme-gold" style="border-style:dashed;">
+            <div class="flow-header" style="justify-content:center; margin-bottom:12px;">
+               <div class="flow-icon" style="font-size:16px;">🔄</div>
+               <div class="flow-title" style="color:var(--gold); margin:0;">14일 간격 리밸런싱 (자산 팽창)</div>
+            </div>
+            <ul class="flow-list" style="text-align:center; display:inline-block; margin:0 auto;">
+              <li style="justify-content:center; margin-bottom:6px;"><span>▪️</span><span><b>주기:</b> 매 2주(14일) 경과 시점</span></li>
+              <li style="justify-content:center; margin-bottom:6px;"><span>▪️</span><span><b>목표 상향:</b> 남은 Pool의 일부(예: 10%)를 V목표에 더함</span></li>
+              <li style="justify-content:center; margin-bottom:0;"><span>▪️</span><span><b>효과:</b> 밴드가 위로 올라가며 강제로 자산 덩치를 키우는 스노우볼링</span></li>
+            </ul>
+          </div>
+          
+        </div>
+      </div>
+
+      <div class="section" style="margin-top:20px;">
+        <div class="section-title">RECENT TRADES (VR)</div>
+        <div class="trade-list" id="vr-tradeList">
+          </div>
+      </div>
+      <div style="height:30px;"></div>
     </div>
   </div>
 </div>
 
 <script>
-// 클럭 및 기본 내비게이션 로직
 function updateClocks() {
   const now = new Date();
   const opts = { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
@@ -185,35 +553,82 @@ function switchMainTab(tabId, btnElement) {
   document.getElementById('scrollArea').scrollTop = 0;
 }
 
+let isUSD = true;
+document.getElementById('currency-toggle').addEventListener('click', function() {
+  isUSD = !isUSD;
+  const viewUsd = document.getElementById('view-usd');
+  const viewKrw = document.getElementById('view-krw');
+  
+  if (isUSD) {
+    this.innerText = "🇰🇷 KRW 보기";
+    this.style.background = "rgba(255,255,255,0.1)"; this.style.borderColor = "rgba(255,255,255,0.2)";
+    viewUsd.style.display = "block"; viewKrw.style.display = "none";
+  } else {
+    this.innerText = "🇺🇸 USD 보기";
+    this.style.background = "rgba(0,229,255,0.2)"; this.style.borderColor = "var(--cyan)";
+    viewUsd.style.display = "none"; viewKrw.style.display = "block";
+  }
+});
+
+function formatUSD(val) { return '$' + parseFloat(val).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}); }
+function formatKRW(val) { return '₩' + Math.round(val).toLocaleString('ko-KR'); }
+function formatSignUSD(val) { return (val >= 0 ? '+' : '') + formatUSD(val); }
+function formatSignKRW(val) { return (val >= 0 ? '+' : '') + formatKRW(val); }
+
+// ⚠️ 사장님의 Apps Script 배포 URL
 const API_URL = "https://script.google.com/macros/s/AKfycbz4jm7V3za7zjbxXn4wmXWJKVR0ZvhMxqMAxuVY1onafu0QBmCubqk0rL2uj7GjH1X_zA/exec";
 
 async function loadLiveData() {
   try {
     const response = await fetch(API_URL);
     const data = await response.json();
-    if(data && data.success) { renderVR(data.vr); } 
+    if(data && data.success) { renderAll(data); } 
   } catch (error) {
     console.error("Fetch failed:", error);
   } finally {
-    document.getElementById('loader-overlay').style.display = 'none';
+    const loader = document.getElementById('loader-overlay');
+    loader.style.opacity = '0';
+    setTimeout(() => loader.style.display = 'none', 300);
   }
 }
 
-function renderVR(vr) {
-  if(!vr) return;
+function renderAll(data) {
+  const EXCHANGE_RATE = parseFloat(data.exchangeRate) || 1350.00;
+  document.getElementById('display-exchange-rate').innerText = '적용 환율: ₩' + EXCHANGE_RATE.toLocaleString('ko-KR', {minimumFractionDigits:2}) + ' / $1';
 
-  const logs = (vr.logs || []).filter(log => log && log[0]);
+  const inf = data.infinite || {};
+  const vr = data.vr || {};
+
+  const INITIAL_SEED_TQQQ_USD = parseFloat(inf.initialSeed) || 10000;
+  const INITIAL_SEED_VR_KRW   = parseFloat(vr.initialSeed) || 1000000;
+  const infRealCashKrw = parseFloat(inf.realCashKrw) || 0;
+  const infTotalProfit = parseFloat(inf.totalProfit) || 0;
+  const infCycle = parseInt(inf.cycle) || 0;
+  const infInstall = parseFloat(inf.install) || 0;
+  const infTicker = inf.ticker || "WAIT";
+  const infAvg = parseFloat(inf.avg) || 0;
+  const infClose = parseFloat(inf.close) || 0;
+  const infQty = parseInt(inf.qty) || 0;
+  const infInvested = infAvg * infQty;
+  const infEvalVal = (infClose - infAvg) * infQty;
+  const infEvalRate = infAvg > 0 ? ((infClose - infAvg) / infAvg) * 100 : 0;
   
-  // 🚀 사장님 요청 지표 계산 로직
+  const vrAsset = parseFloat(vr.totalAsset) || parseFloat(vr.asset) || 0; 
+  const vrV = parseFloat(vr.vTarget) || parseFloat(vr.v) || 0;
+  const vrUpper = parseFloat(vr.upper) || 0;
+  const vrLower = parseFloat(vr.lower) || 0;
+  const vrPool = parseFloat(vr.pool) || 0;
+  const vrStatus = vr.mode || vr.status || "HOLD";
+  const vrCurrentPrice = parseFloat(vr.currentPrice) || 0;
+  const vrQty = parseInt(vr.qty) || 0;
+
+  // 🚀 [수정된 핵심 로직] VR_매매기록 로그를 역추적하여 정확한 평단가와 원금 계산
   let calcTotalQty = 0;
   let calcTotalCost = 0;
-  let realizedProfit = 0;
-  let buyCount = 0;
-  let sellCount = 0;
-  let rebalanceCount = 0;
-
-  // 오래된 순으로 복기하며 지표 추출
-  let replayLogs = [...logs].sort((a, b) => new Date(a[0]) - new Date(b[0]));
+  let validVrLogsForCalc = (vr.logs || []).filter(log => log && log[0]);
+  
+  // 오래된 날짜부터 순서대로 재생(Replay)
+  let replayLogs = [...validVrLogsForCalc].sort((a, b) => new Date(a[0]) - new Date(b[0]));
   
   for (let log of replayLogs) {
       let type = String(log[1] || ''); 
@@ -223,74 +638,154 @@ function renderVR(vr) {
       if (type.includes('매수') || type.includes('진입')) {
           calcTotalQty += qty;
           calcTotalCost += amt;
-          buyCount++;
       } else if (type.includes('매도')) {
           if (calcTotalQty > 0) {
-              let currentAvg = calcTotalCost / calcTotalQty;
-              // 실현 수익 = 매도금액 - (평단가 * 매도수량)
-              realizedProfit += (amt - (currentAvg * qty));
-              
+              let avg = calcTotalCost / calcTotalQty;
               calcTotalQty -= qty;
-              calcTotalCost -= (currentAvg * qty); // 원금에서 제거
-              sellCount++;
+              calcTotalCost -= (avg * qty); // 판 수량만큼 원금 차감
           }
-      } else if (type.includes('리밸런싱')) {
-          rebalanceCount++; // 14일 주기 M값 조정 횟수
       }
   }
 
-  const currPrice = parseFloat(vr.currentPrice) || 0;
-  const currQty = parseInt(vr.qty) || 0;
-  const evalAmount = currPrice * currQty;
-  const pnlAmount = evalAmount - calcTotalCost;
-  const pnlRate = calcTotalCost > 0 ? (pnlAmount / calcTotalCost * 100) : 0;
+  // 이제 정확한 평단가와 투입금이 완성되었습니다!
+  const vrAvgPrice = vrQty > 0 && calcTotalQty > 0 ? (calcTotalCost / calcTotalQty) : 0;
+  const vrInvestedPrincipal = vrQty > 0 ? calcTotalCost : 0; 
+  const vrCurrentEvalAmount = vrCurrentPrice * vrQty; 
+  const vrPnLAmount = vrCurrentEvalAmount - vrInvestedPrincipal;
+  const vrEvalRate = vrInvestedPrincipal > 0 ? (vrPnLAmount / vrInvestedPrincipal) * 100 : 0;
 
-  // UI 업데이트
-  document.getElementById('vr-total-realized').innerText = '+₩' + Math.round(realizedProfit).toLocaleString();
-  document.getElementById('vr-rebalance-count').innerText = rebalanceCount + '회';
-  document.getElementById('vr-trade-count').innerText = (buyCount + sellCount) + '회';
-  document.getElementById('vr-current-pool').innerText = '₩' + Math.round(vr.pool).toLocaleString();
+  const tqqqTotalAssetKrw = infRealCashKrw + (infInvested * EXCHANGE_RATE) + (infEvalVal * EXCHANGE_RATE);
+  const tqqqTotalAssetUsd = tqqqTotalAssetKrw / EXCHANGE_RATE;
+  const vrTotalAssetKrw = vrAsset > 0 ? vrAsset : INITIAL_SEED_VR_KRW;
+  const totalUsdInvested = infInvested;
+  const totalUsdEval = infEvalVal;
+  const totalUsdRealized = infTotalProfit;
+  const totalFullAssetKrw = tqqqTotalAssetKrw + vrTotalAssetKrw;
+  const totalFullAssetUsd = totalFullAssetKrw / EXCHANGE_RATE;
 
-  document.getElementById('vr-total-asset').innerText = '총 자산 ₩' + Math.round(parseFloat(vr.totalAsset)).toLocaleString();
-  document.getElementById('vr-curr-price').innerText = '₩' + currPrice.toLocaleString();
-  document.getElementById('vr-avg-qty').innerText = `₩${Math.round(calcTotalCost / currQty).toLocaleString()} / ${currQty}주`;
-  document.getElementById('vr-invested').innerText = '₩' + Math.round(calcTotalCost).toLocaleString();
+  // 무매 UI
+  document.getElementById('inf-ticker-title').innerText = `${infTicker} REALIZED PnL`;
+  document.getElementById('inf-cycle-badge').innerText = `🏆 ${infCycle-1 >= 0 ? infCycle-1 : 0}회 완료`;
+  document.getElementById('inf-realized-pnl').innerText = formatSignUSD(infTotalProfit);
+  document.getElementById('inf-cycle-num').innerText = `#${infCycle}`;
+  document.getElementById('inf-install-num').innerText = `${infInstall.toFixed(1)} / 40`; 
+  document.getElementById('inf-pos-ticker').innerText = infTicker;
+  document.getElementById('inf-avg-price').innerText = formatUSD(infAvg);
+  document.getElementById('inf-curr-price').innerText = formatUSD(infClose);
+  document.getElementById('inf-qty').innerText = `${infQty}주`;
+  document.getElementById('inf-invested').innerText = formatUSD(infInvested);
   
-  const pnlColor = pnlAmount >= 0 ? 'var(--green)' : 'var(--red)';
-  document.getElementById('vr-eval-pnl').innerText = `${pnlAmount >= 0 ? '+' : ''}₩${Math.round(pnlAmount).toLocaleString()} (${pnlRate.toFixed(2)}%)`;
-  document.getElementById('vr-eval-pnl').style.color = pnlColor;
+  const evalColor = infEvalVal >= 0 ? 'var(--green)' : 'var(--red)';
+  document.getElementById('inf-eval-pnl').innerText = `${formatSignUSD(infEvalVal)} (${(infEvalRate>0?'+':'')}${infEvalRate.toFixed(2)}%)`;
+  document.getElementById('inf-eval-pnl').style.color = evalColor;
+  document.getElementById('inf-goal-rate').innerText = `${infEvalRate.toFixed(2)}% / 15.00%`;
+  document.getElementById('inf-goal-rate').style.color = infEvalRate >= 15 ? 'var(--green)' : 'var(--gold)';
 
-  document.getElementById('vr-band-range').innerText = `${Math.round(vr.lower/10000)}만 ~ ${Math.round(vr.upper/10000)}만`;
-  document.getElementById('vr-mode-status').innerText = `${vr.mode} / ${vr.status}`;
-
-  // 최근 거래 목록 렌더링
-  const listUi = document.getElementById('vr-trade-list');
-  const sortedLogs = [...logs].sort((a, b) => new Date(b[0]) - new Date(a[0]));
+  // 무매 흐름도
+  ['inf-step-1', 'inf-step-2', 'inf-step-3', 'inf-step-4'].forEach(id => document.getElementById(id).classList.remove('active-step'));
+  ['inf-branch-1', 'inf-branch-2'].forEach(id => document.getElementById(id).classList.remove('active-branch'));
   
-  listUi.innerHTML = sortedLogs.slice(0, 10).map(log => {
-      const isBuy = log[1].includes('매수') || log[1].includes('진입');
-      const isRebalance = log[1].includes('리밸런싱');
-      if(isRebalance) return ''; // 리밸런싱 로그는 목록에서 제외 (깔끔하게)
-      
-      return `
-        <div class="trade-item">
-          <div class="trade-type-dot ${isBuy?'buy':'sell'}"></div>
-          <div class="trade-info">
-            <div class="trade-top">
-              <span class="trade-ticker">TIGER 미국나스닥100레버리지</span>
-              <span class="trade-pnl ${isBuy?'neg':'pos'}">${isBuy?'-':'+'}₩${Math.round(log[4]).toLocaleString()}</span>
-            </div>
-            <div class="trade-bottom">
-              <span class="trade-type-label ${isBuy?'buy':'sell'}">${log[1]}</span>
-              <span class="trade-meta">${log[0].substring(5,16)} · ₩${Math.round(log[2]).toLocaleString()} × ${log[3]}주</span>
-            </div>
-          </div>
-        </div>
-      `;
-  }).join('');
+  let infActiveId = 'inf-step-2';
+  if (infQty === 0 && infInstall === 0) infActiveId = 'inf-step-1';
+  else if (infEvalRate >= 15) infActiveId = 'inf-step-3';           
+  else if (infInstall >= 40) infActiveId = 'inf-step-4';            
+
+  document.getElementById(infActiveId).classList.add('active-step');
+
+  if (infActiveId === 'inf-step-2') {
+    if (infInstall <= 1 || infQty === 0) { document.getElementById('inf-branch-1').classList.add('active-branch'); } 
+    else { document.getElementById('inf-branch-2').classList.add('active-branch'); }
+    const flowActive = document.getElementById('inf-flow-active');
+    flowActive.style.display = 'block';
+    flowActive.innerText = `▶ 현재 ${infInstall.toFixed(1)}회차 진행 중`;
+  } else { document.getElementById('inf-flow-active').style.display = 'none'; }
+
+  // TOTAL UI
+  document.getElementById('tot-usd-asset').innerText = formatUSD(totalFullAssetUsd);
+  document.getElementById('tot-usd-invest').innerText = formatUSD(totalUsdInvested);
+  document.getElementById('tot-usd-realized').innerText = formatSignUSD(totalUsdRealized);
+  document.getElementById('tot-usd-eval').innerText = `${formatSignUSD(totalUsdEval)} (${infEvalRate.toFixed(2)}%)`;
+  document.getElementById('tot-usd-eval').style.color = evalColor;
+
+  document.getElementById('tot-krw-asset').innerText = formatKRW(totalFullAssetKrw);
+  document.getElementById('tot-krw-invest').innerText = formatKRW(totalUsdInvested * EXCHANGE_RATE);
+  document.getElementById('tot-krw-realized').innerText = formatSignKRW(totalUsdRealized * EXCHANGE_RATE);
+  document.getElementById('tot-krw-eval').innerText = `${formatSignKRW(totalUsdEval * EXCHANGE_RATE)} (${infEvalRate.toFixed(2)}%)`;
+  document.getElementById('tot-krw-eval').style.color = evalColor;
+
+  const initialTotalSeedKrw = (INITIAL_SEED_TQQQ_USD * EXCHANGE_RATE) + INITIAL_SEED_VR_KRW;
+  document.getElementById('pipe-total-seed').innerText = formatKRW(initialTotalSeedKrw);
+  document.getElementById('pipe-inf-pool').innerText = formatKRW(infRealCashKrw);
+  document.getElementById('pipe-vr-pool').innerText = formatKRW(vrPool);
+
+  // VR UI
+  document.getElementById('vr-integrated-asset').innerText = formatKRW(vrAsset);
+  document.getElementById('vr-integrated-pool').innerText = formatKRW(vrPool);
+  document.getElementById('vr1-total').innerText = `총 자산 ${formatKRW(vrAsset)}`;
+  document.getElementById('vr1-curr-price').innerText = formatKRW(vrCurrentPrice);
+  
+  // 🚀 정확히 계산된 평단가, 수량, 원금, 수익률 바인딩!
+  document.getElementById('vr1-avg-qty').innerText = `${formatKRW(vrAvgPrice)} / ${vrQty}주`;
+  document.getElementById('vr1-invested').innerText = formatKRW(vrInvestedPrincipal);
+  
+  const vrEvalColor = vrPnLAmount >= 0 ? 'var(--green)' : 'var(--red)';
+  document.getElementById('vr1-eval-pnl').innerText = `${formatSignKRW(vrPnLAmount)} (${(vrEvalRate>0?'+':'')}${vrEvalRate.toFixed(2)}%)`;
+  document.getElementById('vr1-eval-pnl').style.color = vrEvalColor;
+
+  const vMan = (vrV / 10000).toFixed(1);
+  const upperMan = (vrUpper / 10000).toFixed(1);
+  const lowerMan = (vrLower / 10000).toFixed(1);
+  document.getElementById('vr1-band').innerText = `${vMan}만 / (${upperMan}만 ~ ${lowerMan}만)`;
+  
+  const poolRatio = vrAsset > 0 ? ((vrPool / vrAsset) * 100).toFixed(1) : 0;
+  document.getElementById('vr1-pool').innerText = `${formatKRW(vrPool)} (${poolRatio}%)`;
+  document.getElementById('vr1-status').innerText = vrStatus;
+
+  // VR 흐름도
+  ['vr-step-1', 'vr-step-2', 'vr-step-3', 'vr-step-4'].forEach(id => document.getElementById(id).classList.remove('active-step'));
+  
+  let vrActiveId = 'vr-step-3';
+  if (vrQty === 0 && vrAsset <= INITIAL_SEED_VR_KRW) vrActiveId = 'vr-step-1';
+  
+  document.getElementById(vrActiveId).classList.add('active-step');
+
+  if (vrActiveId === 'vr-step-3') {
+      const vrFlowActive = document.getElementById('vr-flow-active');
+      vrFlowActive.style.display = 'block';
+      vrFlowActive.innerText = `▶ 현재 밴드 상태: ${vrStatus}`;
+  } else { document.getElementById('vr-flow-active').style.display = 'none'; }
+
+  // 영수증 기록 렌더링
+  const tradeList = document.getElementById('ui-tradeList');
+  let validInfLogs = (inf.logs || []).filter(log => log && log[0]);
+  if (validInfLogs.length > 0) {
+    validInfLogs.sort((a, b) => new Date(b[0]) - new Date(a[0])); // 최신순 정렬
+    tradeList.innerHTML = validInfLogs.slice(0, 30).map(log => {
+      const dateRaw = new Date(log[0]);
+      const dateStr = !isNaN(dateRaw) ? `${String(dateRaw.getMonth()+1).padStart(2,'0')}/${String(dateRaw.getDate()).padStart(2,'0')}` : String(log[0]).substring(5,10);
+      const isBuy = String(log[5]).includes('매수');
+      const pnlClass = parseFloat(log[10]) > 0 ? 'pos' : (parseFloat(log[10]) < 0 ? 'neg' : 'neu');
+      return `<div class="trade-item"><div class="trade-type-dot ${isBuy?'buy':'sell'}"></div><div class="trade-info"><div class="trade-top"><span class="trade-ticker">${log[1]} (T${log[4]})</span><span class="trade-pnl ${pnlClass}">${parseFloat(log[10]) !== 0 ? formatSignUSD(log[10]) : `-${formatUSD(log[8])}`}</span></div><div class="trade-bottom"><span class="trade-type-label ${isBuy?'buy':'sell'}">${log[5]}</span><span class="trade-meta">${dateStr} · $${parseFloat(log[6]).toFixed(2)} × ${log[7]}주</span></div></div></div>`;
+    }).join('');
+  } else { tradeList.innerHTML = `<div class="empty-state">기록이 없습니다.</div>`; }
+
+  const vrTradeList = document.getElementById('vr-tradeList');
+  let validVrLogs = (vr.logs || []).filter(log => log && log[0]);
+  if (validVrLogs.length > 0) {
+    validVrLogs.sort((a, b) => new Date(b[0]) - new Date(a[0])); // 최신순 정렬
+    vrTradeList.innerHTML = validVrLogs.slice(0, 15).map(log => {
+      const dateRaw = new Date(log[0]);
+      const dateStr = !isNaN(dateRaw) ? `${String(dateRaw.getMonth()+1).padStart(2,'0')}/${String(dateRaw.getDate()).padStart(2,'0')}` : String(log[0]).substring(5,10);
+      const isBuy = String(log[1]).includes('진입') || String(log[1]).includes('매수');
+      // VR 시트는 거래금액이 E열(log[4])에 있습니다.
+      const tradeAmt = parseFloat(log[4]) || 0;
+      return `<div class="trade-item"><div class="trade-type-dot ${isBuy?'buy':'sell'}"></div><div class="trade-info"><div class="trade-top"><span class="trade-ticker">VR TIGER레버리지</span><span class="trade-pnl ${isBuy?'neu':'pos'}">${isBuy ? `-${formatKRW(tradeAmt)}` : `+${formatKRW(tradeAmt)}`}</span></div><div class="trade-bottom"><span class="trade-type-label ${isBuy?'buy':'sell'}">${log[1]}</span><span class="trade-meta">${dateStr} · ₩${parseFloat(log[2] || 0).toLocaleString()} × ${log[3] || 0}주</span></div></div></div>`;
+    }).join('');
+  } else { vrTradeList.innerHTML = `<div class="empty-state">기록이 없습니다.</div>`; }
 }
 
 loadLiveData();
+  
 </script>
 </body>
 </html>
