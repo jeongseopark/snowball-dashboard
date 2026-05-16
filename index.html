@@ -46,10 +46,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .hero-label{font-size:11px;color:var(--text3);font-family:var(--mono);letter-spacing:1px;margin-bottom:6px;}
 .hero-value{font-family:var(--mono);font-size:38px;font-weight:700;color:var(--green);line-height:1;}
 .kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-
-/* 🚀 새로 추가된 3단 KPI 그리드 */
 .kpi-grid-3 { display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-bottom:10px; }
-
 .kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:14px;}
 .kpi-label{font-size:10px;color:var(--text3);font-family:var(--mono);margin-bottom:8px; white-space:nowrap;}
 .kpi-value{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--cyan);}
@@ -287,6 +284,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       <div style="height:30px;"></div>
     </div>
 
+
     <div class="tab-content" id="tab-infinite">
       <div class="section">
         <div class="hero-card">
@@ -406,11 +404,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 
     <div class="tab-content" id="tab-vr">
       <div class="section">
-        <div class="hero-card" style="border-color:var(--cyan); background:linear-gradient(135deg, var(--bg3) 0%, rgba(0,229,255,0.05) 100%);">
-          <div class="hero-label" style="color:var(--cyan);">VR REALIZED PROFIT (익절금)</div>
-          <div class="hero-value" style="color:var(--green);" id="vr-total-realized">+₩0</div>
+        <div class="hero-card" style="border-color:var(--cyan); background:linear-gradient(135deg, var(--bg3) 0%, rgba(0,229,255,0.05) 100%); padding-bottom:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="hero-label" style="margin:0; color:var(--cyan);">VR REALIZED PROFIT (익절금)</div>
+            <div class="tag" style="background:rgba(0,229,255,0.1); color:var(--cyan);">🇰🇷 부부 합산 예정</div>
+          </div>
+          <div class="hero-value" style="margin-top:6px; color:var(--green);" id="vr-total-realized">+₩0</div>
         </div>
-        
         <div class="kpi-grid-3">
           <div class="kpi-card">
             <div class="kpi-label">리밸런싱 횟수</div>
@@ -618,7 +618,6 @@ function renderAll(data) {
   const vrCurrentPrice = parseFloat(vr.currentPrice) || 0;
   const vrQty = parseInt(vr.qty) || 0;
 
-  // 🚀 [수정된 핵심 로직] VR_매매기록 로그를 역추적하여 새로운 KPI(실현수익 등) 계산
   let calcTotalQty = 0;
   let calcTotalCost = 0;
   let realizedProfit = 0;
@@ -628,7 +627,6 @@ function renderAll(data) {
 
   let validVrLogsForCalc = (vr.logs || []).filter(log => log && log[0]);
   
-  // 오래된 날짜부터 순서대로 재생(Replay)
   let replayLogs = [...validVrLogsForCalc].sort((a, b) => new Date(a[0]) - new Date(b[0]));
   
   for (let log of replayLogs) {
@@ -646,15 +644,17 @@ function renderAll(data) {
               realizedProfit += (amt - (currentAvg * qty));
               
               calcTotalQty -= qty;
-              calcTotalCost -= (currentAvg * qty); // 판 수량만큼 원금 차감
+              calcTotalCost -= (currentAvg * qty); 
               sellCount++;
           }
-      } else if (type.includes('리밸런싱')) {
+      } 
+      
+      // 🚀 정기 리밸런싱 글자가 포함된 경우에만 리밸런싱 카운트 증가
+      if (type.includes('정기_리밸런싱')) {
           rebalanceCount++;
       }
   }
 
-  // 이제 정확한 평단가와 투입금이 완성되었습니다!
   const vrAvgPrice = vrQty > 0 && calcTotalQty > 0 ? (calcTotalCost / calcTotalQty) : 0;
   const vrInvestedPrincipal = vrQty > 0 ? calcTotalCost : 0; 
   const vrCurrentEvalAmount = vrCurrentPrice * vrQty; 
@@ -670,7 +670,6 @@ function renderAll(data) {
   const totalFullAssetKrw = tqqqTotalAssetKrw + vrTotalAssetKrw;
   const totalFullAssetUsd = totalFullAssetKrw / EXCHANGE_RATE;
 
-  // 무매 UI (유지)
   document.getElementById('inf-ticker-title').innerText = `${infTicker} REALIZED PnL`;
   document.getElementById('inf-cycle-badge').innerText = `🏆 ${infCycle-1 >= 0 ? infCycle-1 : 0}회 완료`;
   document.getElementById('inf-realized-pnl').innerText = formatSignUSD(infTotalProfit);
@@ -688,7 +687,6 @@ function renderAll(data) {
   document.getElementById('inf-goal-rate').innerText = `${infEvalRate.toFixed(2)}% / 15.00%`;
   document.getElementById('inf-goal-rate').style.color = infEvalRate >= 15 ? 'var(--green)' : 'var(--gold)';
 
-  // 무매 흐름도 (유지)
   ['inf-step-1', 'inf-step-2', 'inf-step-3', 'inf-step-4'].forEach(id => document.getElementById(id).classList.remove('active-step'));
   ['inf-branch-1', 'inf-branch-2'].forEach(id => document.getElementById(id).classList.remove('active-branch'));
   
@@ -707,7 +705,6 @@ function renderAll(data) {
     flowActive.innerText = `▶ 현재 ${infInstall.toFixed(1)}회차 진행 중`;
   } else { document.getElementById('inf-flow-active').style.display = 'none'; }
 
-  // TOTAL UI (유지)
   document.getElementById('tot-usd-asset').innerText = formatUSD(totalFullAssetUsd);
   document.getElementById('tot-usd-invest').innerText = formatUSD(totalUsdInvested);
   document.getElementById('tot-usd-realized').innerText = formatSignUSD(totalUsdRealized);
@@ -725,7 +722,6 @@ function renderAll(data) {
   document.getElementById('pipe-inf-pool').innerText = formatKRW(infRealCashKrw);
   document.getElementById('pipe-vr-pool').innerText = formatKRW(vrPool);
 
-  // 🚀 VR UI 업데이트 (새로운 KPI 바인딩)
   document.getElementById('vr-total-realized').innerText = formatSignKRW(realizedProfit);
   document.getElementById('vr-rebalance-count').innerText = rebalanceCount + '회';
   document.getElementById('vr-trade-count').innerText = (buyCount + sellCount) + '회';
@@ -745,11 +741,8 @@ function renderAll(data) {
   const lowerMan = (vrLower / 10000).toFixed(1);
   document.getElementById('vr1-band').innerText = `${vMan}만 / (${upperMan}만 ~ ${lowerMan}만)`;
   
-  const poolRatio = vrAsset > 0 ? ((vrPool / vrAsset) * 100).toFixed(1) : 0;
-  // 하단 카드에 있던 Pool을 지우고 윗쪽 KPI로 올렸지만, 기존 칸은 유지
   document.getElementById('vr1-status').innerText = vrStatus;
 
-  // VR 흐름도
   ['vr-step-1', 'vr-step-2', 'vr-step-3', 'vr-step-4'].forEach(id => document.getElementById(id).classList.remove('active-step'));
   
   let vrActiveId = 'vr-step-3';
@@ -763,11 +756,10 @@ function renderAll(data) {
       vrFlowActive.innerText = `▶ 현재 밴드 상태: ${vrStatus}`;
   } else { document.getElementById('vr-flow-active').style.display = 'none'; }
 
-  // 영수증 기록 렌더링
   const tradeList = document.getElementById('ui-tradeList');
   let validInfLogs = (inf.logs || []).filter(log => log && log[0]);
   if (validInfLogs.length > 0) {
-    validInfLogs.sort((a, b) => new Date(b[0]) - new Date(a[0])); // 최신순 정렬
+    validInfLogs.sort((a, b) => new Date(b[0]) - new Date(a[0])); 
     tradeList.innerHTML = validInfLogs.slice(0, 30).map(log => {
       const dateRaw = new Date(log[0]);
       const dateStr = !isNaN(dateRaw) ? `${String(dateRaw.getMonth()+1).padStart(2,'0')}/${String(dateRaw.getDate()).padStart(2,'0')}` : String(log[0]).substring(5,10);
@@ -778,9 +770,10 @@ function renderAll(data) {
   } else { tradeList.innerHTML = `<div class="empty-state">기록이 없습니다.</div>`; }
 
   const vrTradeList = document.getElementById('vr-tradeList');
-  let validVrLogs = (vr.logs || []).filter(log => log && log[0] && !String(log[1]).includes('리밸런싱')); // 리밸런싱 시스템 메시지는 목록에서 숨김
+  // 🚀 정확히 '정기_리밸런싱'만 숨기도록 필터 수정
+  let validVrLogs = (vr.logs || []).filter(log => log && log[0] && !String(log[1]).includes('정기_리밸런싱')); 
   if (validVrLogs.length > 0) {
-    validVrLogs.sort((a, b) => new Date(b[0]) - new Date(a[0])); // 최신순 정렬
+    validVrLogs.sort((a, b) => new Date(b[0]) - new Date(a[0])); 
     vrTradeList.innerHTML = validVrLogs.slice(0, 15).map(log => {
       const dateRaw = new Date(log[0]);
       const dateStr = !isNaN(dateRaw) ? `${String(dateRaw.getMonth()+1).padStart(2,'0')}/${String(dateRaw.getDate()).padStart(2,'0')}` : String(log[0]).substring(5,10);
