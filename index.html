@@ -846,69 +846,10 @@ function renderAll(data) {
   document.getElementById('tot-krw-eval').innerText = `${formatSignKRW(totalUsdEval * EXCHANGE_RATE)} (${infEvalRate.toFixed(2)}%)`;
   document.getElementById('tot-krw-eval').style.color = evalColor;
 
-// (기존 코드) 초기 시드 및 파이프라인 세팅 부분
   const initialTotalSeedKrw = (INITIAL_SEED_UBM_USD * EXCHANGE_RATE) + INITIAL_SEED_VR_KRW;
   document.getElementById('pipe-total-seed').innerText = formatKRW(initialTotalSeedKrw);
   document.getElementById('pipe-ubm-pool').innerText = formatKRW(infRealCashKrw);
   document.getElementById('pipe-vr-pool').innerText = formatKRW(vrPool);
-
-  // ==========================================
-  // 🚀 [추가] OVERVIEW 탭 - UBM 요약 카드 연동
-  // ==========================================
-  document.getElementById('ov-ubm-realized').innerText = formatSignUSD(totalUsdRealized);
-  document.getElementById('ov-ubm-ticker').innerText = infTicker;
-  document.getElementById('ov-ubm-eval').innerText = `${infEvalRate.toFixed(2)}%`;
-  document.getElementById('ov-ubm-eval').style.color = evalColor;
-  document.getElementById('ov-ubm-install').innerText = `${infInstall.toFixed(1)} / 40`;
-  document.getElementById('ov-ubm-qty').innerText = `${infQty}주`;
-  document.getElementById('ov-ubm-target').innerText = `${ubmTargetRate.toFixed(1)}%`;
-  
-  // UBM 상태 태그 및 다음 액션 판단
-  let ubmStateTag = document.getElementById('ov-ubm-state');
-  if (infInstall > 0 || infQty > 0) {
-      ubmStateTag.innerText = "가동중";
-      ubmStateTag.className = "tag cyan";
-  } else {
-      ubmStateTag.innerText = "대기중";
-      ubmStateTag.className = "tag";
-  }
-
-  let ubmAction = "데이터 대기중";
-  if (infEvalRate >= ubmTargetRate) ubmAction = "<b>다음 판단:</b> 목표 도달! 전량 익절 대기 🏆";
-  else if (infInstall >= 40) ubmAction = "<b>다음 판단:</b> 🚨 예산 소진, 리버스 모드 방어 대기";
-  else ubmAction = "<b>다음 판단:</b> 평단가/시장가 스플릿 매수 대기 ⚖️";
-  document.getElementById('ov-ubm-action').innerHTML = ubmAction;
-
-  // ==========================================
-  // 🚀 [추가] OVERVIEW 탭 - ISA VR 요약 카드 연동
-  // ==========================================
-  document.getElementById('ov-vr-realized').innerText = formatSignKRW(realizedProfit);
-  document.getElementById('ov-vr-status').innerText = vrStatus;
-  document.getElementById('ov-vr-eval').innerText = `${vrEvalRate.toFixed(2)}%`;
-  document.getElementById('ov-vr-eval').style.color = vrEvalColor;
-  document.getElementById('ov-vr-asset').innerText = formatKRW(vrAsset > 0 ? vrAsset : INITIAL_SEED_VR_KRW);
-  document.getElementById('ov-vr-pool').innerText = formatKRW(vrPool);
-  document.getElementById('ov-vr-rebal').innerText = `${rebalanceCount}회`;
-  
-  // VR 상태 태그 및 다음 액션 판단
-  let vrStateTag = document.getElementById('ov-vr-state');
-  if (vrQty > 0) {
-      vrStateTag.innerText = "가동중";
-      vrStateTag.className = "tag cyan";
-  } else {
-      vrStateTag.innerText = "대기중";
-      vrStateTag.className = "tag gold";
-  }
-
-  let vrAction = "<b>다음 판단:</b> 장 마감 전 밴드 점검 대기 📊";
-  if (vrStatus === "AGGRESSIVE") vrAction = "<b>다음 판단:</b> 🔻 하단 이탈! 폭락장 추가 매수 대기";
-  else if (vrStatus === "DEFENSIVE") vrAction = "<b>다음 판단:</b> 🔺 상단 돌파! 급등장 부분 익절 대기";
-  document.getElementById('ov-vr-action').innerHTML = vrAction;
-
-
-  // ==========================================
-  // (기존 코드) USA UBM 상세 탭 렌더링 시작...
-  document.getElementById('ubm-ticker-title').innerText = `USA UBM REALIZED PnL`;
 
   // USA UBM
   document.getElementById('ubm-ticker-title').innerText = `USA UBM REALIZED PnL`;
