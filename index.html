@@ -846,7 +846,6 @@ function renderAll(data) {
   document.getElementById('tot-krw-eval').innerText = `${formatSignKRW(totalUsdEval * EXCHANGE_RATE)} (${infEvalRate.toFixed(2)}%)`;
   document.getElementById('tot-krw-eval').style.color = evalColor;
 
-// (기존 코드) 초기 시드 및 파이프라인 세팅 부분
   const initialTotalSeedKrw = (INITIAL_SEED_UBM_USD * EXCHANGE_RATE) + INITIAL_SEED_VR_KRW;
   document.getElementById('pipe-total-seed').innerText = formatKRW(initialTotalSeedKrw);
   document.getElementById('pipe-ubm-pool').innerText = formatKRW(infRealCashKrw);
